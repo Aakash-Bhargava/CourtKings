@@ -1,0 +1,25 @@
+<ion-content padding>
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label>Name</ion-label>
+      <ion-input type="text" [(ngModel)]="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Email </ion-label>
+      <ion-input type="email" [(ngModel)]="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Password </ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+  </ion-list>
+
+  <button ion-button full round (tap)="signUp()"> Sign Up</button>
+  <button ion-button small clear> Already have an account? Log in</button>
+
+</ion-content>
