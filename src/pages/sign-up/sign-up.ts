@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the SignUpPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { LoginPage } from '../login/login';
 
 @IonicPage()
 @Component({
@@ -30,6 +24,10 @@ export class SignUpPage {
     console.log(this.name);
     console.log(this.email);
     console.log(this.password);
+  }
+
+  goToLoginPage(){
+    this.navCtrl.push(LoginPage);
   }
 
 

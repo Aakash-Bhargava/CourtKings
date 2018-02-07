@@ -9,13 +9,18 @@
 <ion-content padding>
 
 
+  <div class="body">
+    <img src="../../assets/imgs/basketcrown-e.png"/>
 
-
-  <button ion-button full color="light" (click)="goToSignUpPage()">Sign up</button>
-  <div text-center>
-    <button ion-button center small color="light">Or Log In</button>
+    <button ion-button full round color="light" (tap)="goToSignUpPage()">Sign up</button>
+    <div text-center>
+      <button ion-button center small color="light" clear (tap)="goToLoginPage()">Or Log In</button>
+    </div>
   </div>
 
 
+  <ion-footer>
+    <p text-center class="termAndCond"> By signing up or loggin in, you agree to Court Kings' Terms and Conditions</p>
+  </ion-footer>
 
 </ion-content>

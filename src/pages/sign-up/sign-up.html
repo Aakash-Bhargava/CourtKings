@@ -1,4 +1,4 @@
-<ion-content padding>
+<ion-content padding text-center>
 
   <ion-list>
 
@@ -20,6 +20,6 @@
   </ion-list>
 
   <button ion-button full round (tap)="signUp()"> Sign Up</button>
-  <button ion-button small clear> Already have an account? Log in</button>
+  <button ion-button small clear (tap)="goToLoginPage()"> Already have an account? Log in</button>
 
 </ion-content>

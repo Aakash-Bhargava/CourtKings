@@ -1,3 +1,25 @@
 page-welcome {
 
+  ion-content{
+      background-color: black !important;
+  }
+
+  img{
+    padding: 5%;
+  }
+
+  .body{
+    padding-top: 50%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .termAndCond{
+    padding: 5%;
+    font-size: 12px;
+    position: bottom;
+    color: white;
+  }
+
+
 }

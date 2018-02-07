@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { SignUpPage } from '../pages/sign-up/sign-up';
+import { LoginPage } from '../pages/login/login';
 
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -27,7 +28,8 @@ import { ApolloModule, Apollo } from 'apollo-angular';
     HomePage,
     TabsPage,
     WelcomePage,
-    SignUpPage
+    SignUpPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -44,7 +46,8 @@ import { ApolloModule, Apollo } from 'apollo-angular';
     HomePage,
     TabsPage,
     WelcomePage,
-    SignUpPage
+    SignUpPage,
+    LoginPage
   ],
   providers: [
     StatusBar,
