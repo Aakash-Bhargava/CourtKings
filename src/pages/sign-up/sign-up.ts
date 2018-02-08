@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+
 import { LoginPage } from '../login/login';
+import { TabsPage } from '../tabs/tabs';
+
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
 
 @IonicPage()
 @Component({
@@ -12,8 +17,12 @@ export class SignUpPage {
   name: any;
   email: any;
   password: any;
+  imageUri: any = "";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  userInfo = <any>{};
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public apollo: Apollo,
+              public toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
@@ -28,6 +37,94 @@ export class SignUpPage {
 
   goToLoginPage(){
     this.navCtrl.push(LoginPage);
+  }
+
+
+  loginEvent(event) {
+    if (!this.name || !this.email || !this.password) {
+      let toast = this.toastCtrl.create({
+        message: 'There is some information missing. Try again.',
+        duration: 3000,
+        position: 'top'
+      });
+      toast.present();
+    } else {
+
+        this.createUser().then(({data}) => {
+          if (data){
+            this.SignIn().then(({data}) => {
+              this.userInfo.data = data
+              console.log(this.userInfo.data.signinUser.token);
+              window.localStorage.setItem('graphcoolToken', this.userInfo.data.signinUser.token);
+              this.navCtrl.setRoot(TabsPage);
+            }, (errors) => {
+                console.log(errors);
+                if (errors == "GraphQL error: No user found with that information") {
+                  let toast = this.toastCtrl.create({
+                    message: 'User already exists with that information. Try again.',
+                    duration: 3000,
+                    position: 'top'
+                  });
+                  toast.present();
+                }
+              });
+
+          }
+        }, (errors) => {
+          console.log(errors);
+          if (errors == "Error: GraphQL error: User already exists with that information") {
+            let toast = this.toastCtrl.create({
+              message: 'User already exists with that information. Try again.',
+              duration: 3000,
+              position: 'top'
+            });
+            toast.present();
+          }
+        });
+
+    }
+  }
+
+  createUser(){
+      return this.apollo.mutate({
+        mutation: gql`
+        mutation createUser($email: String!,
+                            $password: String!,
+                            $name: String!,
+                            $profilePic: String){
+
+          createUser(authProvider: { email: {email: $email, password: $password}},
+                     name: $name,
+                     profilePic: $profilePic){
+            id
+          }
+        }
+        `,
+        variables: {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          profilePic: this.imageUri
+        }
+      }).toPromise();
+  }
+
+  SignIn(){
+      return this.apollo.mutate({
+        mutation: gql`
+        mutation signinUser($email: String!,
+                            $password: String!){
+
+          signinUser(email: {email: $email, password: $password}){
+            token
+          }
+        }
+        `,
+        variables: {
+          email: this.email,
+          password: this.password,
+        }
+      }).toPromise();
   }
 
 

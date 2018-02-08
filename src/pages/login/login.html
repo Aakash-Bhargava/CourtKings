@@ -7,7 +7,10 @@
 
 
 
-<ion-content padding>
+<ion-content padding text-center>
+
+  <img src="../../assets/imgs/basketcrown-e.png">
+
   <ion-list>
 
     <ion-item>
@@ -20,7 +23,13 @@
       <ion-input type="password" [(ngModel)]="password"></ion-input>
     </ion-item>
 
-
   </ion-list>
+
+  <button ion-button full round color="light" (tap)="login()">Log In</button>
+  <button ion-button small clear color="light" (tap)="goToSignUpPage()"> Don't have an account? Sign Up</button>
+
+  <ion-footer>
+    <p text-center class="termAndCond"> By signing up or loggin in, you agree to Court Kings' Terms and Conditions</p>
+  </ion-footer>
 
 </ion-content>

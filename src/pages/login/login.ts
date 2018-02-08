@@ -1,13 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
+import { SignUpPage } from '../sign-up/sign-up';
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -15,11 +8,23 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class LoginPage {
 
+  email: any;
+  password: any;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+  }
+
+  login(){
+    console.log(this.email);
+    console.log(this.password);
+  }
+
+  goToSignUpPage(){
+    this.navCtrl.push(SignUpPage);
   }
 
 }
