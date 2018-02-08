@@ -3,8 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
+
+//pages
+import { SearchPage } from '../pages/search/search';
+import { NotificationsPage } from '../pages/notifications/notifications';
+import { ProfilePage } from '../pages/profile/profile';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { WelcomePage } from '../pages/welcome/welcome';
@@ -23,8 +26,9 @@ import { ApolloModule, Apollo } from 'apollo-angular';
 @NgModule({
   declarations: [
     MyApp,
-    AboutPage,
-    ContactPage,
+    SearchPage,
+    NotificationsPage,
+    ProfilePage,
     HomePage,
     TabsPage,
     WelcomePage,
@@ -41,8 +45,9 @@ import { ApolloModule, Apollo } from 'apollo-angular';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    AboutPage,
-    ContactPage,
+    SearchPage,
+    NotificationsPage,
+    ProfilePage,
     HomePage,
     TabsPage,
     WelcomePage,

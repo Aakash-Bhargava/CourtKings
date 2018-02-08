@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+
 import { SignUpPage } from '../sign-up/sign-up';
+import { TabsPage } from '../tabs/tabs';
+
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
+
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -11,20 +17,74 @@ export class LoginPage {
   email: any;
   password: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+              public toastCtrl: ToastController, public apollo: Apollo) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
 
-  login(){
-    console.log(this.email);
-    console.log(this.password);
-  }
-
   goToSignUpPage(){
     this.navCtrl.push(SignUpPage);
   }
+
+  doLogin(event) {
+      let userInfo = <any>{};
+      this.signIn().then(({data}) =>{
+        if (data) {
+          userInfo.data = data
+          console.log(userInfo.data.signinUser.token);
+          window.localStorage.setItem('graphcoolToken', userInfo.data.signinUser.token);
+        }
+        // this.apollo.watchQuery({
+        // query: this.CurrentUserForProfile
+        // }).subscribe(({data}) => {
+        //     console.log(data);
+        // });
+
+      }).then(() => {
+        this.navCtrl.push(TabsPage);
+      }).catch(() => {
+      console.log('view was not dismissed');
+      this.showToast();
+    });
+
+
+
+        // console.log(data.token);
+        // console.log(data.signinUser);
+        // window.localStorage.setItem('graphcoolToken', data.signinUser.token);
+      // })
+
+    }
+
+    showToast() {
+    let toast = this.toastCtrl.create({
+      message: 'Login failed, Please try again.',
+      duration: 2500,
+      position: 'top'
+    });
+
+    toast.present(toast);
+  }
+
+    signIn(){
+      return this.apollo.mutate({
+        mutation: gql`
+        mutation signinUser($email: String!,
+                            $password: String!){
+          signinUser(email: {email: $email, password: $password}){
+            token
+          }
+        }
+        `,
+        variables: {
+          email: this.email,
+          password: this.password
+        }
+      }).toPromise();
+    }
+
 
 }
