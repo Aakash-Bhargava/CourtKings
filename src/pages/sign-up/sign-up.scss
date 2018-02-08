@@ -1,9 +1,41 @@
 page-sign-up {
 
+  ion-content{
+    background: black !important;
+  }
+
+  img{
+    padding: 7%;
+  }
+
+  ion-avatar{
+    img{
+      height: 15%;
+      width: 40%;
+      margin: auto;
+    }
+  }
+
   ion-list{
     padding: 5%;
   }
 
-  
+  ion-item{
+    background-color: transparent !important;
+    color: white !important;
+  }
+  ion-item:first-child{
+    border-top: none !important;
+  }
+
+  ion-item:last-child{
+    border-bottom: none !important;
+    .item-inner{
+      border-bottom: 0.55px solid #c8c7cc !important;
+    }
+  }
+
+
+
 
 }
