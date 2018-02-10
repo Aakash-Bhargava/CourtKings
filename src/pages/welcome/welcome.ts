@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { SignUpPage } from '../sign-up/sign-up';
-import { LoginPage } from '../login/login';
 
 @IonicPage()
 @Component({
@@ -18,10 +16,10 @@ export class WelcomePage {
   }
 
   goToSignUpPage(){
-    this.navCtrl.push(SignUpPage);
+    this.navCtrl.push("SignUpPage");
   }
   goToLoginPage(){
-    this.navCtrl.push(LoginPage);
+    this.navCtrl.push("LoginPage");
   }
 
 }

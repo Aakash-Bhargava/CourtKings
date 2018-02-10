@@ -9,5 +9,8 @@ import { WelcomePage } from './welcome';
   imports: [
     IonicPageModule.forChild(WelcomePage),
   ],
+  exports: [
+    WelcomePage
+  ]
 })
 export class WelcomePageModule {}

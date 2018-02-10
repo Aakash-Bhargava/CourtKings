@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 
+@IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'

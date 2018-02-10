@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
-import { SignUpPage } from '../sign-up/sign-up';
-import { TabsPage } from '../tabs/tabs';
-
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 
@@ -26,7 +23,7 @@ export class LoginPage {
   }
 
   goToSignUpPage(){
-    this.navCtrl.push(SignUpPage);
+    this.navCtrl.push("SignUpPage");
   }
 
   doLogin(event) {
@@ -44,7 +41,7 @@ export class LoginPage {
         // });
 
       }).then(() => {
-        this.navCtrl.push(TabsPage);
+        this.navCtrl.push("TabsPage");
       }).catch(() => {
       console.log('view was not dismissed');
       this.showToast();
