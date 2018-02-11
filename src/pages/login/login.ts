@@ -22,15 +22,15 @@ export class LoginPage {
     console.log('ionViewDidLoad LoginPage');
   }
 
-  goToSignUpPage(){
-    this.navCtrl.push("SignUpPage");
+  goToSignUpPage() {
+    this.navCtrl.push('SignUpPage');
   }
 
   doLogin(event) {
-      let userInfo = <any>{};
-      this.signIn().then(({data}) =>{
+      const userInfo = <any>{};
+      this.signIn().then(({data}) => {
         if (data) {
-          userInfo.data = data
+          userInfo.data = data;
           console.log(userInfo.data.signinUser.token);
           window.localStorage.setItem('graphcoolToken', userInfo.data.signinUser.token);
         }
@@ -41,7 +41,7 @@ export class LoginPage {
         // });
 
       }).then(() => {
-        this.navCtrl.push("TabsPage");
+        this.navCtrl.push('TabsPage');
       }).catch(() => {
       console.log('view was not dismissed');
       this.showToast();
@@ -57,7 +57,7 @@ export class LoginPage {
     }
 
     showToast() {
-    let toast = this.toastCtrl.create({
+    const toast = this.toastCtrl.create({
       message: 'Login failed, Please try again.',
       duration: 2500,
       position: 'top'
@@ -66,7 +66,7 @@ export class LoginPage {
     toast.present(toast);
   }
 
-    signIn(){
+    signIn() {
       return this.apollo.mutate({
         mutation: gql`
         mutation signinUser($email: String!,

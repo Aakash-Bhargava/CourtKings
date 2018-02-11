@@ -17,7 +17,7 @@ export class SignUpPage {
   name: any;
   email: any;
   password: any;
-  imageUri: any = "";
+  imageUri: any = '';
 
   userInfo = <any>{};
 
@@ -29,20 +29,20 @@ export class SignUpPage {
     console.log('ionViewDidLoad SignUpPage');
   }
 
-  signUp(){
+  signUp() {
     console.log(this.name);
     console.log(this.email);
     console.log(this.password);
   }
 
-  goToLoginPage(){
+  goToLoginPage() {
     this.navCtrl.push(LoginPage);
   }
 
 
   loginEvent(event) {
     if (!this.name || !this.email || !this.password) {
-      let toast = this.toastCtrl.create({
+      const toast = this.toastCtrl.create({
         message: 'There is some information missing. Try again.',
         duration: 3000,
         position: 'top'
@@ -51,16 +51,16 @@ export class SignUpPage {
     } else {
 
         this.createUser().then(({data}) => {
-          if (data){
+          if (data) {
             this.SignIn().then(({data}) => {
-              this.userInfo.data = data
+              this.userInfo.data = data;
               console.log(this.userInfo.data.signinUser.token);
               window.localStorage.setItem('graphcoolToken', this.userInfo.data.signinUser.token);
               this.navCtrl.setRoot(TabsPage);
             }, (errors) => {
                 console.log(errors);
-                if (errors == "GraphQL error: No user found with that information") {
-                  let toast = this.toastCtrl.create({
+                if (errors === 'GraphQL error: No user found with that information') {
+                  const toast = this.toastCtrl.create({
                     message: 'User already exists with that information. Try again.',
                     duration: 3000,
                     position: 'top'
@@ -72,8 +72,8 @@ export class SignUpPage {
           }
         }, (errors) => {
           console.log(errors);
-          if (errors == "Error: GraphQL error: User already exists with that information") {
-            let toast = this.toastCtrl.create({
+          if (errors === 'Error: GraphQL error: User already exists with that information') {
+            const toast = this.toastCtrl.create({
               message: 'User already exists with that information. Try again.',
               duration: 3000,
               position: 'top'
@@ -85,7 +85,7 @@ export class SignUpPage {
     }
   }
 
-  createUser(){
+  createUser() {
       return this.apollo.mutate({
         mutation: gql`
         mutation createUser($email: String!,
@@ -109,7 +109,7 @@ export class SignUpPage {
       }).toPromise();
   }
 
-  SignIn(){
+  SignIn() {
       return this.apollo.mutate({
         mutation: gql`
         mutation signinUser($email: String!,

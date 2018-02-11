@@ -1,15 +1,16 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { HttpClientModule } from '@angular/common/http';
-import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
+import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloModule, Apollo } from 'apollo-angular';
+import { Apollo, ApolloModule } from 'apollo-angular';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ApolloModule, Apollo } from 'apollo-angular';
   providers: [
     StatusBar,
     SplashScreen,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
@@ -38,7 +40,7 @@ export class AppModule {
     httpLink: HttpLink
   ) {
     apollo.create({
-      link: httpLink.create({ uri: "https://api.graph.cool/simple/v1/cjdathzip2q32019034unk5yo" }),
+      link: httpLink.create({ uri: 'https://api.graph.cool/simple/v1/cjdathzip2q32019034unk5yo' }),
       cache: new InMemoryCache()
     });
   }

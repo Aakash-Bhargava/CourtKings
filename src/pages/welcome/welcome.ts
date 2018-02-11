@@ -15,11 +15,11 @@ export class WelcomePage {
     console.log('ionViewDidLoad WelcomePage');
   }
 
-  goToSignUpPage(){
-    this.navCtrl.push("SignUpPage");
+  goToSignUpPage() {
+    this.navCtrl.push('SignUpPage');
   }
-  goToLoginPage(){
-    this.navCtrl.push("LoginPage");
+  goToLoginPage() {
+    this.navCtrl.push('LoginPage');
   }
 
 }
