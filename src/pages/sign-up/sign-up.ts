@@ -96,9 +96,9 @@ export class SignUpPage {
           createUser(authProvider: { email: {email: $email, password: $password}},
                      name: $name,
                      profilePic: $profilePic){
-            id
-          }
-        }
+                       id
+                     }
+                   }
         `,
         variables: {
           name: this.name,

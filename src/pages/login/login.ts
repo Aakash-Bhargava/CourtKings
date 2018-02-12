@@ -33,27 +33,14 @@ export class LoginPage {
           userInfo.data = data;
           console.log(userInfo.data.signinUser.token);
           window.localStorage.setItem('graphcoolToken', userInfo.data.signinUser.token);
+          console.log(userInfo.data);
         }
-        // this.apollo.watchQuery({
-        // query: this.CurrentUserForProfile
-        // }).subscribe(({data}) => {
-        //     console.log(data);
-        // });
-
       }).then(() => {
         this.navCtrl.push('TabsPage');
       }).catch(() => {
-      console.log('view was not dismissed');
-      this.showToast();
-    });
-
-
-
-        // console.log(data.token);
-        // console.log(data.signinUser);
-        // window.localStorage.setItem('graphcoolToken', data.signinUser.token);
-      // })
-
+        console.log('view was not dismissed');
+        this.showToast();
+      });
     }
 
     showToast() {
