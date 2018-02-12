@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-
-<<<<<<< Updated upstream
-@IonicPage()
-=======
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 
+@IonicPage()
 
->>>>>>> Stashed changes
+
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html'

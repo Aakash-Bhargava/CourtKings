@@ -28,4 +28,6 @@ type File @model {
 
    email: String! @isUnique
    password: String!
+   name: String!
+   profilePic: String
  }

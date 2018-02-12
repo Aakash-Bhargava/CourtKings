@@ -3,8 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-<<<<<<< Updated upstream
-=======
 //pages
 import { SearchPage } from '../pages/search/search';
 import { NotificationsPage } from '../pages/notifications/notifications';
@@ -16,7 +14,6 @@ import { SignUpPage } from '../pages/sign-up/sign-up';
 import { LoginPage } from '../pages/login/login';
 
 
->>>>>>> Stashed changes
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';

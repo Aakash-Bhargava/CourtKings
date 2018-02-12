@@ -181,7 +181,6 @@ export class HomePage {
 
   }
 
-<<<<<<< Updated upstream
   loadMap() {
     const locationOptions: GeolocationOptions = { timeout: 20000, enableHighAccuracy: true };
     this.geolocation.getCurrentPosition(locationOptions).then((position) => {
@@ -209,21 +208,6 @@ export class HomePage {
       .on(GoogleMapsEvent.MARKER_CLICK)
       .subscribe(() => infoWindow.open(marker));
   }
-=======
-      this.apollo.query({
-        query: gql`
-          query {
-            user{
-              id
-              name
-              email
-            }
-          }
-        `
-      }).toPromise().then(({data}) => {
-        console.log(data);
-      })
->>>>>>> Stashed changes
 
   getCourts(): Promise<Array<Court>> {
     return new Promise((resolve, reject) => {
