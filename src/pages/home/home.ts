@@ -12,6 +12,8 @@ import {
   Marker,
   MarkerOptions,
  } from '@ionic-native/google-maps';
+ import {Apollo} from 'apollo-angular';
+ import gql from 'graphql-tag';
 
  type Court = {
    name: string,
@@ -142,9 +144,21 @@ export class HomePage {
     public navCtrl: NavController,
     public geolocation: Geolocation,
     public platform: Platform,
+    public apollo: Apollo
   ) {
     platform.ready().then(() => {
       this.loadMap();
+      this.apollo.query({
+        query: gql`
+        query {
+          loggedInUser {
+            id
+          }
+        }
+          `
+      }).toPromise().then(({data}) => {
+        console.log(data);
+      })
     });
   }
 
