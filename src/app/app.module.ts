@@ -19,9 +19,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { HttpClientModule } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { setContext } from 'apollo-link-context';
 import { Apollo, ApolloModule } from 'apollo-angular';
+
 
 @NgModule({
   declarations: [
@@ -50,8 +53,27 @@ export class AppModule {
     apollo: Apollo,
     httpLink: HttpLink
   ) {
+    const http = httpLink.create({ uri: 'https://api.graph.cool/simple/v1/cjdathzip2q32019034unk5yo' });
+
+    const auth = setContext((_, {} ) => {
+      // get the authentication token from local storage if it exists
+      const token = localStorage.getItem('graphcoolToken');
+      // return the headers to the context so httpLink can read them
+
+      //Create new HttpHeader everytime a graphcool token is sent
+      var headers = new HttpHeaders();
+
+      if (!token) {
+        return {};
+      } else {
+        return {
+          headers: headers.append('Authorization', `Bearer ${token}`)
+        };
+      }
+    });
+
     apollo.create({
-      link: httpLink.create({ uri: 'https://api.graph.cool/simple/v1/cjdathzip2q32019034unk5yo' }),
+      link: auth.concat(http),
       cache: new InMemoryCache()
     });
   }
