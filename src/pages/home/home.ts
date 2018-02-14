@@ -150,9 +150,10 @@ export class HomePage {
 
   addMap(lat: number, lng: number) {
     const home = new LatLng(lat, lng);
+    const campus = new LatLng(42.729863, -84.477767);
     const mapOptions: GoogleMapOptions = {
       camera: {
-        target: home,
+        target: campus,
         zoom: 13,
       },
       controls: {
@@ -171,7 +172,7 @@ export class HomePage {
       .then(() => {
         this.map.addMarker({
           animation: 'DROP',
-          position: home,
+          position: campus,
         });
         this.getCourts().then((courts) => {
           courts.map(court => this.addMarker(court));
