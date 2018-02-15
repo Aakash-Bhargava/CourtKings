@@ -151,7 +151,7 @@ export class HomePage {
       this.apollo.query({
         query: gql`
         query {
-          loggedInUser {
+          user {
             id
             name
           }
