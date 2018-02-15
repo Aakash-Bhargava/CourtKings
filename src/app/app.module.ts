@@ -53,7 +53,7 @@ export class AppModule {
     apollo: Apollo,
     httpLink: HttpLink
   ) {
-    const http = httpLink.create({ uri: 'https://api.graph.cool/simple/v1/cjdathzip2q32019034unk5yo' });
+    const http = httpLink.create({ uri: 'https://api.graph.cool/simple/v1/cjdnnk64a7j750115weeh5xmm' });
 
     const auth = setContext((_, {} ) => {
       // get the authentication token from local storage if it exists

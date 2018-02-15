@@ -41,8 +41,6 @@ export class ProfilePage {
           id
           email
           name
-          coins
-          age
          }
         }
     `

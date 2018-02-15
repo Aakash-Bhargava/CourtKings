@@ -153,6 +153,7 @@ export class HomePage {
         query {
           loggedInUser {
             id
+            name
           }
         }
           `

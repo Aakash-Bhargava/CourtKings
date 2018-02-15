@@ -30,6 +30,7 @@
     "apollo-angular-link-http": "^1.0.2-beta.0",
     "apollo-cache-inmemory": "^1.1.7",
     "apollo-client": "^2.2.2",
+    "apollo-link-context": "^1.0.5",
     "cordova-ios": "4.5.4",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-geolocation": "^4.0.1",
