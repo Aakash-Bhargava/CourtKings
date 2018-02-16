@@ -14,3 +14,14 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+
+//Fonts
+@font-face {
+  font-family: Gotham;
+  src: url("../assets/fonts/GothamRegular.otf");
+}
+// $font-family-base: 'CenturyGothic' !important;
+* {
+  font-family: 'Gotham';
+}
