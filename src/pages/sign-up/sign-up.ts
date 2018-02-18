@@ -86,7 +86,7 @@ export class SignUpPage {
     }
   }
 
-  createUser(){
+  createUser() {
       return this.apollo.mutate({
         mutation: gql`
         mutation createUser($email: String!,$password: String!,
@@ -107,7 +107,7 @@ export class SignUpPage {
       }).toPromise();
   }
 
-  SignIn(){
+  SignIn() {
       return this.apollo.mutate({
         mutation: gql`
         mutation signinUser($email: String!,

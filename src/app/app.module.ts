@@ -3,16 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { SearchPage } from '../pages/search/search';
-import { NotificationsPage } from '../pages/notifications/notifications';
-import { ProfilePage } from '../pages/profile/profile';
-import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
-import { WelcomePage } from '../pages/welcome/welcome';
-import { SignUpPage } from '../pages/sign-up/sign-up';
-import { LoginPage } from '../pages/login/login';
-
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -59,8 +49,8 @@ export class AppModule {
       const token = localStorage.getItem('graphcoolToken');
       // return the headers to the context so httpLink can read them
 
-      //Create new HttpHeader everytime a graphcool token is sent
-      var headers = new HttpHeaders();
+      // Create new HttpHeader everytime a graphcool token is sent
+      const headers = new HttpHeaders();
 
       if (!token) {
         return {};
