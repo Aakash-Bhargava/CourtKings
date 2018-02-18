@@ -31,29 +31,16 @@ export class LoginPage {
       this.signIn().then(({data}) => {
         if (data) {
           userInfo.data = data;
-          console.log(userInfo.data.signinUser.token);
-          window.localStorage.setItem('graphcoolToken', userInfo.data.signinUser.token);
+          console.log(userInfo.data.authenticateUser.token);
+          window.localStorage.setItem('graphcoolToken', userInfo.data.authenticateUser.token);
+          console.log(userInfo.data);
         }
-        // this.apollo.watchQuery({
-        // query: this.CurrentUserForProfile
-        // }).subscribe(({data}) => {
-        //     console.log(data);
-        // });
-
       }).then(() => {
         this.navCtrl.push('TabsPage');
       }).catch(() => {
-      console.log('view was not dismissed');
-      this.showToast();
-    });
-
-
-
-        // console.log(data.token);
-        // console.log(data.signinUser);
-        // window.localStorage.setItem('graphcoolToken', data.signinUser.token);
-      // })
-
+        console.log('view was not dismissed');
+        this.showToast();
+      });
     }
 
     showToast() {
@@ -66,22 +53,24 @@ export class LoginPage {
     toast.present(toast);
   }
 
-    signIn() {
+  signIn() {
       return this.apollo.mutate({
         mutation: gql`
-        mutation signinUser($email: String!,
+        mutation authenticateUser($email: String!,
                             $password: String!){
-          signinUser(email: {email: $email, password: $password}){
-            token
+
+          authenticateUser(email: $email, password: $password){
+            token,
+            id
           }
         }
         `,
         variables: {
           email: this.email,
-          password: this.password
+          password: this.password,
         }
       }).toPromise();
-    }
+  }
 
 
 }

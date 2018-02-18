@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, Platform } from 'ionic-angular';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import {
-  CameraPosition,
   GoogleMap,
   GoogleMapOptions,
   GoogleMaps,
@@ -10,8 +9,9 @@ import {
   HtmlInfoWindow,
   LatLng,
   Marker,
-  MarkerOptions,
  } from '@ionic-native/google-maps';
+ import { Apollo } from 'apollo-angular';
+ import gql from 'graphql-tag';
 
  type Court = {
    name: string,
@@ -142,14 +142,26 @@ export class HomePage {
     public navCtrl: NavController,
     public geolocation: Geolocation,
     public platform: Platform,
+    public apollo: Apollo
   ) {
     platform.ready().then(() => {
       this.loadMap();
+      this.apollo.query({
+        query: gql`
+        query {
+          loggedInUser {
+            id
+          }
+        }
+          `
+      }).toPromise().then(({data}) => {
+        console.log(data);
+      });
     });
   }
 
   addMap(lat: number, lng: number) {
-    const home = new LatLng(lat, lng);
+    // const home = new LatLng(lat, lng);
     const campus = new LatLng(42.729863, -84.477767);
     const mapOptions: GoogleMapOptions = {
       camera: {

@@ -36,7 +36,7 @@ export class SignUpPage {
   }
 
   goToLoginPage() {
-    this.navCtrl.push(LoginPage);
+    this.navCtrl.push('LoginPage');
   }
 
 
@@ -54,9 +54,9 @@ export class SignUpPage {
           if (data) {
             this.SignIn().then(({data}) => {
               this.userInfo.data = data;
-              console.log(this.userInfo.data.signinUser.token);
-              window.localStorage.setItem('graphcoolToken', this.userInfo.data.signinUser.token);
-              this.navCtrl.setRoot(TabsPage);
+              console.log(this.userInfo.data.authenticateUser.token);
+              window.localStorage.setItem('graphcoolToken', this.userInfo.data.authenticateUser.token);
+              this.navCtrl.setRoot('TabsPage');
             }, (errors) => {
                 console.log(errors);
                 if (errors === 'GraphQL error: No user found with that information') {
@@ -88,23 +88,16 @@ export class SignUpPage {
   createUser() {
       return this.apollo.mutate({
         mutation: gql`
-        mutation createUser($email: String!,
-                            $password: String!,
-                            $name: String!,
-                            $profilePic: String){
-
-          createUser(authProvider: { email: {email: $email, password: $password}},
-                     name: $name,
-                     profilePic: $profilePic){
+        mutation signupUser($email: String!, $password: String!){
+          signupUser(email: $email, password: $password) {
             id
+            token
           }
         }
         `,
         variables: {
-          name: this.name,
           email: this.email,
           password: this.password,
-          profilePic: this.imageUri
         }
       }).toPromise();
   }
@@ -112,11 +105,12 @@ export class SignUpPage {
   SignIn() {
       return this.apollo.mutate({
         mutation: gql`
-        mutation signinUser($email: String!,
+        mutation authenticateUser($email: String!,
                             $password: String!){
 
-          signinUser(email: {email: $email, password: $password}){
-            token
+          authenticateUser(email: $email, password: $password){
+            token,
+            id
           }
         }
         `,
