@@ -31,8 +31,8 @@ export class LoginPage {
       this.signIn().then(({data}) => {
         if (data) {
           userInfo.data = data;
-          console.log(userInfo.data.authenticateUser.token);
-          window.localStorage.setItem('graphcoolToken', userInfo.data.authenticateUser.token);
+          console.log(userInfo.data.signinUser.token);
+          window.localStorage.setItem('graphcoolToken', userInfo.data.signinUser.token);
           console.log(userInfo.data);
         }
       }).then(() => {
@@ -53,24 +53,23 @@ export class LoginPage {
     toast.present(toast);
   }
 
-  signIn() {
+    signIn() {
       return this.apollo.mutate({
         mutation: gql`
-        mutation authenticateUser($email: String!,
+        mutation signinUser($email: String!,
                             $password: String!){
-
-          authenticateUser(email: $email, password: $password){
-            token,
-            id
+          signinUser(email: {email: $email, password: $password}){
+            token
           }
         }
         `,
         variables: {
           email: this.email,
-          password: this.password,
+          password: this.password
         }
       }).toPromise();
-  }
+    }
+
 
 
 }

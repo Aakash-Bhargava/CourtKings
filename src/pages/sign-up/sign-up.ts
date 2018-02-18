@@ -15,6 +15,7 @@ import gql from 'graphql-tag';
 export class SignUpPage {
 
   name: any;
+  streetName: any;
   email: any;
   password: any;
   imageUri: any = '';
@@ -54,8 +55,8 @@ export class SignUpPage {
           if (data) {
             this.SignIn().then(({data}) => {
               this.userInfo.data = data;
-              console.log(this.userInfo.data.authenticateUser.token);
-              window.localStorage.setItem('graphcoolToken', this.userInfo.data.authenticateUser.token);
+              console.log(this.userInfo.data.signinUser.token);
+              window.localStorage.setItem('graphcoolToken', this.userInfo.data.signinUser.token);
               this.navCtrl.setRoot('TabsPage');
             }, (errors) => {
                 console.log(errors);
@@ -85,12 +86,33 @@ export class SignUpPage {
     }
   }
 
-  createUser() {
+  createUser(){
       return this.apollo.mutate({
         mutation: gql`
-        mutation signupUser($email: String!, $password: String!){
-          signupUser(email: $email, password: $password) {
-            id
+        mutation createUser($email: String!,$password: String!,
+                            $name: String!,$streetName: String!, $profilePic: String){
+          createUser(authProvider: { email: {email: $email, password: $password}},
+                     name: $name,streetName: $streetName, profilePic: $profilePic){
+                       id
+                     }
+                   }
+        `,
+        variables: {
+          name: this.name,
+          streetName: this.streetName,
+          email: this.email,
+          password: this.password,
+          profilePic: this.imageUri
+        }
+      }).toPromise();
+  }
+
+  SignIn(){
+      return this.apollo.mutate({
+        mutation: gql`
+        mutation signinUser($email: String!,
+                            $password: String!){
+          signinUser(email: {email: $email, password: $password}){
             token
           }
         }
@@ -102,24 +124,6 @@ export class SignUpPage {
       }).toPromise();
   }
 
-  SignIn() {
-      return this.apollo.mutate({
-        mutation: gql`
-        mutation authenticateUser($email: String!,
-                            $password: String!){
-
-          authenticateUser(email: $email, password: $password){
-            token,
-            id
-          }
-        }
-        `,
-        variables: {
-          email: this.email,
-          password: this.password,
-        }
-      }).toPromise();
-  }
 
 
 }
