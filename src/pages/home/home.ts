@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Platform } from 'ionic-angular';
+import { IonicPage, ModalController, NavController, Platform } from 'ionic-angular';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import {
   GoogleMap,
@@ -139,6 +139,7 @@ export class HomePage {
   courts: Array<Court>;
 
   constructor(
+    public modalCtrl: ModalController,
     public navCtrl: NavController,
     public geolocation: Geolocation,
     public platform: Platform,
@@ -227,6 +228,12 @@ export class HomePage {
     return new Promise((resolve, reject) => {
       resolve(fake_courts);
     });
+  }
+
+  openDetail(court: Court) {
+    // const modal = this.modalCtrl.create('MapModalPage', court);
+    // modal.present();
+    this.navCtrl.push('MapDetailPage');
   }
 
 }
