@@ -13,6 +13,14 @@ import gql from 'graphql-tag';
 export class ProfilePage {
 
   userInfo = <any>{};
+  name: any;
+  streetName: any;
+  coins: any;
+  winTotal: any;
+  lossTotal: any;
+  courtsRuled: any;
+  teams: any;
+
 
   constructor(public navCtrl: NavController, public apollo: Apollo) {
 
@@ -20,14 +28,17 @@ export class ProfilePage {
 
   ionViewDidLoad() {
     this.checkUserInfo().then(({data}) => {
-      if (data) {
-        console.log(data);
+      if(data){
         this.userInfo = data;
-        console.log(this.userInfo);
         this.userInfo = this.userInfo.user;
+        this.name = this.userInfo.name;
+        this.streetName = this.userInfo.streetName;
+        this.coins = this.userInfo.coins;
+        this.winTotal = this.userInfo.winTotal;
+        this.lossTotal = this.userInfo.lossTotal;
+        this.courtsRuled = this.userInfo.courtsRuled;
+        this.teams = this.userInfo.teams;
         console.log(this.userInfo);
-      } else {
-        console.log('Error checking User Info');
       }
     });
   }
@@ -40,6 +51,14 @@ export class ProfilePage {
           id
           email
           name
+          streetName
+          coins
+          winTotal
+          lossTotal
+          courtsRuled
+          teams{
+            id
+          }
          }
         }
     `
