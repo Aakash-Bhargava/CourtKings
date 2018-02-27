@@ -62,7 +62,15 @@ export class ProfilePage {
          }
         }
     `
-  }).toPromise();
-}
+    }).toPromise();
+  }
+
+  goToCreatePage(){
+    this.navCtrl.push('CreateTeamPage', {
+      user: this.userInfo
+    });
+  }
+
+
 
 }

@@ -1,0 +1,49 @@
+<ion-content text-center>
+
+  <h4> Create a team </h4>
+
+  <ion-list>
+    <ion-item>
+      <ion-input placeholder="Write a Team Name" [(ngModel)]= "teamName"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="search" item-start></ion-icon>
+      <ion-input placeholder="Your home Town" [(ngModel)]= "teamHomeTown"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-icon name="image" item-start></ion-icon>
+      <ion-input placeholder="Choose a Team Photo" [(ngModel)]= "teamImageUrl"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <h5>Current Roster</h5>
+    <ion-list>
+      <ion-item *ngFor="let user of team" text-capitalize>
+        {{user.name}}
+      </ion-item>
+    </ion-list>
+
+    <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="getItems($event)" placeholder="Search Players" showCancelButton="true"></ion-searchbar>
+    <div *ngIf="queryList">
+      <ion-list>
+        <button ion-item *ngFor="let user of queryList" (click)="addUser(user)" text-capitalize>
+          {{user.name}}
+        </button>
+      </ion-list>
+    </div>
+
+  <div *ngIf="!queryList || queryList == ''">
+    <div class="empty" padding>
+      <h2 padding>Add Players to your team.</h2>
+    </div>
+  </div>
+  </ion-list>
+
+
+</ion-content>
+<ion-footer>
+    <button color="dark" ion-button full (tap)="createTeam()">Create Team</button>
+</ion-footer>
