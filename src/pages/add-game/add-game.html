@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button>
+        <span ion-text color="primary" showWhen="ios">Back</span>
+        <ion-icon name="md-close" showWhen="android"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      ADD A GAME
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <div class="section">
+    <h1 class="header">CHOOSE YOUR COURT</h1>
+    <div class="court-group">
+      <button ion-button color="light">W.HOLMES</button>
+      <button ion-button color="light">W.CASE</button>
+      <button ion-button color="light">E.HOLDEN</button>
+    </div>
+  </div>
+  <div class="section">
+    <h1 class="header">CHOOSE YOUR TEAM</h1>
+    <ion-select>
+      <ion-option value="jumpmen" selected>JUMPMEN</ion-option>
+      <ion-option value="bigrings">BIG RINGS</ion-option>
+    </ion-select>
+  </div>
+  <div class="section">
+    <h1 class="header search">
+      <ion-icon name="search"></ion-icon>
+      SEARCH OPPONENT TEAM
+    </h1>
+  </div>
+  <div class="section">
+    <h1 class="header">CHOOSE A TIME SLOT</h1>
+    <ion-item no-lines>
+      <h3 item-start>4PM</h3>
+      <button ion-button block class="open">OPEN</button>
+    </ion-item>
+    <ion-item no-lines>
+      <h3 item-start>4PM</h3>
+      <button ion-button block class="open">OPEN</button>
+    </ion-item>
+  </div>
+</ion-content>
+<ion-footer no-shadow no-border>
+  <ion-toolbar position="bottom">
+    <button color="dark" ion-button full>ADD GAME</button>
+  </ion-toolbar>
+</ion-footer>

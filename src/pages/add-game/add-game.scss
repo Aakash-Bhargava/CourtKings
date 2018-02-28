@@ -1,0 +1,36 @@
+page-add-game {
+  .section {
+    padding: 20px 0;
+    border-top: solid 1px lightgray;
+
+    .search {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    h1.header {
+      font-size: 15px;
+    }
+  
+    .court-group {
+      display: inline-flex;
+      flex-direction: row;
+      justify-content: space-between;
+      button {
+        color: gray !important;
+        font-size: 12px;
+        margin: 0 5px;
+      }
+    }
+
+    ion-item {
+      .open {
+        background-color: orange !important;
+      }
+    }
+  }
+
+  .section:first-child {
+    border-top: none;
+  }
+}
