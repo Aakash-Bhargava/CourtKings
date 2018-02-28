@@ -1,0 +1,17 @@
+<ion-content>
+  <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="getItems($event)" placeholder="Search Players" showCancelButton="true"></ion-searchbar>
+  <div *ngIf="queryList">
+    <ion-list>
+      <button ion-item *ngFor="let user of queryList" text-capitalize>
+        {{user.name}}
+      </button>
+    </ion-list>
+  </div>
+
+<div *ngIf="!queryList || queryList == ''">
+  <div class="empty" padding>
+    <h2 padding>Search for player</h2>
+  </div>
+</div>
+
+</ion-content>

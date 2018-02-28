@@ -29,6 +29,9 @@ export class CreateTeamPage {
 
   }
 
+
+
+
   ionViewDidLoad() {
     this.getAllUserInfo().then(({data})=> {
         this.allUsersData = [];
@@ -158,7 +161,7 @@ export class CreateTeamPage {
   }
 
 
-  createTeam(){
+  validateTeam(){
 
     //missing top information
     if(!this.teamName || !this.teamHomeTown){
@@ -173,9 +176,14 @@ export class CreateTeamPage {
 
 
     if(this.team.length == 3){
-      console.log(this.team);
-      console.log(this.teamName);
-      console.log(this.teamHomeTown);
+
+      this.createTeam().then(({data}) => {
+        if (data) {
+          console.log(data);
+        }
+      }, (errors) => {
+        console.log(errors);
+      });
     }
     else{
       let alert = this.alertCtrl.create({
@@ -187,6 +195,29 @@ export class CreateTeamPage {
     }
 
   }
+
+
+  createTeam(){
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation createTeam($teamName: String!, $homeTown: String,
+                          $players: [User]){
+        createTeam(teamName: $teamName, homeTown: $homeTown, Players: $players){
+                     id
+                   }
+                 }
+      `,
+      variables: {
+        teamName: this.teamName,
+        hometown: this.teamHomeTown,
+        players: this.team
+      }
+    }).toPromise();
+  }
+
+
+
+
 
 
 

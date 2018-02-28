@@ -15,6 +15,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SearchPage {
 
+  tab1Root = "SearchTeamPage";
+  tab2Root = "SearchPlayerPage";
+  tab3Root = "SearchCourtPage";
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
