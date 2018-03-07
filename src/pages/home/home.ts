@@ -230,7 +230,7 @@ export class HomePage {
     });
   }
 
-  openDetail(court: Court) {
+  openDetail() {
     // const modal = this.modalCtrl.create('MapModalPage', court);
     // modal.present();
     this.navCtrl.push('MapDetailPage');

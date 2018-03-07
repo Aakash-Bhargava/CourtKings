@@ -19,7 +19,7 @@ export class WelcomePage {
     this.navCtrl.push('SignUpPage');
   }
   goToLoginPage() {
-    this.navCtrl.push('LoginPage');
+    this.navCtrl.push('MapDetailPage');
   }
 
 }
