@@ -37,6 +37,7 @@ export class SearchTeamPage {
         allTeams{
           id
           teamName
+          wins
          }
         }
     `

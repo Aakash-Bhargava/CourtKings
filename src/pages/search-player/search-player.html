@@ -2,8 +2,9 @@
   <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="getItems($event)" placeholder="Search Players" showCancelButton="true"></ion-searchbar>
   <div *ngIf="queryList">
     <ion-list>
-      <button ion-item *ngFor="let user of queryList" text-capitalize>
+      <button ion-item *ngFor="let user of queryList" text-capitalize text-capitalize detail-none no-lines>
         {{user.name}}
+        <h3 item-end> {{user.winTotal}}</h3>
       </button>
     </ion-list>
   </div>

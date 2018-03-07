@@ -25,14 +25,7 @@ export class CreateTeamPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public apollo: Apollo,
               public alertCtrl: AlertController, public toastCtrl: ToastController) {
-
-
-
   }
-
-
-
-
   ionViewDidLoad() {
     this.getAllUserInfo().then(({data})=> {
         this.allUsersData = [];
@@ -79,8 +72,6 @@ export class CreateTeamPage {
     this.queryList = this.allUsersData;
     console.log(this.queryList);
   }
-
-
 
   getItems(searchbar) {
     // Reset items back to all of the items
@@ -184,7 +175,10 @@ export class CreateTeamPage {
 
       this.createTeam().then(({data}) => {
         if (data) {
+          console.log("Team Successfully made");
           console.log(data);
+
+          this.navCtrl.push('ProfilePage');
         }
       }, (errors) => {
         console.log(errors);
