@@ -7,6 +7,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';
 
+import { SuperTabsModule } from 'ionic2-super-tabs';
+import { SuperTabsController } from 'ionic2-super-tabs';
+
 import { HttpClientModule } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
@@ -24,6 +27,7 @@ import { Apollo, ApolloModule } from 'apollo-angular';
     HttpClientModule,
     HttpLinkModule,
     IonicModule.forRoot(MyApp),
+    SuperTabsModule.forRoot(),
     ApolloModule
   ],
   bootstrap: [IonicApp],
@@ -33,6 +37,7 @@ import { Apollo, ApolloModule } from 'apollo-angular';
   providers: [
     StatusBar,
     SplashScreen,
+    SuperTabsController,
     Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

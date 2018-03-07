@@ -58,6 +58,7 @@ export class ProfilePage {
           courtsRuled
           teams{
             id
+            teamName
           }
          }
         }

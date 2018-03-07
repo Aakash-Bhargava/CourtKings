@@ -42,12 +42,19 @@
         My Teams
       </ion-list-header>
 
-      <ion-item>
+        <button ion-item *ngFor="let team of teams" text-capitalize>
+          <ion-avatar item-start>
+            <img src="../../assets/imgs/logo.png">
+          </ion-avatar>
+          {{team.teamName}}
+        </button>
+
+      <!-- <ion-item>
         <ion-avatar item-start>
           <img src="../../assets/imgs/logo.png">
         </ion-avatar>
         <h3>Jumpmen</h3>
-      </ion-item>
+      </ion-item> -->
 
       <button ion-item (click)="goToCreatePage()">
         <h3>Create A Team</h3>

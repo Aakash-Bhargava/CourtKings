@@ -18,23 +18,20 @@ export class CreateTeamPage {
   q: any;
 
   teamName: any;
-  teamHomeTown: any;
-  teamImageUrl: any;
+  homeTown: any;
+  teamImage: any;
   team = <any>[];
+  teamIds = <any>[];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public apollo: Apollo,
               public alertCtrl: AlertController, public toastCtrl: ToastController) {
-
-
-
   }
-
   ionViewDidLoad() {
     this.getAllUserInfo().then(({data})=> {
         this.allUsersData = [];
         this.allUsers = data;
         this.allUsers = this.allUsers.allUsers;
-        console.log(this.allUsers);
+        //console.log(this.allUsers);
         for (let user of this.allUsers) {
           if (user.id != this.userId) {
             this.allUsersData.push(user);
@@ -75,8 +72,6 @@ export class CreateTeamPage {
     this.queryList = this.allUsersData;
     console.log(this.queryList);
   }
-
-
 
   getItems(searchbar) {
     // Reset items back to all of the items
@@ -158,10 +153,10 @@ export class CreateTeamPage {
   }
 
 
-  createTeam(){
+  validateTeam(){
 
     //missing top information
-    if(!this.teamName || !this.teamHomeTown){
+    if(!this.teamName || !this.homeTown){
       let alert = this.alertCtrl.create({
         title: 'Warning!',
         subTitle: "Your team is missing some information",
@@ -173,9 +168,21 @@ export class CreateTeamPage {
 
 
     if(this.team.length == 3){
-      console.log(this.team);
-      console.log(this.teamName);
-      console.log(this.teamHomeTown);
+
+      for (let player of this.team){
+        this.teamIds.push(player.id);
+      }
+
+      this.createTeam().then(({data}) => {
+        if (data) {
+          console.log("Team Successfully made");
+          console.log(data);
+
+          this.navCtrl.push('ProfilePage');
+        }
+      }, (errors) => {
+        console.log(errors);
+      });
     }
     else{
       let alert = this.alertCtrl.create({
@@ -189,5 +196,21 @@ export class CreateTeamPage {
   }
 
 
-
+  createTeam(){
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation createTeam($teamName: String!, $homeTown: String, $teamImage: String, $playerId: [ID!]){
+        createTeam(teamName: $teamName, homeTown: $homeTown, teamImage: $teamImage, playersIds: $playerId){
+                     id
+                   }
+                 }
+      `,
+      variables: {
+        teamName: this.teamName,
+        homeTown: this.homeTown,
+        teamImage: this.teamImage,
+        playerId: this.teamIds
+      }
+    }).toPromise();
+  }
 }
