@@ -1,13 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the SearchTeamPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
 @IonicPage()
 @Component({
   selector: 'page-search-team',
@@ -20,11 +14,33 @@ export class SearchTeamPage {
   allTeamsData = <any>[];
   q: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public apollo: Apollo) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SearchTeamPage');
+    this.getAllTeamInfo().then(({data})=> {
+        this.allTeamsData = [];
+        this.allTeams = data;
+        this.allTeams = this.allTeams.allTeams;
+        for (let team of this.allTeams) {
+          this.allTeamsData.push(team);
+        }
+        // console.log("All Teams Data");
+        // console.log(this.allTeamsData);
+      });
+  }
+
+  getAllTeamInfo() {
+  return this.apollo.query({
+    query: gql`
+      query{
+        allTeams{
+          id
+          teamName
+         }
+        }
+    `
+    }).toPromise();
   }
 
   initializeItems(): void {
@@ -46,8 +62,8 @@ export class SearchTeamPage {
     }
 
     this.queryList = this.queryList.filter((v) => {
-      if(v.name && this.q) {
-        if (v.name.toLowerCase().indexOf(this.q.toLowerCase()) > -1) {
+      if(v.teamName && this.q) {
+        if (v.teamName.toLowerCase().indexOf(this.q.toLowerCase()) > -1) {
           return true;
         }
         return false;
