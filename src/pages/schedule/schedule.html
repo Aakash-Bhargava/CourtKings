@@ -2,7 +2,7 @@
 
   <ion-toolbar>
     <ion-buttons start>
-      <button ion-button>
+      <button ion-button (click)="goback()">
         <span ion-text color="primary" showWhen="ios">Back</span>
         <ion-icon name="md-close" showWhen="android"></ion-icon>
       </button>
@@ -13,45 +13,26 @@
   </ion-toolbar>
 
 </ion-header>
-
-
 <ion-content>
-    <div class="court-name">
-      <h1>WEST HOLMES COURT</h1>
+  <div class="court-name">
+    <h1 text-capitalize>{{ court.courtName }}</h1>
+  </div>
+  <div class="court-king-info">
+    <h3>{{ court.courtKings.teamName }}</h3>
+    <div class="avatar-group">
+      <img [src]="court.courtKings.players[0].profilePic">
+      <img [src]="court.courtKings.players[1].profilePic">
+      <img [src]="court.courtKings.players[2].profilePic">
     </div>
-    <div class="court-king-info">
-      <h3>JUMPMEN</h3>
-      <div class="avatar-group">
-        <img src="http://via.placeholder.com/50x50">
-        <img src="http://via.placeholder.com/50x50">
-        <img src="http://via.placeholder.com/50x50">
-      </div>
-      <h3>14</h3>
-    </div>
-    <div class="standings-header">
-      <h3>TODAY&nbsp;<ion-icon name="arrow-forward"></ion-icon></h3>
-    </div>
-    <ion-item no-lines>
-      <h3 item-start>1PM</h3>
-      <button ion-button block class="open">OPEN</button>
-    </ion-item>
-    <ion-item no-lines>
-      <h3 item-start>2PM</h3>
-      <button ion-button block color="dark">JUMPMEN VS BALLERS</button>
-    </ion-item>
-    <ion-item no-lines>
-      <h3 item-start>3PM</h3>
-      <button ion-button block color="dark">THE OTHER GUYS VS BIG RINGS</button>
-    </ion-item>
-    <ion-item no-lines>
-      <h3 item-start>4PM</h3>
-      <button ion-button block class="open">OPEN</button>
-    </ion-item>
-    <ion-item no-lines>
-      <h3 item-start>5PM</h3>
-      <button ion-button block color="dark">JUMPMEN VS BIG RINGS</button>
-    </ion-item>
-    <ion-item no-lines>
-      <button ion-button block color="light">ADD A GAME</button>
-    </ion-item>
+    <h3>{{ court.courtKings.wins }}</h3>
+  </div>
+  <div class="standings-header">
+    <h3>TODAY&nbsp;<ion-icon name="arrow-forward"></ion-icon></h3>
+  </div>
+  <ion-item no-lines *ngFor="let hour of hours">
+    <h3 item-start>{{ hour }}</h3>
+    <button ion-button block text-capitalize (tap)="addGame(hour)" [ngClass]="isHourOpen(hour)?'open':'closed'">
+      {{ isHourOpen(hour) ? 'OPEN' : findTeams(hour)[0] + ' VS ' + findTeams(hour)[1] }}
+    </button>
+  </ion-item>
 </ion-content>
