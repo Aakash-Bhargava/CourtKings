@@ -7,40 +7,40 @@
       </button>
     </ion-buttons>
     <ion-title>
-      ADD A GAME
+      REQUEST TO PLAY
     </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
   <div class="section">
-    <h1 class="header">CHOOSE YOUR COURT</h1>
+    <h1 class="header">YOUR COURT</h1>
     <div class="court-group">
-      <button ion-button color="light">W.HOLMES</button>
-      <button ion-button color="light">W.CASE</button>
-      <button ion-button color="light">E.HOLDEN</button>
+      <button ion-button text-capitalize color="light">{{ court.courtName }}</button>
     </div>
   </div>
-  <div class="section">
+  <div *ngIf="user" class="section">
     <h1 class="header">CHOOSE YOUR TEAM</h1>
     <ion-select>
-      <ion-option value="jumpmen" selected>JUMPMEN</ion-option>
-      <ion-option value="bigrings">BIG RINGS</ion-option>
+      <ion-option *ngFor="let team of user.teams; let i = index" [value]="team.teamName.toLowerCase()" [selected]="i == 0 ? true : false">
+        {{ team.teamName }}
+      </ion-option>
     </ion-select>
   </div>
-  <div class="section">
-    <h1 class="header search">
-      <ion-icon name="search"></ion-icon>
-      SEARCH OPPONENT TEAM
-    </h1>
+  <div class="search-section">
+    <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="getItems($event)" placeholder="Search Players" showCancelButton="true"></ion-searchbar>
+    <div *ngIf="queryList">
+      <ion-list>
+        <button ion-item *ngFor="let team of queryList" (click)="setOpponent(team)" text-capitalize>
+          {{ team.teamName }}
+        </button>
+      </ion-list>
+    </div>
+    <h1 *ngIf="opponent">{{ opponent.teamName }}</h1>
   </div>
   <div class="section">
-    <h1 class="header">CHOOSE A TIME SLOT</h1>
+    <h1 class="header">YOUR TIME SLOT</h1>
     <ion-item no-lines>
-      <h3 item-start>4PM</h3>
-      <button ion-button block class="open">OPEN</button>
-    </ion-item>
-    <ion-item no-lines>
-      <h3 item-start>4PM</h3>
+      <h3 item-start>{{ hour }}</h3>
       <button ion-button block class="open">OPEN</button>
     </ion-item>
   </div>
