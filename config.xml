@@ -91,5 +91,5 @@
         <variable name="LOCATION_ALWAYS_USAGE_DESCRIPTION" value="Trace your location on the map" />
     </plugin>
     <allow-navigation href="http://10.0.1.15:8100" />
-    <engine name="ios" spec="4.5.4" />
+    <engine name="ios" spec="~4.5.4" />
 </widget>

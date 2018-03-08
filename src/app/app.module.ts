@@ -17,6 +17,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
 import { Apollo, ApolloModule } from 'apollo-angular';
 
+import CourtProvider from '../providers/court/court';
+import UserProvider from '../providers/user/user';
+import TeamProvider from '../providers/team/team';
+
 
 @NgModule({
   declarations: [
@@ -39,7 +43,10 @@ import { Apollo, ApolloModule } from 'apollo-angular';
     SplashScreen,
     SuperTabsController,
     Geolocation,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    CourtProvider,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    UserProvider,
+    TeamProvider
   ]
 })
 export class AppModule {
