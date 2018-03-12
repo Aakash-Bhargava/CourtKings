@@ -28,15 +28,16 @@
   </div>
   <div class="search-section">
     <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="getItems($event)" placeholder="Search Players" showCancelButton="true"></ion-searchbar>
-    <div *ngIf="queryList">
-      <ion-list>
-        <button ion-item *ngFor="let team of queryList" (click)="setOpponent(team)" text-capitalize>
-          {{ team.teamName }}
-        </button>
-      </ion-list>
-    </div>
-    <h1 *ngIf="opponent">{{ opponent.teamName }}</h1>
   </div>
+  <ion-list *ngIf="queryList.length !== 0">
+    <button ion-item *ngFor="let team of queryList" (click)="setOpponent(team)" text-capitalize>
+      {{ team.teamName }}
+    </button>
+  </ion-list>
+  <ion-item class="opponent" *ngIf="opponent">
+    You choose {{ opponent.teamName }}
+    <ion-icon name="ios-close" item-end></ion-icon>
+  </ion-item>
   <div class="section">
     <h1 class="header">YOUR TIME SLOT</h1>
     <ion-item no-lines>

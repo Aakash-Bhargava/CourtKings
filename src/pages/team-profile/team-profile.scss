@@ -1,0 +1,47 @@
+page-team-profile {
+
+  ion-grid {
+    color: white;
+    background-image: url('https://static.pexels.com/photos/149988/pexels-photo-149988.jpeg');
+  }
+  .name{
+    margin-bottom: .1em;
+    font-size: 1.9rem;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: white !important;
+    opacity: 1;
+  }
+
+  .swiper-pagination-bullet {
+    background: gray;
+    opacity: 1;
+  }
+
+  ion-slide {
+    padding-bottom: 30px !important;
+  }
+
+  .notes {
+    font-size: 11px;
+    color: lightgray;
+  }
+
+  .location {
+    margin-bottom: 10px;
+  }
+
+  .player-name {
+    font-size: 1.35rem;
+    margin-bottom: 0.1em;
+  }
+
+  .profile-pic {
+    img{
+      height: 15%;
+      width: 25%;
+      margin: auto;
+    }
+  }
+}

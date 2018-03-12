@@ -7,6 +7,11 @@ page-add-game {
     h1 {
       font-size: 13px;
     }
+
+    div {
+      padding: 0;
+      margin: 0;
+    }
   }
   .section {
     padding: 20px 0;
@@ -36,5 +41,11 @@ page-add-game {
 
   .section:first-child {
     border-top: none;
+  }
+
+  .opponent {
+    ion-icon {
+      color: red;
+    }
   }
 }
