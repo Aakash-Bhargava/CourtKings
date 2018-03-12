@@ -54,7 +54,7 @@ export class SignUpPage {
               this.userInfo.data = data;
               console.log(this.userInfo.data.signinUser.token);
               window.localStorage.setItem('graphcoolToken', this.userInfo.data.signinUser.token);
-              this.navCtrl.setRoot('TabsPage');
+              this.navCtrl.push('IntroPage');
             }, (errors) => {
                 console.log(errors);
                 if (errors === 'GraphQL error: No user found with that information') {
