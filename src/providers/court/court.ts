@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import Subject from 'rxjs/Subject';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import map from 'rxjs/add/operator/map';
 import { Court, CourtDetail } from '../../types';
@@ -39,7 +38,7 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
 
 const QUERY_ALL_COURTS = gql`
   query{
-    allCourts{
+    allCourts {
       id
       courtName
       latitude
@@ -55,13 +54,13 @@ export default class CourtProvider {
   private fetching = true;
 
   constructor(private http: HttpClient, private apollo: Apollo) {
-    this.fetchCourts().subscribe(() => this.fetching = false);
+    this.fetchCourts().subscribe((courts) => this.fetching = false);
   }
 
   fetchCourts(): Observable<Array<Court>> {
     const obs = this.apollo
       .query({ query: QUERY_ALL_COURTS })
-      .map(({ data }: any) => data.Court);
+      .map(({ data }: any) => data.allCourts);
     obs.subscribe(this._allCourts);
     return obs;
   }

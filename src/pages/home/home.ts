@@ -29,14 +29,8 @@ export class HomePage {
   ) {
     platform.ready().then(() => {
       this.loadMap();
-      // this.courtProvider.fetchCourts().then((data) => {
-      //   console.log(data);
-      // });
-      // this.courtProvider.getCourtById('cje7iinnj4ywu0189yhx9bz7z')
-      // .then((data) => {
-      //   console.log(data);
-      // });
       // this.navCtrl.push('MapDetailPage', { id: 'cje7iinnj4ywu0189yhx9bz7z' });
+      // this.navCtrl.push('TeamProfilePage', { id: 'cjehxya9877co0189hv57ihtj' });
     });
   }
 
@@ -66,7 +60,7 @@ export class HomePage {
           animation: 'DROP',
           position: campus,
         });
-        this.courtProvider.getAllCourts().then((courts) => {
+        this.courtProvider.fetchCourts().subscribe((courts) => {
           courts.map(court => this.addMarker(court));
         });
       }

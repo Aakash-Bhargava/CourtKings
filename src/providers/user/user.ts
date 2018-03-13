@@ -58,7 +58,7 @@ export default class UserProvider {
       .map(({ data }: any) => this.currentUser = data.user);
 
     obs.subscribe(this.currentUser);
-    return this.currentUser;
+    return obs;
   }
 
   getCurrentUser(): Observable<User> {
