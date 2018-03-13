@@ -2,6 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import Subject from 'rxjs/Subject';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
+import map from 'rxjs/add/operator/map';
 import { Court, CourtDetail } from '../../types';
 
 
@@ -47,35 +50,30 @@ const QUERY_ALL_COURTS = gql`
 
 @Injectable()
 export default class CourtProvider {
-  allCourts: Array<Court> = [];
+  private _allCourts: BehaviorSubject<Array<Court>> = new BehaviorSubject([]);
+  private readonly allCourts: Observable<Array<Court>> = this._allCourts.asObservable();
+  private fetching = true;
 
-  constructor(public http: HttpClient, public apollo: Apollo) {
-    console.log('Hello CourtProvider Provider');
+  constructor(private http: HttpClient, private apollo: Apollo) {
+    this.fetchCourts().subscribe(() => this.fetching = false);
   }
 
-  fetchCourts(): Promise<Array<Court>> {
-    return this.apollo.query({ query: QUERY_ALL_COURTS })
-    .toPromise()
-    .then(({ data }: any) => {
-      this.allCourts = data.allCourts;
-      return Promise.resolve(this.allCourts);
-    });
+  fetchCourts(): Observable<Array<Court>> {
+    const obs = this.apollo
+      .query({ query: QUERY_ALL_COURTS })
+      .map(({ data }: any) => data.Court);
+    obs.subscribe(this._allCourts);
+    return obs;
   }
 
-  getAllCourts(): Promise<Array<Court>> {
-    if (this.allCourts) {
-      return Promise.resolve(this.allCourts);
-    }
-    return this.fetchCourts();
+  getAllCourts(): Observable<Array<Court>> {
+    return this.allCourts;
   }
 
-  getCourtById(id: string): Promise<CourtDetail> {
-    return this.apollo.query({ query: QUERY_COURT_DETAIL_BY_ID, variables: { courtId: id } })
-    .toPromise()
-    .then(({ data }: any) => {
-      const result = data.Court;
-      return Promise.resolve(result);
-    });
+  getCourtById(id: string): Observable<CourtDetail> {
+    return this.apollo
+      .query({ query: QUERY_COURT_DETAIL_BY_ID, variables: { courtId: id } })
+      .map(({ data }: any) => data.Court);
   }
 
 }

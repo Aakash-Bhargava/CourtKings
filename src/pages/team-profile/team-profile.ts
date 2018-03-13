@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the TeamProfilePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import moment from 'moment';
+import TeamProvider from '../../providers/team/team';
+import { TeamDetail } from '../../types';
 
 @IonicPage()
 @Component({
@@ -14,12 +10,32 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'team-profile.html',
 })
 export class TeamProfilePage {
+  private team: TeamDetail;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private teamProvider: TeamProvider,
+  ) {
+    this.teamProvider.getTeamById(this.navParams.get('id'))
+      .subscribe((team: TeamDetail) => this.team = team);
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad TeamProfilePage');
+  getTotalCoins(team: TeamDetail): number {
+    return team.players.reduce((acc, player) => acc + player.coins, 0);
   }
 
+  openPendingChallenges() {
+    const challenges = this.team.challenges.filter(c => moment(c.gameTime) > moment());
+    this.navCtrl.push('PendingChallengesPage', { challenges });
+  }
+
+  openFinishedChallenges() {
+    const challenges = this.team.challenges.filter(c => moment(c.gameTime) < moment());
+    this.navCtrl.push('FinishedChallengesPage', { challenges });
+  }
+
+  goback() {
+    this.navCtrl.pop();
+  }
 }

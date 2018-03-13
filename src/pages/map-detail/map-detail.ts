@@ -9,22 +9,21 @@ import { CourtDetail } from '../../types';
   templateUrl: 'map-detail.html',
 })
 export class MapDetailPage {
-  court: CourtDetail;
+  private court: CourtDetail;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public viewCtrl: ViewController,
-    public courtProvider: CourtProvider,
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private viewCtrl: ViewController,
+    private courtProvider: CourtProvider,
   ) {
   }
 
   ngOnInit() {
     const id = this.navParams.get('id');
-    this.courtProvider.getCourtById(id)
-    .then((court: CourtDetail) => {
-      this.court = court;
-    });
+    this.courtProvider
+      .getCourtById(id)
+      .subscribe((court: CourtDetail) => this.court = court);
   }
 
   dismiss() {

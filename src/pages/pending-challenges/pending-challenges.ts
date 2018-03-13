@@ -22,4 +22,8 @@ export class PendingChallengesPage {
     console.log('ionViewDidLoad PendingChallengesPage');
   }
 
+  goback() {
+    this.navCtrl.pop();
+  }
+
 }

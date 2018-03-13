@@ -1,5 +1,10 @@
 page-team-profile {
-
+  .spinner-container {
+    width: 100%;
+    text-align: center;
+    padding: 50%;
+  }
+  
   ion-grid {
     color: white;
     background-image: url('https://static.pexels.com/photos/149988/pexels-photo-149988.jpeg');

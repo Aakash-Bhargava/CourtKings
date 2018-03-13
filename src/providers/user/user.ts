@@ -2,84 +2,78 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import { User } from '../../types';
+
+const QUERY_CURRENT_USER = gql`
+  query{
+    user{
+      id
+      email
+      name
+      streetName
+      coins
+      winTotal
+      lossTotal
+      courtsRuled
+      teams{
+        id
+        teamName
+      }
+    }
+  }
+`;
+
+const QUERY_ALL_USERS = gql`
+  query{
+    allUsers{
+      id
+      email
+      name
+      streetName
+      coins
+      winTotal
+      lossTotal
+      courtsRuled
+      teams{
+        id
+      }
+    }
+  }
+`;
 
 @Injectable()
 export default class UserProvider {
-  allUsers: Array<User>;
-  currentUser: User;
+  private _allUsers: BehaviorSubject<Array<User>> = new BehaviorSubject<Array<User>>([]);
+  private readonly allUsers: Observable<Array<User>> = this._allUsers.asObservable();
+  private currentUser: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
   constructor(public http: HttpClient, public apollo: Apollo) {
     console.log('Hello UserProvider Provider');
   }
 
-  fetchCurrentUser(): Promise<User> {
-    return this.apollo.query({
-      query: gql`
-        query{
-          user{
-            id
-            email
-            name
-            streetName
-            coins
-            winTotal
-            lossTotal
-            courtsRuled
-            teams{
-              id
-              teamName
-            }
-          }
-        }
-      `
-    })
-    .toPromise()
-    .then(({ data }: any) => {
-      this.currentUser = data.user;
-      return Promise.resolve(this.currentUser);
-    });
+  fetchCurrentUser(): Observable<User> {
+    const obs =  this.apollo
+      .query({ query: QUERY_CURRENT_USER })
+      .map(({ data }: any) => this.currentUser = data.user);
+
+    obs.subscribe(this.currentUser);
+    return this.currentUser;
   }
 
-  getCurrentUser(): Promise<User> {
-    if (this.currentUser) {
-      return Promise.resolve(this.currentUser);
-    }
-    return this.fetchCurrentUser();
+  getCurrentUser(): Observable<User> {
+    return this.currentUser;
   }
 
-  fetchAllUsers(): Promise<Array<User>> {
-    return this.apollo.query({
-      query: gql`
-        query{
-          allUsers{
-            id
-            email
-            name
-            streetName
-            coins
-            winTotal
-            lossTotal
-            courtsRuled
-            teams{
-              id
-            }
-          }
-        }
-      `
-    })
-    .toPromise()
-    .then(({ data }: any) => {
-      this.allUsers = data.allUsers;
-      return Promise.resolve(this.allUsers);
-    });
+  fetchAllUsers(): Observable<Array<User>> {
+    const obs = this.apollo.query({ query: QUERY_ALL_USERS })
+    .map(({ data }: any) => data.allUsers);
+    obs.subscribe(this._allUsers);
+    return obs;
   }
 
-  getAllUsers(): Promise<Array<User>> {
-    if (this.allUsers) {
-      return Promise.resolve(this.allUsers);
-    }
-    return this.fetchAllUsers();
+  getAllUsers(): Observable<Array<User>> {
+    return this.allUsers;
   }
 
 }

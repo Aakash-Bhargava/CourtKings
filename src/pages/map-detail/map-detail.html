@@ -12,6 +12,9 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <div *ngIf="!court" class="spinner-container">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
   <div *ngIf="court">
     <div class="court-name">
       <h1 text-capitalize>{{ court.courtName }}</h1>

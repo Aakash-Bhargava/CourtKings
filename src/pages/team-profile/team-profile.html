@@ -1,53 +1,51 @@
 <ion-content>
-  <ion-grid text-center>
-    <h1 class="name">JUMPMEN</h1>
-    <span class="notes location">East Lansing, MI</span>
-    <ion-slides pager>
-      <ion-slide>
-        <ion-avatar class="profile-pic">
-          <img  src="../../assets/imgs/logo.png">
-        </ion-avatar>
-        <h3 class="player-name">@jonnie</h3>
-        <span class="notes player-notes">Center on College League</span>
-      </ion-slide>
-      <ion-slide>
-        <ion-avatar class="profile-pic">
-          <img  src="../../assets/imgs/logo.png">
-        </ion-avatar>
-        <h3 class="player-name">@jonnie</h3>
-        <span class="notes player-notes">Center on College League</span>
-      </ion-slide>
-    </ion-slides>
-    <ion-row>
-      <ion-col>
-        <span class="notes">COURTS RULED</span>
-      </ion-col>
-      <ion-col class="notes">
-        <span>GAMES WON</span>
-      </ion-col>
-      <ion-col>
-        <span class="notes">COINS AVAILABLE</span>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        3
-      </ion-col>
-      <ion-col>
-        10
-      </ion-col>
-      <ion-col>
-        75
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <button ion-button small round outline color="light">Challenge</button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-list>
-    <button ion-item>Pending Challenges</button>
-    <button ion-item>Finished Challenges</button>
-  </ion-list>
+  <div *ngIf="!team" class="spinner-container">
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+  <div *ngIf="team">
+    <ion-grid text-center>
+      <h1 class="name">{{ team.teamName }}</h1>
+      <span class="notes location">{{ team.homeTown }}</span>
+      <ion-slides pager>
+        <ion-slide *ngFor="let player of team.players">
+          <ion-avatar class="profile-pic">
+            <img  [src]="player.profilePic">
+          </ion-avatar>
+          <h3 class="player-name">@{{ player.streetName }}</h3>
+          <span class="notes player-notes">Center on College League</span>
+        </ion-slide>
+      </ion-slides>
+      <ion-row>
+        <ion-col>
+          <span class="notes">COURTS RULED</span>
+        </ion-col>
+        <ion-col>
+          <span class="notes">GAMES WON</span>
+        </ion-col>
+        <ion-col>
+          <span class="notes">COINS AVAILABLE</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          {{ team.courtsRuled.length }}
+        </ion-col>
+        <ion-col>
+          {{ team.wins }}
+        </ion-col>
+        <ion-col>
+          {{ getTotalCoins(team) }}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <button ion-button small round outline color="light">Challenge</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-list>
+      <button ion-item (tap)="openPendingChallenges()">Pending Challenges</button>
+      <button ion-item (tap)="openFinishedChallenge()">Finished Challenges</button>
+    </ion-list>
+  </div>
 </ion-content>

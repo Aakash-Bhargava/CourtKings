@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { BehaviorSubject } from 'rxjs/Rx';
 import { Court } from '../../types';
 import UserProvider from '../../providers/user/user';
 import TeamProvider from '../../providers/team/team';
@@ -11,47 +12,36 @@ import { Team, User } from '../../types';
   templateUrl: 'add-game.html',
 })
 export class AddGamePage {
-  user: User;
-  court: Court;
-  hour: string;
-  opponent: Team;
-  queryList: Array<Team> = [];
+  private court: Court;
+  private hour: string;
+  private opponent: Team;
+  private searching = false;
+  private queryList: Array<Team> = [];
+  private term$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public userProvider: UserProvider,
-    public teamProvider: TeamProvider,
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private userProvider: UserProvider,
+    private teamProvider: TeamProvider,
   ) {
     this.court = this.navParams.get('court');
     this.hour = this.navParams.get('hour');
-  }
-
-  ionViewDidLoad() {
-    this.userProvider.getCurrentUser().then((user: User) => this.user = user);
-  }
-
-  getItems(searchbar) {
-    const key = searchbar.srcElement.value;
-    if (!key) {
-      this.queryList = [];
-      return;
-    }
-
-    this.teamProvider.getAllTeams().then((teams: Array<Team>) => {
-      this.queryList = teams.filter((team: Team) => {
-        if (team.teamName && key) {
-          if (team.teamName.toLowerCase().indexOf(key.toLowerCase()) > -1) {
-            return true;
-          }
-          return false;
-        }
-      });
+    this.term$.subscribe((term: string) => this.searching = !!term);
+    this.teamProvider.search(this.term$).subscribe((result: Array<Team>) => {
+      this.queryList = result;
+      this.searching = false;
     });
   }
 
   setOpponent(team: Team) {
     this.opponent = team;
+    this.queryList = [];
+    this.term$.next('');
+  }
+
+  clearOpponent() {
+    this.opponent = null;
   }
 
 }

@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import moment from 'moment';
-import { Challenge, CourtDetail } from '../../types';
-
-type Schedule = {
-  hour: string,
-  teams: Array<string>,
-};
+import { Challenge, CourtDetail, Schedule } from '../../types';
 
 @IonicPage()
 @Component({
@@ -31,10 +26,7 @@ export class SchedulePage {
 
   isHourOpen(hour: string): boolean {
     const find = this.schedules.find((s: Schedule) => s.hour === hour);
-    if (find) {
-      return false;
-    }
-    return true;
+    return !find;
   }
 
   findTeams(hour: string): Array<string> {
@@ -50,9 +42,4 @@ export class SchedulePage {
       this.navCtrl.push('AddGamePage', { court: { id: this.court.id, courtName: this.court.courtName }, hour });
     }
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SchedulePage');
-  }
-
 }

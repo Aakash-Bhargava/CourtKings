@@ -22,4 +22,8 @@ export class FinishedChallengesPage {
     console.log('ionViewDidLoad FinishedChallengesPage');
   }
 
+  goback() {
+    this.navCtrl.pop();
+  }
+
 }

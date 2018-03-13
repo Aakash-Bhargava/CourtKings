@@ -28,7 +28,13 @@ export interface Team {
   teamImage: string;
   wins: number;
   teamName: string;
-  playAt?: Array<Court>;
+}
+
+export interface TeamDetail extends Team {
+  challenges: Array<Challenge>;
+  challengesWon: Array<Challenge>;
+  courtsRuled: Array<Court>;
+  playAt: Array<Court>;
 }
 
 export interface Court {
@@ -43,3 +49,8 @@ export interface CourtDetail extends Court {
   courtKings: Team;
   standings: Array<Team>;
 }
+
+export type Schedule = {
+  hour: string,
+  teams: Array<string>,
+};

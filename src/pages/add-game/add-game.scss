@@ -1,4 +1,8 @@
 page-add-game {
+  .spinner-container {
+    text-align: center;
+  }
+
   .search-section {
     padding: 0;
     margin: 0;
@@ -11,6 +15,10 @@ page-add-game {
     div {
       padding: 0;
       margin: 0;
+    }
+
+    ion-searchbar {
+      border: none !important;
     }
   }
   .section {
