@@ -2,27 +2,42 @@
 <ion-slides pager="true">
 
   <ion-slide>
+    <button ion-button color="light" clear large icon-only>
+      <ion-icon name="map"></ion-icon>
+    </button>
     <p> Browse the map. Find a court. Tap on it. </p>
   </ion-slide>
 
   <ion-slide>
+    <button ion-button color="light" clear large icon-only>
+      <ion-icon name="calendar"></ion-icon>
+    </button>
      <p> View the schedule. Schedule a game. Show up. </p>
   </ion-slide>
 
   <ion-slide>
+    <button ion-button color="light" clear large icon-only>
+      <ion-icon name="ribbon"></ion-icon>
+    </button>
      <p> Play the game. Win the game. Claim the throne. </p>
   </ion-slide>
 
   <ion-slide>
     <ion-row>
       <ion-col>
+        <button ion-button color="light" clear large icon-only>
+          <ion-icon name="basketball"></ion-icon>
+        </button>
          <p> Create a team to get started. </p>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <button ion-button color="light" (click)="goToHomePage()">Create A Team</button>
+        <button id="create-team-btn" ion-button full round color="light" (click)="goToHomePage()">Create A Team</button>
       </ion-col>
+    </ion-row>
+    <ion-row>
+      <button id="create-team-btn" ion-button full small clear round color="light" (tap)="warning()">Skip for now</button>
     </ion-row>
   </ion-slide>
 

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, ToastController} from 'ionic-angular';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
@@ -15,12 +17,13 @@ export class SignUpPage {
   streetName: any;
   email: any;
   password: any;
-  imageUri: any = '';
+  imageUri: any;
 
   userInfo = <any>{};
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public apollo: Apollo,
-              public toastCtrl: ToastController) {
+              public toastCtrl: ToastController, private Camera: Camera, public _DomSanitizer: DomSanitizer,
+              private platform: Platform) {
   }
 
   ionViewDidLoad() {
@@ -119,6 +122,32 @@ export class SignUpPage {
           password: this.password,
         }
       }).toPromise();
+  }
+
+  changePic() {
+    console.log("clicked");
+    let options: CameraOptions = {
+      quality: 50,
+      destinationType: 0,
+      targetWidth: 500,
+      targetHeight: 500,
+      encodingType: 0,
+      sourceType: 0,
+      correctOrientation: true,
+      allowEdit: true
+
+    };
+    if (this.platform.is('android')) {
+      this.Camera.getPicture(options).then((ImageData) => {
+        let base64Image = "data:image/jpeg;base64," + ImageData;
+        this.imageUri = base64Image;
+      });
+    } else if (this.platform.is('ios')) {
+      this.Camera.getPicture(options).then((ImageData) => {
+        let base64Image = "data:image/jpeg;base64," + ImageData;
+        this.imageUri = base64Image;
+      })
+    }
   }
 
 

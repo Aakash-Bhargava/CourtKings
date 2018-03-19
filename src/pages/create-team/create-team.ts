@@ -175,7 +175,11 @@ export class CreateTeamPage {
 
       this.createTeam().then(({data}) => {
         if (data) {
-          console.log("Team Successfully made");
+          let alert = this.alertCtrl.create({
+            title: 'Team successfully made!',
+            buttons: ['Ok']
+          });
+          alert.present();
           console.log(data);
 
           this.navCtrl.push('ProfilePage');
