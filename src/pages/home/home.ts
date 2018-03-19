@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, NavController, Platform } from 'ionic-angular';
+import { IonicPage, ModalController, NavController, Platform, LoadingController, App } from 'ionic-angular';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import {
   GoogleMap,
@@ -19,6 +19,7 @@ import {
 export class HomePage {
   map: GoogleMap;
   courts: Array<Court>;
+  loading: any;
 
   constructor(
     public modalCtrl: ModalController,
@@ -26,6 +27,8 @@ export class HomePage {
     public geolocation: Geolocation,
     public platform: Platform,
     public courtProvider: CourtProvider,
+    public loadingCtrl: LoadingController,
+    public app: App
   ) {
     platform.ready().then(() => {
       this.loadMap();
@@ -94,6 +97,19 @@ export class HomePage {
 
   openDetail(court: Court) {
     this.navCtrl.push('MapDetailPage', { id: court.id });
+  }
+
+  logoutUser() {
+      window.localStorage.removeItem('graphcoolToken');
+      this.loading = this.loadingCtrl.create({
+        dismissOnPageChange: true,
+        content: 'Logging Out...'
+      });
+      this.loading.present();
+      // this.navCtrl.setRoot(WelcomePage);
+      // location.reload();
+      // this.navCtrl.push(WelcomePage);
+       this.app.getRootNav().setRoot('WelcomePage');
   }
 
 }

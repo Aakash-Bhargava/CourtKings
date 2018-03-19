@@ -25,3 +25,7 @@
 * {
   font-family: 'Gotham';
 }
+
+.tabs-ios .tab-button[aria-selected=true] .tab-button-icon {
+  color: #222;
+}
