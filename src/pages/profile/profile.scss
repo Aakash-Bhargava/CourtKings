@@ -1,5 +1,10 @@
 page-profile {
 
+  ion-grid{
+    background-color: black;
+    color: white;
+  }
+
   #name{
     margin-bottom: .3em;
     font-size: 1.9rem;
@@ -10,13 +15,18 @@ page-profile {
     font-size: 1.35rem;
   }
 
-  #profilePic{
+
+  ion-avatar{
     img{
       height: 15%;
-      width: 25%;
+      width: 40%;
       margin: auto;
+      display: block;
+      border-radius: 50%;
     }
   }
+
+
 
 
 

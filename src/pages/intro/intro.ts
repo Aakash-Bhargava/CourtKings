@@ -19,25 +19,8 @@ export class IntroPage {
     this.navCtrl.setRoot('TabsPage');
   }
 
-  warning(){
-    let alert = this.alertCtrl.create({
-      title: 'Warning!',
-      subTitle: "In order to schedule games you will need to make a team!",
-      buttons: [{
-        text: 'Create Team',
-        handler: () => {
-          console.log('Create Team clicked');
-        }
-      },{
-        text: 'Go to Home',
-        handler: () => {
-          this.goToHomePage();
-          console.log('cancel clicked');
-        }
-      }
-      ]});
-      alert.present();
-      return;
+  goToCreateTeamPage(){
+    this.navCtrl.setRoot('CreateTeamPage');
   }
 
 }
