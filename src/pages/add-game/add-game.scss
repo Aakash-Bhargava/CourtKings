@@ -3,10 +3,14 @@ page-add-game {
     text-align: center;
   }
 
+  ion-list {
+    margin-bottom: 0 !important;
+  }
+
   .search-section {
     padding: 0;
     margin: 0;
-    border-top: solid 1px lightgray;
+    // border-top: solid 1px lightgray;
 
     h1 {
       font-size: 13px;

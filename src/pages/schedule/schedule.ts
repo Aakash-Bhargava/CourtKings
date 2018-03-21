@@ -39,7 +39,7 @@ export class SchedulePage {
 
   addGame(hour: string) {
     if (this.isHourOpen(hour)) {
-      this.navCtrl.push('AddGamePage', { court: { id: this.court.id, courtName: this.court.courtName }, hour });
+      this.navCtrl.push('AddGamePage', { court: this.court, hour });
     }
   }
 }

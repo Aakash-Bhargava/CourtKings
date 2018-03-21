@@ -38,4 +38,8 @@ export class MapDetailPage {
     this.navCtrl.push('SchedulePage', { court: this.court });
   }
 
+  openTeamProfile(id: string) {
+    this.navCtrl.push('TeamProfilePage', { id });
+  }
+
 }

@@ -42,10 +42,10 @@ export interface Court {
   courtName: string;
   latitude: number;
   longitude: number;
+  challenges: Array<Challenge>;
 }
 
 export interface CourtDetail extends Court {
-  challenges: Array<Challenge>;
   courtKings: Team;
   standings: Array<Team>;
 }

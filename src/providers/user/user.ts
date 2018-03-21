@@ -49,13 +49,13 @@ export default class UserProvider {
   private currentUser: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
   constructor(public http: HttpClient, public apollo: Apollo) {
-    console.log('Hello UserProvider Provider');
+    this.fetchCurrentUser();
   }
 
   fetchCurrentUser(): Observable<User> {
     const obs =  this.apollo
       .query({ query: QUERY_CURRENT_USER })
-      .map(({ data }: any) => this.currentUser = data.user);
+      .map(({ data }: any) => data.user);
 
     obs.subscribe(this.currentUser);
     return obs;

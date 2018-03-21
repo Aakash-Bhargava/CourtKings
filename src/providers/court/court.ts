@@ -23,6 +23,7 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
       latitude
       longitude
       standings {
+        id
         wins
         teamName
       }
@@ -43,6 +44,12 @@ const QUERY_ALL_COURTS = gql`
       courtName
       latitude
       longitude
+      challenges {
+        gameTime
+        teams {
+          teamName
+        }
+      }
     }
   }
 `;
@@ -73,6 +80,25 @@ export default class CourtProvider {
     return this.apollo
       .query({ query: QUERY_COURT_DETAIL_BY_ID, variables: { courtId: id } })
       .map(({ data }: any) => data.Court);
+  }
+
+  search(term: BehaviorSubject<string>, debounce = 400): Observable<Array<Court>> {
+    return term
+      .debounceTime(debounce)
+      .distinctUntilChanged()
+      .map((keyword: string) => {
+        if (!keyword) {
+          return [];
+        }
+        return this._allCourts.getValue().filter((court: Court) => {
+          if (court.courtName && keyword) {
+            if (court.courtName.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+              return true;
+            }
+            return false;
+          }
+        });
+      });
   }
 
 }

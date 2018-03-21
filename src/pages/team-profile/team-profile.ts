@@ -38,4 +38,8 @@ export class TeamProfilePage {
   goback() {
     this.navCtrl.pop();
   }
+
+  openChallenge() {
+    this.navCtrl.push('AddGamePage', { opponent: this.team });
+  }
 }

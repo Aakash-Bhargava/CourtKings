@@ -4,7 +4,11 @@
   </div>
   <div *ngIf="team">
     <ion-grid text-center>
-      <h1 class="name">{{ team.teamName }}</h1>
+      <ion-row>
+        <ion-col col-2><button color="light" ion-button clear (tap)="goback()">Back</button></ion-col>
+        <ion-col col-8><h1 class="name">{{ team.teamName }}</h1></ion-col>
+        <ion-col col-2></ion-col>
+      </ion-row>
       <span class="notes location">{{ team.homeTown }}</span>
       <ion-slides pager>
         <ion-slide *ngFor="let player of team.players">
@@ -39,13 +43,13 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <button ion-button small round outline color="light">Challenge</button>
+          <button ion-button small round outline (tap)="openChallenge()" color="light">Challenge</button>
         </ion-col>
       </ion-row>
     </ion-grid>
     <ion-list>
       <button ion-item (tap)="openPendingChallenges()">Pending Challenges</button>
-      <button ion-item (tap)="openFinishedChallenge()">Finished Challenges</button>
+      <button ion-item (tap)="openFinishedChallenges()">Finished Challenges</button>
     </ion-list>
   </div>
 </ion-content>
