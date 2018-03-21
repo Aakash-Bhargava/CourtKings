@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, NavController, Platform } from 'ionic-angular';
+import { IonicPage, ModalController, NavController, Platform, LoadingController, App, AlertController } from 'ionic-angular';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import {
   GoogleMap,
@@ -19,13 +19,17 @@ import {
 export class HomePage {
   map: GoogleMap;
   courts: Array<Court>;
+  loading: any;
 
   constructor(
+    public alertCtrl: AlertController,
     public modalCtrl: ModalController,
     public navCtrl: NavController,
     public geolocation: Geolocation,
     public platform: Platform,
     public courtProvider: CourtProvider,
+    public loadingCtrl: LoadingController,
+    public app: App
   ) {
     platform.ready().then(() => {
       this.loadMap();
@@ -94,6 +98,39 @@ export class HomePage {
 
   openDetail(court: Court) {
     this.navCtrl.push('MapDetailPage', { id: court.id });
+  }
+
+  logoutUser() {
+
+    let alert = this.alertCtrl.create({
+           title: 'Are you sure you want to logout?',
+           buttons: [
+             {
+             text: 'Logout',
+             handler: () => {
+               window.localStorage.removeItem('graphcoolToken');
+               this.loading = this.loadingCtrl.create({
+                 dismissOnPageChange: true,
+                 content: 'Logging Out...'
+               });
+               this.loading.present();
+               // this.navCtrl.setRoot(WelcomePage);
+               // location.reload();
+               // this.navCtrl.push(WelcomePage);
+                this.app.getRootNav().setRoot('WelcomePage');
+             }
+           },
+           {
+             text: 'Cancel',
+             handler: () => {
+               console.log('cancel clicked');
+               return;
+             }
+           }
+         ]
+         });
+        alert.present();
+
   }
 
 }

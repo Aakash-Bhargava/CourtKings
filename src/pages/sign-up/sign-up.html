@@ -2,39 +2,42 @@
 
   <img src="../../assets/imgs/basketcrown-e.png"/>
 
-  <ion-avatar>
-   <img  src="../../assets/imgs/logo.png">
-  </ion-avatar>
+  <div id="profile-info" padding *ngIf="!imageUri">
+    <button id="add-photo-btn" ion-button large round icon-only color="dark" (tap)="changePic()">
+        <ion-icon name="camera"></ion-icon>
+    </button>
+  </div>
+  <div id="profile-info" padding *ngIf="imageUri">
+    <ion-avatar (click)="changePic()">
+      <img id="profile-image" [src]="_DomSanitizer.bypassSecurityTrustUrl(imageUri)">
+    </ion-avatar>
+  </div>
 
   <ion-list>
 
     <ion-item>
-      <ion-label>Name</ion-label>
-      <ion-input type="text" [(ngModel)]="name"></ion-input>
+      <ion-icon name="person" item-start></ion-icon>
+      <ion-input type="text" placeholder="Name" [(ngModel)]="name"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label>Street Name</ion-label>
-      <ion-input type="text" [(ngModel)]="streetName"></ion-input>
+      <ion-icon name="basketball" item-start></ion-icon>
+      <ion-input type="text" placeholder="Username" [(ngModel)]="streetName"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label>Email </ion-label>
-      <ion-input type="email" [(ngModel)]="email"></ion-input>
+      <ion-icon name="mail" item-start></ion-icon>
+      <ion-input type="email" placeholder="Email" [(ngModel)]="email"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label>Password </ion-label>
-      <ion-input type="password" [(ngModel)]="password"></ion-input>
+      <ion-icon name="lock" item-start></ion-icon>
+      <ion-input type="password" placeholder="Password" [(ngModel)]="password"></ion-input>
     </ion-item>
 
   </ion-list>
 
   <button ion-button full round color="light" (tap)="loginEvent()"> Sign Up</button>
   <button ion-button small clear color="light" (tap)="goToLoginPage()"> Already have an account? Log in</button>
-
-  <ion-footer>
-    <p text-center class="termAndCond"> By signing up or loggin in, you agree to Court Kings' Terms and Conditions</p>
-  </ion-footer>
 
 </ion-content>

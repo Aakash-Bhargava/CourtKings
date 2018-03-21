@@ -20,6 +20,7 @@
     "@angular/http": "5.2.4",
     "@angular/platform-browser": "5.2.4",
     "@angular/platform-browser-dynamic": "5.2.4",
+    "@ionic-native/camera": "^4.5.3",
     "@ionic-native/core": "4.5.3",
     "@ionic-native/geolocation": "^4.5.3",
     "@ionic-native/google-maps": "^4.5.3",
@@ -32,6 +33,7 @@
     "apollo-client": "^2.2.2",
     "apollo-link-context": "^1.0.5",
     "cordova-ios": "4.5.4",
+    "cordova-plugin-camera": "^4.0.2",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-googlemaps": "^2.2.3",
@@ -72,7 +74,8 @@
         "API_KEY_FOR_IOS": "AIzaSyDhkZvz58SPSVyKeCfvDdu9OEEa75HdecU",
         "LOCATION_WHEN_IN_USE_DESCRIPTION": "Show your location on the map",
         "LOCATION_ALWAYS_USAGE_DESCRIPTION": "Trace your location on the map"
-      }
+      },
+      "cordova-plugin-camera": {}
     },
     "platforms": [
       "ios"

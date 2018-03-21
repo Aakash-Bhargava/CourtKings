@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 @IonicPage()
 @Component({
   selector: 'page-intro',
@@ -7,7 +7,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class IntroPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+  public alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -16,6 +17,10 @@ export class IntroPage {
 
   goToHomePage(){
     this.navCtrl.setRoot('TabsPage');
+  }
+
+  goToCreateTeamPage(){
+    this.navCtrl.setRoot('CreateTeamPage');
   }
 
 }

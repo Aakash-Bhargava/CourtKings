@@ -5,7 +5,7 @@ page-sign-up {
   }
 
   img{
-    padding: 7%;
+    padding: 1%;
   }
 
   ion-avatar{
@@ -13,36 +13,30 @@ page-sign-up {
       height: 15%;
       width: 40%;
       margin: auto;
+      display: block;
+      border-radius: 50%;
     }
   }
 
-  ion-list{
-    padding: 5%;
-  }
-
   ion-item{
-    background-color: transparent !important;
+    margin-bottom:4% !important;
+    background-color: #323232 !important;
     color: white !important;
-  }
-  ion-item:first-child{
     border-top: none !important;
+    .item-inner{
+      border-bottom: none !important;
+    }
+    -moz-border-radius: 30%;
+    -webkit-border-radius: 30%;
+    border-radius: 30px;
   }
 
   ion-item:last-child{
     border-bottom: none !important;
-    .item-inner{
-      border-bottom: 0.55px solid #c8c7cc !important;
-    }
   }
 
-  .termAndCond{
-    padding: 5%;
-    font-size: 12px;
-    position: bottom;
-    color: white;
+  .item-ios{
+    border-radius: 30px;
   }
-
-
-
 
 }

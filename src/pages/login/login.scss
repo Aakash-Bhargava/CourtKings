@@ -6,33 +6,42 @@ page-login {
 
   img{
     padding: 7%;
-    padding-top: 40%;
+    padding-top: 10%;
   }
 
   ion-list{
-    padding: 5%;
+    padding-top: 40%;
+
   }
+
 
   ion-item{
-    background-color: transparent !important;
+    margin-bottom:3% !important;
+    background-color: #323232 !important;
     color: white !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    -moz-border-radius: 30%;
+    -webkit-border-radius: 30%;
+    border-radius: 30px;
+
   }
+
+  .item-ios{
+    border-radius: 30px;
+  }
+
   ion-item:first-child{
     border-top: none !important;
-  }
-
-  ion-item:last-child{
-    border-bottom: none !important;
     .item-inner{
-      border-bottom: 0.55px solid #c8c7cc !important;
+      border-bottom: none !important;
     }
+    border-bottom: none !important;
   }
 
-  .termAndCond{
-    padding: 5%;
-    font-size: 12px;
-    position: bottom;
-    color: white;
+
+  button{
+    width: 95%;
   }
 
 

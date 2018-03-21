@@ -1,12 +1,11 @@
 <ion-content text-center>
 
   <ion-item text-center>
-      <button ion-button icon-only item-start clearc>
+      <button ion-button item-start clear color="dark">
         <ion-icon name="arrow-back"></ion-icon>
       </button>
       <h4> Create a team </h4>
   </ion-item>
-
 
   <ion-list>
     <ion-item>
@@ -19,10 +18,17 @@
       <ion-input placeholder="Your home Town" [(ngModel)]= "homeTown"></ion-input>
     </ion-item>
 
-    <ion-item>
-        <ion-icon name="image" item-start></ion-icon>
-      <ion-input placeholder="Choose a Team Photo" [(ngModel)]= "teamImage"></ion-input>
+    <ion-item (click)="changePic()" *ngIf="!teamImage">
+      <ion-icon name="image" item-start></ion-icon>
+      <ion-input readonly="True" placeholder="Choose a Team Photo" [(ngModel)]= "teamImage"></ion-input>
     </ion-item>
+    <ion-item (click)="changePic()" *ngIf="teamImage">
+      <ion-icon name="image" item-start></ion-icon>
+      <ion-avatar (click)="changePic()">
+        <img id="profile-image" [src]="_DomSanitizer.bypassSecurityTrustUrl(teamImage)">
+      </ion-avatar>
+    </ion-item>
+
   </ion-list>
 
   <ion-list>
