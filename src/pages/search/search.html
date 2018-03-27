@@ -1,24 +1,70 @@
-<!--
-  Generated template for the SearchPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<!-- <ion-header>
-
-  <ion-navbar>
-    <ion-title>search</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
 <ion-content padding>
+  <ion-segment [(ngModel)]="searchType" color="dark">
+      <ion-segment-button value="Players">
+        Players
+      </ion-segment-button>
+      <ion-segment-button value="Teams">
+        Teams
+      </ion-segment-button>
+      <ion-segment-button value="Courts">
+        Courts
+      </ion-segment-button>
+  </ion-segment>
 
-</ion-content> -->
 
-<super-tabs tabsPlacement="top">
-  <super-tab [root]="tab1Root" title="Team"></super-tab>
-  <super-tab [root]="tab2Root" title="Player"></super-tab>
-  <super-tab [root]="tab3Root" title="Court"></super-tab>
-</super-tabs>
+  <div [ngSwitch]="searchType">
+    <div *ngSwitchCase="'Players'">
+      <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchPlayers($event)" placeholder="Search Players" showCancelButton="true"></ion-searchbar>
+      <div *ngIf="queryListPlayers">
+        <ion-list>
+          <button ion-item *ngFor="let user of queryListPlayers" text-capitalize text-capitalize detail-none no-lines>
+            {{user.name}}
+            <h3 item-end> {{user.winTotal}}</h3>
+          </button>
+        </ion-list>
+      </div>
+    <div *ngIf="!queryListPlayers || queryListPlayers == ''">
+      <div class="empty" padding>
+        <h2 padding>Search for Players</h2>
+      </div>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="'Teams'">
+    <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchTeams($event)" placeholder="Search Teams" showCancelButton="true"></ion-searchbar>
+    <div *ngIf="queryListTeams">
+      <ion-list>
+        <button ion-item *ngFor="let team of queryListTeams" text-capitalize detail-none no-lines>
+          {{team.teamName}}
+          <h3 item-end> {{team.wins}}</h3>
+        </button>
+
+      </ion-list>
+    </div>
+
+  <div *ngIf="!queryListTeams || queryListTeams == ''">
+    <div class="empty" padding>
+      <h2 padding>Search for Teams</h2>
+    </div>
+  </div>
+</div>
+
+  <div *ngSwitchCase="'Courts'">
+    <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchCourts($event)" placeholder="Search Courts" showCancelButton="true"></ion-searchbar>
+    <div *ngIf="queryListCourts">
+      <ion-list>
+        <button ion-item *ngFor="let court of queryListCourts" text-capitalize>
+          {{court.courtName}}
+        </button>
+      </ion-list>
+    </div>
+    <div *ngIf="!queryListCourts || queryListCourts == ''">
+      <div class="empty" padding>
+        <h2 padding>Search for Courts</h2>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+</ion-content>
