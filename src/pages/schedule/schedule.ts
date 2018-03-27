@@ -22,17 +22,6 @@ export class SchedulePage {
     console.log(this.court);
     console.log(this.court.challenges);
 
-
-    this.getAllChallenges().then(({data}) => {
-        if(data){
-          this.challenges = data;
-          console.log(this.challenges);
-        }
-      })
-
-
-
-
     this.court.challenges.forEach((challenge: Challenge) => {
       const hour = moment(challenge.gameTime).hour();
       const schedule: Schedule = {
@@ -66,23 +55,23 @@ export class SchedulePage {
     console.log(this.time);
   }
 
-  getAllChallenges(){
-    return this.apollo.query({
-      query: gql`
-      query allChallenges($dueDate: DateTime, $courtId: ID) {
-        allChallenges(filter: {
-          court: $courtId
-        }) {
-          id
-          gameTime
-        }
-      }
-    `, variables: {
-        courtId: this.court.id
-
-      }
-    }).toPromise();
-  }
+  // getAllChallenges(){
+  //   return this.apollo.query({
+  //     query: gql`
+  //     query allChallenges($gameTime: DateTime, $courtId: ID) {
+  //       allChallenges(filter: {
+  //         court: $courtId
+  //       }) {
+  //         id
+  //         gameTime
+  //       }
+  //     }
+  //   `, variables: {
+  //       courtId: this.court.id
+  //
+  //     }
+  //   }).toPromise();
+  // }
 
 
 

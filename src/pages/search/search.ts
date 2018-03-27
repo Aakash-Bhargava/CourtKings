@@ -112,6 +112,22 @@ export class SearchPage {
         allCourts{
           id
           courtName
+          challenges{
+            id
+            teams{
+              id
+              teamName
+              teamImage
+              wins
+              players{
+                id
+                name
+                profilePic
+              }
+            }
+            gameTime
+            status
+          }
          }
         }
     `
@@ -207,6 +223,12 @@ export class SearchPage {
       }
     });
     console.log(this.qCourts, this.queryListCourts.length);
+  }
+
+
+  goToCourt(court){
+    console.log(court);
+    this.navCtrl.push('MapDetailPage', { id: court.id });
   }
 
 }

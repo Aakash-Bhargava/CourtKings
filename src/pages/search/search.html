@@ -53,7 +53,7 @@
     <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchCourts($event)" placeholder="Search Courts" showCancelButton="true"></ion-searchbar>
     <div *ngIf="queryListCourts">
       <ion-list>
-        <button ion-item *ngFor="let court of queryListCourts" text-capitalize>
+        <button ion-item *ngFor="let court of queryListCourts" text-capitalize (tap)="goToCourt(court)">
           {{court.courtName}}
         </button>
       </ion-list>
