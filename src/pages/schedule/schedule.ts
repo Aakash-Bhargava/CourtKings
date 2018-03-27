@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import moment from 'moment';
 import { Challenge, CourtDetail, Schedule } from '../../types';
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
 
 @IonicPage()
 @Component({
@@ -11,9 +13,26 @@ import { Challenge, CourtDetail, Schedule } from '../../types';
 export class SchedulePage {
   court: CourtDetail;
   schedules: Array<Schedule> = [];
-  hours: Array<string> = ['1PM', '2PM', '3PM', '4PM', '5PM', '6PM'];
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  time: any;
+  challenges: any;
+  date: String = new Date().toISOString();
+
+  constructor(public apollo: Apollo, public navCtrl: NavController, public navParams: NavParams) {
     this.court = this.navParams.get('court');
+    console.log(this.court);
+    console.log(this.court.challenges);
+
+
+    this.getAllChallenges().then(({data}) => {
+        if(data){
+          this.challenges = data;
+          console.log(this.challenges);
+        }
+      })
+
+
+
+
     this.court.challenges.forEach((challenge: Challenge) => {
       const hour = moment(challenge.gameTime).hour();
       const schedule: Schedule = {
@@ -42,4 +61,34 @@ export class SchedulePage {
       this.navCtrl.push('AddGamePage', { court: this.court, hour });
     }
   }
+
+  timeChange(){
+    console.log(this.time);
+  }
+
+  getAllChallenges(){
+    return this.apollo.query({
+      query: gql`
+      query allChallenges($dueDate: DateTime, $courtId: ID) {
+        allChallenges(filter: {
+          court: $courtId
+        }) {
+          id
+          gameTime
+        }
+      }
+    `, variables: {
+        courtId: this.court.id
+
+      }
+    }).toPromise();
+  }
+
+
+
+
+
+
+
+
 }

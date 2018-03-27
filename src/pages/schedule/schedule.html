@@ -1,23 +1,19 @@
-<ion-header>
+<ion-buttons start>
+  <button ion-button icon-only large (tap)="goback()">
+    <ion-icon name="arrow-round-back" color="dark"></ion-icon>
+  </button>
+</ion-buttons>
 
-  <ion-toolbar>
-    <ion-buttons start>
-      <button ion-button (tap)="goback()">
-        <span ion-text color="primary" showWhen="ios">Back</span>
-        <ion-icon name="md-close" showWhen="android"></ion-icon>
-      </button>
-    </ion-buttons>
-    <ion-title>
-      MARCH
-    </ion-title>
-  </ion-toolbar>
 
-</ion-header>
 <ion-content>
+  <div>
+    <ion-datetime disabled displayFormat="MMMM DD" [(ngModel)]="date"></ion-datetime>
+  </div>
+
   <div class="court-name">
     <h1 text-capitalize>{{ court.courtName }}</h1>
   </div>
-  <div class="court-king-info">
+  <!-- <div class="court-king-info">
     <h3>{{ court.courtKings.teamName }}</h3>
     <div class="avatar-group">
       <img [src]="court.courtKings.players[0].profilePic">
@@ -25,14 +21,98 @@
       <img [src]="court.courtKings.players[2].profilePic">
     </div>
     <h3>{{ court.courtKings.wins }}</h3>
+  </div> -->
+  <div class="court-king-info">
+    <h3> Court King Name</h3>
+    <div class="avatar-group">
+      <img [src]="">
+      <img [src]="">
+      <img [src]="">
+    </div>
+    <h3> 12 </h3>
   </div>
-  <div class="standings-header">
-    <h3>TODAY&nbsp;<ion-icon name="arrow-forward"></ion-icon></h3>
+
+    <h5>Today</h5>
+
+  <ion-segment [(ngModel)]="time" color="dark" (ionChange)="timeChange()">
+      <ion-segment-button value="11am">
+        11 am
+      </ion-segment-button>
+      <ion-segment-button value="12pm">
+        12 pm
+      </ion-segment-button>
+      <ion-segment-button value="1pm">
+        1 pm
+      </ion-segment-button>
+      <ion-segment-button value="2pm">
+        2 pm
+      </ion-segment-button>
+      <ion-segment-button value="3pm">
+        3 pm
+      </ion-segment-button>
+  </ion-segment>
+  <ion-segment [(ngModel)]="time" color="dark">
+      <ion-segment-button value="4pm">
+        4 pm
+      </ion-segment-button>
+      <ion-segment-button value="5pm">
+        5 pm
+      </ion-segment-button>
+      <ion-segment-button value="6pm">
+        6 pm
+      </ion-segment-button>
+      <ion-segment-button value="7pm">
+        7 pm
+      </ion-segment-button>
+      <ion-segment-button value="8pm">
+        8 pm
+      </ion-segment-button>
+  </ion-segment>
+
+  <div id="schedule-content" text-center padding-top>
+    <h5> Scheduled </h5>
+    <ion-item text-center>
+      <h3 item-start> 1 </h3>
+      vs
+      <h3 item-end> 2 </h3>
+    </ion-item>
+    <ion-item>
+      <h3 item-start> 3 </h3>
+      vs
+      <h3 item-end> 4 </h3>
+    </ion-item>
+    <ion-item>
+      <h3 item-start> 5 </h3>
+      vs
+      <h3 item-end> 6 </h3>
+    </ion-item>
   </div>
-  <ion-item no-lines *ngFor="let hour of hours">
-    <h3 item-start>{{ hour }}</h3>
-    <button ion-button block text-capitalize (tap)="addGame(hour)" [ngClass]="isHourOpen(hour)?'open':'closed'">
-      {{ isHourOpen(hour) ? 'OPEN' : findTeams(hour)[0] + ' VS ' + findTeams(hour)[1] }}
-    </button>
-  </ion-item>
+  <div id="queue-content">
+    <h5> Queued </h5>
+    <ion-item (tap)="addToQueue()" text-center>
+      <ion-icon item-start name="add"></ion-icon>
+      <h3 item-start>Add your team to queue</h3>
+    </ion-item>
+    <ion-item>
+      <ion-avatar item-start>
+        <img [src]="">
+      </ion-avatar>
+      <h3 item-start> name </h3>
+      <button ion-button item-end small round color="light">Play</button>
+    </ion-item>
+    <ion-item>
+      <ion-avatar item-start>
+        <img [src]="">
+      </ion-avatar>
+      <h3 item-start> {{name}} wants to play</h3>
+      <button ion-button item-end small round color="light">Play</button>
+    </ion-item>
+    <ion-item>
+      <ion-avatar item-start>
+        <img [src]="">
+      </ion-avatar>
+      <h3 item-start> {{name}} wants to play </h3>
+      <button ion-button item-end small round color="light">Play</button>
+    </ion-item>
+  </div>
 </ion-content>

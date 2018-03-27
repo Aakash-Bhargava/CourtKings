@@ -1,5 +1,11 @@
 page-profile {
 
+
+  .toolbar-background, .tabbar{
+    border : none !important;
+    background-color: black !important;
+  }
+
   ion-grid{
     background-color: black;
     color: white;
