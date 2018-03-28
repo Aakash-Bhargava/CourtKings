@@ -114,6 +114,7 @@ export class SearchPage {
           courtName
           challenges{
             id
+            date
             teams{
               id
               teamName

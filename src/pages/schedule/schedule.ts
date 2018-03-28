@@ -30,26 +30,36 @@ export class SchedulePage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public toastCtrl: ToastController) {
-    this.court = this.navParams.get('court');
-    console.log(this.court);
-    console.log(this.court.challenges);
 
-    this.userData = this.checkUserInfo();
-    this.userData.refetch().then(({data}) => {
-      if(data){
-        this.user = data;
-        this.user = this.user.user;
+      console.log("This is today");
+      console.log(this.today.getDate());
+      console.log(this.today.getMonth());
+      console.log(this.today.getFullYear());
+
+      this.court = this.navParams.get('court');
+      console.log(this.court);
+      console.log(this.court.challenges);
+
+      for (let challenge of this.court.challenges){
+        console.log(challenge.gameTime);
       }
-   });
 
-    this.court.challenges.forEach((challenge: Challenge) => {
-      const hour = moment(challenge.gameTime).hour();
-      const schedule: Schedule = {
-        hour: hour >= 12 ? (hour - 12) + 'PM' : hour + 'AM',
-        teams: challenge.teams.map(t => t.teamName),
-      };
-      this.schedules.push(schedule);
-    });
+      this.userData = this.checkUserInfo();
+      this.userData.refetch().then(({data}) => {
+        if(data){
+          this.user = data;
+          this.user = this.user.user;
+        }
+     });
+
+      // this.court.challenges.forEach((challenge: Challenge) => {
+      //   const hour = moment(challenge.gameTime).hour();
+      //   const schedule: Schedule = {
+      //     hour: hour >= 12 ? (hour - 12) + 'PM' : hour + 'AM',
+      //     teams: challenge.teams.map(t => t.teamName),
+      //   };
+      //   this.schedules.push(schedule);
+      // });
   }
 
   isHourOpen(hour: string): boolean {
@@ -94,22 +104,29 @@ export class SchedulePage {
     alert.addButton({
       text: 'Select',
       handler: data => {
+
+        this.selectedTeam =  data;
+
         //mutation to create a challenge, status: "pending", Team: {{data}} -- this is selected team's id
         //gameTime: this.time, court: this.court.id
-        this.selectedTeam =  data;
         this.addPendingChallenge().then(({data}) => {
-          //get the challenge Id once its created
+        //get the challenge Id once its created
           this.createdChallengeId = data.createChallenges.id;
-          //add link between single user team and created pending challenge
-          this.addChallengeToTeam().then(({data}) =>{
-            let toast = this.toastCtrl.create({
-              message: 'Added to the Queue!',
-              position: 'top',
-              duration: 3000
+          //add challenge to court
+          this.addToChallengesOnCourt().then(({data}) =>{
+        //add link between single user team and created pending challenge
+            this.addChallengeToTeam().then(({data}) =>{
+              let toast = this.toastCtrl.create({
+                message: 'Added to the Queue!',
+                position: 'top',
+                duration: 3000
+              });
+              toast.present();
             });
-            toast.present();
           });
+
         });
+
       }
     });
     alert.present();
@@ -141,13 +158,11 @@ export class SchedulePage {
     return this.apollo.mutate({
       mutation: gql`
       mutation createChallenges($status: String!,
-                          $courtId: ID,
                           $gameTime: String!
                           $date: DateTime!,
                           ){
 
         createChallenges(status: $status,
-                    courtId: $courtId,
                     gameTime: $gameTime,
                     date: $date,
                     ){
@@ -160,7 +175,7 @@ export class SchedulePage {
         gameTime: this.time,
         date: this.date,
         // teamId: this.selectedTeam.id,
-        court: this.court.id
+        // court: this.court.id
       }
     }).toPromise();
 
@@ -183,6 +198,27 @@ export class SchedulePage {
       variables: {
         challengesChallengesId: this.createdChallengeId,
         teamsTeamId: this.selectedTeam.id
+      }
+
+    }).toPromise();
+    //this.refreshPage();
+  }
+
+  addToChallengesOnCourt() {
+
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation addToChallengesOnCourt($challengesChallengesId: ID!, $courtCourtId: ID!) {
+        addToChallengesOnCourt(challengesChallengesId: $challengesChallengesId, courtCourtId: $courtCourtId){
+          courtCourt{
+            id
+          }
+        }
+      }
+      `,
+      variables: {
+        challengesChallengesId: this.createdChallengeId,
+        courtCourtId: this.court.id
       }
 
     }).toPromise();
