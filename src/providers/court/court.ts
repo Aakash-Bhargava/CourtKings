@@ -51,6 +51,7 @@ const QUERY_ALL_COURTS = gql`
       longitude
       challenges {
         date
+        status
         gameTime
         teams {
           teamName

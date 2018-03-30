@@ -24,6 +24,8 @@ export class SchedulePage {
   today = new Date();
   challenges: any;
   todaysChallenges = <any>[];
+  selectedTimePending = <any>[];
+  selectedTimeSchedulued = <any>[];
   date: String = new Date().toISOString();
 
   constructor(
@@ -57,14 +59,38 @@ export class SchedulePage {
           challengeDate.getMonth() == this.today.getMonth() &&
           challengeDate.getFullYear() == this.today.getFullYear()){
             this.todaysChallenges.push(challenge);
+            if(challenge.gameTime == this.time && challenge.status == "Pending"){
+              this.selectedTimePending.push(challenge);
+            }
+            if(challenge.gameTime == this.time && challenge.status == "Scheduled"){
+              if(this.selectedTimeSchedulued.size >= 3){
+                continue;
+              }
+              this.selectedTimeSchedulued.push(challenge);
+            }
           }
     }
-    console.log(this.todaysChallenges);
   }
 
 
   timeChange(){
+    this.selectedTimePending = [];
+    this.selectedTimeSchedulued = [];
     console.log(this.time);
+
+    for( let challenge of this.todaysChallenges){
+      if(challenge.gameTime == this.time){
+        if(challenge.status == "Pending"){
+          this.selectedTimePending.push(challenge);
+        }
+        else{
+          this.selectedTimeSchedulued.push(challenge);
+        }
+      }
+    }
+    console.log("At" + this.time + "there are these challenges");
+    console.log(this.selectedTimePending);
+    console.log(this.selectedTimeSchedulued);
   }
 
 
