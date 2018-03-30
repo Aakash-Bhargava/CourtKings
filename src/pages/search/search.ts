@@ -229,7 +229,7 @@ export class SearchPage {
 
   goToCourt(court){
     console.log(court);
-    this.navCtrl.push('MapDetailPage', { id: court.id });
+    this.navCtrl.push('MapDetailPage', { court: court });
   }
 
 }

@@ -6,6 +6,7 @@ import UserProvider from '../../providers/user/user';
 import { Challenge, CourtDetail, Schedule } from '../../types';
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @IonicPage()
 @Component({
@@ -22,28 +23,23 @@ export class SchedulePage {
   time = "11am";
   today = new Date();
   challenges: any;
+  todaysChallenges = <any>[];
   date: String = new Date().toISOString();
 
   constructor(
     public apollo: Apollo,
     public alertCtrl: AlertController,
+    public _DomSanitizer: DomSanitizer,
     public navCtrl: NavController,
     public navParams: NavParams,
     public toastCtrl: ToastController) {
-
-      console.log("This is today");
-      console.log(this.today.getDate());
-      console.log(this.today.getMonth());
-      console.log(this.today.getFullYear());
-
       this.court = this.navParams.get('court');
-      console.log(this.court);
-      console.log(this.court.challenges);
-
-      for (let challenge of this.court.challenges){
-        console.log(challenge.gameTime);
-      }
-
+      // console.log(this.court);
+      // console.log(this.court.challenges);
+      // console.log("This is today");
+      // console.log(this.today.getDate());
+      // console.log(this.today.getMonth());
+      // console.log(this.today.getFullYear());
       this.userData = this.checkUserInfo();
       this.userData.refetch().then(({data}) => {
         if(data){
@@ -51,38 +47,30 @@ export class SchedulePage {
           this.user = this.user.user;
         }
      });
-
-      // this.court.challenges.forEach((challenge: Challenge) => {
-      //   const hour = moment(challenge.gameTime).hour();
-      //   const schedule: Schedule = {
-      //     hour: hour >= 12 ? (hour - 12) + 'PM' : hour + 'AM',
-      //     teams: challenge.teams.map(t => t.teamName),
-      //   };
-      //   this.schedules.push(schedule);
-      // });
   }
 
-  isHourOpen(hour: string): boolean {
-    const find = this.schedules.find((s: Schedule) => s.hour === hour);
-    return !find;
-  }
-
-  findTeams(hour: string): Array<string> {
-    return this.schedules.find((s: Schedule) => s.hour === hour).teams;
-  }
-
-  goback() {
-    this.navCtrl.pop();
-  }
-
-  addGame(hour: string) {
-    if (this.isHourOpen(hour)) {
-      this.navCtrl.push('AddGamePage', { court: this.court, hour });
+  ionViewDidEnter(){
+    //if challenge is today push to todaysChallenges
+    for (let challenge of this.court.challenges){
+       var challengeDate = new Date(challenge.date);
+       if(challengeDate.getDate() == this.today.getDate() &&
+          challengeDate.getMonth() == this.today.getMonth() &&
+          challengeDate.getFullYear() == this.today.getFullYear()){
+            this.todaysChallenges.push(challenge);
+          }
     }
+    console.log(this.todaysChallenges);
   }
+
 
   timeChange(){
     console.log(this.time);
+  }
+
+
+  play(challenge){
+    console.log("CHALLENGE ACCEPTED")
+    console.log(challenge);
   }
 
   //alert that shows user's teams and will create an pending challenge.

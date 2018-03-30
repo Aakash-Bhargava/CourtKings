@@ -93,26 +93,23 @@
       <ion-icon item-start name="add"></ion-icon>
       <h3 item-start>Add your team to queue at {{time}}</h3>
     </ion-item>
-    <ion-item>
-      <ion-avatar item-start>
-        <img [src]="">
-      </ion-avatar>
-      <h3 item-start> name </h3>
-      <button ion-button item-end small round color="light">Play</button>
-    </ion-item>
-    <ion-item>
-      <ion-avatar item-start>
-        <img [src]="">
-      </ion-avatar>
-      <h3 item-start> {{name}} wants to play</h3>
-      <button ion-button item-end small round color="light">Play</button>
-    </ion-item>
-    <ion-item>
-      <ion-avatar item-start>
-        <img [src]="">
-      </ion-avatar>
-      <h3 item-start> {{name}} wants to play </h3>
-      <button ion-button item-end small round color="light">Play</button>
-    </ion-item>
+
+      <div *ngFor="let challenge of todaysChallenges">
+        <ion-item *ngIf="challenge.gameTime == time">
+            <ion-avatar item-start>
+              <img [src]="_DomSanitizer.bypassSecurityTrustUrl(challenge.teams[0].teamImage)">
+            </ion-avatar>
+              <h3 item-start> {{challenge.teams[0].teamName}} want to play. </h3>
+              <!-- <ion-avatar item-start>
+                <img [src]="{{challenge.teams[0].teamImage}}">
+              </ion-avatar> -->
+              <!-- <h3 item-start> {{challange.teams[0].teamName}} wants to play</h3> -->
+              <button ion-button item-end small round color="light" (tap)="play(challenge)">Play</button>
+        </ion-item>
+      </div>
+
+
+
+
   </div>
 </ion-content>

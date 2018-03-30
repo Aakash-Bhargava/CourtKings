@@ -20,9 +20,9 @@ export class MapDetailPage {
   }
 
   ngOnInit() {
-    const id = this.navParams.get('id');
+    const court = this.navParams.get('court');
     this.courtProvider
-      .getCourtById(id)
+      .getCourtById(court.id)
       .subscribe((court: CourtDetail) => this.court = court);
   }
 
