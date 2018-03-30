@@ -71,12 +71,15 @@
 
   <div id="schedule-content" text-center padding-top>
     <h5> Scheduled </h5>
-    <ion-item text-center>
-      <h3 item-start> 1 </h3>
-      vs
-      <h3 item-end> 2 </h3>
-    </ion-item>
-    <ion-item>
+    <div *ngFor="let challenge of todaysChallenges">
+      <ion-item text-center *ngIf="challenge.gameTime == time && challenge.status == 'Scheduled'">
+        <h3 item-start> {{challenge.teams[0].teamName}} </h3>
+        vs
+        <h3 item-end> {{challenge.teams[1].teamName}} </h3>
+      </ion-item>
+    </div>
+
+    <!-- <ion-item>
       <h3 item-start> 3 </h3>
       vs
       <h3 item-end> 4 </h3>
@@ -85,7 +88,7 @@
       <h3 item-start> 5 </h3>
       vs
       <h3 item-end> 6 </h3>
-    </ion-item>
+    </ion-item> -->
   </div>
   <div id="queue-content">
     <h5> Queued </h5>
@@ -95,7 +98,7 @@
     </ion-item>
 
       <div *ngFor="let challenge of todaysChallenges">
-        <ion-item *ngIf="challenge.gameTime == time">
+        <ion-item *ngIf="challenge.gameTime == time && challenge.status == 'Pending'">
             <ion-avatar item-start>
               <img [src]="_DomSanitizer.bypassSecurityTrustUrl(challenge.teams[0].teamImage)">
             </ion-avatar>

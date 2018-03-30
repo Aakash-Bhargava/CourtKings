@@ -49,7 +49,7 @@ export class SchedulePage {
      });
   }
 
-  ionViewDidEnter(){
+  ionViewDidLoad(){
     //if challenge is today push to todaysChallenges
     for (let challenge of this.court.challenges){
        var challengeDate = new Date(challenge.date);
@@ -69,9 +69,85 @@ export class SchedulePage {
 
 
   play(challenge){
-    console.log("CHALLENGE ACCEPTED")
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Select your team.');
+    //load your teams
+    for (let team of this.user.teams) {
+      alert.addInput({
+        type: 'radio',
+        label: team.teamName,
+        value: team,
+        checked: false
+      },
+    );
+    }
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'Select',
+      handler: data => {
+        this.selectedTeam =  data;
+        if(this.selectedTeam.id == challenge.teams[0].id){
+          let toast = this.toastCtrl.create({
+            message: 'Dont ever play yourself!',
+            position: 'top',
+            duration: 3000
+          });
+          toast.present();
+          return;
+        }
+        this.acceptChallenge(challenge).then(({data}) => {
+          this.pendingToScheduled(challenge).then(({data}) => {
+            let toast = this.toastCtrl.create({
+              message: 'Game Scheduled!',
+              position: 'top',
+              duration: 3000
+            });
+            toast.present();
+          });
+
+        });
+
+      }
+    });
+    alert.present();
     console.log(challenge);
   }
+
+  acceptChallenge(challenge){
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation addToChallengesOnTeam($challengesChallengesId: ID!, $teamsTeamId: ID!) {
+        addToChallengesOnTeam(challengesChallengesId: $challengesChallengesId, teamsTeamId: $teamsTeamId){
+          teamsTeam{
+            id
+          }
+        }
+      }
+      `,
+      variables: {
+        challengesChallengesId: challenge.id,
+        teamsTeamId: this.selectedTeam.id
+      }
+
+    }).toPromise();
+  }
+
+  pendingToScheduled(challenge){
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation updateChallenges($id: ID!, $status: String) {
+        updateChallenges(id:$id, status:$status) {
+          id
+        }
+      }
+      `, variables: {
+        id: challenge.id,
+        status: "Scheduled",
+      }
+    }).toPromise();
+  }
+
 
   //alert that shows user's teams and will create an pending challenge.
   addToQueue() {

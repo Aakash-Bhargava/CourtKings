@@ -28,8 +28,10 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
         teamName
       }
       challenges {
+        id
         date
         gameTime
+        status
         teams {
           teamName
           teamImage
