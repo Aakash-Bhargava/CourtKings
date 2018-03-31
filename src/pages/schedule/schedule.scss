@@ -47,6 +47,11 @@ page-schedule {
     }
   }
 
+
+  #schedule-content{
+    border-bottom: 1px solid grey;
+  }
+
   ion-item {
     .open {
       background-color: orange !important;

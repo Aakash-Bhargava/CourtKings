@@ -71,11 +71,79 @@
 
   <div id="schedule-content" text-center padding-top>
     <h5> Scheduled </h5>
-      <ion-item *ngFor="let challenge of selectedTimeSchedulued">
-        <h3 item-start> {{challenge.teams[0].teamName}} </h3>
-        vs
-        <h3 item-end> {{challenge.teams[1].teamName}} </h3>
+
+    <!--  if There are no games scheduled -->
+    <div *ngIf="selectedTimeSchedulued.length == 0">
+      <ion-item no-lines>
+        <h3> Game Slot Available </h3>
       </ion-item>
+      <ion-item no-lines>
+        <h3> Game Slot Available </h3>
+      </ion-item>
+      <ion-item no-lines>
+        <h3> Game Slot Available </h3>
+      </ion-item>
+    </div>
+
+    <!--  if There are 1 games scheduled -->
+    <div *ngIf="selectedTimeSchedulued.length == 1">
+      <ion-item no-lines *ngFor="let challenge of selectedTimeSchedulued">
+        <ion-row>
+          <ion-col>
+            <h3> {{challenge.teams[0].teamName}} </h3>
+          </ion-col>
+          <ion-col>
+             <h3> vs </h3>
+          </ion-col>
+          <ion-col>
+            <h3> {{challenge.teams[1].teamName}} </h3>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item no-lines>
+        <h3> Game Slot Available </h3>
+      </ion-item>
+      <ion-item no-lines>
+        <h3> Game Slot Available </h3>
+      </ion-item>
+    </div>
+
+    <!--  if There are 2 games scheduled -->
+    <div *ngIf="selectedTimeSchedulued.length == 2">
+      <ion-item no-lines *ngFor="let challenge of selectedTimeSchedulued">
+        <ion-row>
+          <ion-col>
+            <h3> {{challenge.teams[0].teamName}} </h3>
+          </ion-col>
+          <ion-col>
+             <h3> vs </h3>
+          </ion-col>
+          <ion-col>
+            <h3> {{challenge.teams[1].teamName}} </h3>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+      <ion-item no-lines>
+        <h3> Game Slot Available </h3>
+      </ion-item>>
+    </div>
+
+    <!--  if There are 3 games scheduled -->
+    <div *ngIf="selectedTimeSchedulued.length == 3" >
+      <ion-item no-lines *ngFor="let challenge of selectedTimeSchedulued">
+        <ion-row>
+          <ion-col>
+            <h3> {{challenge.teams[0].teamName}} </h3>
+          </ion-col>
+          <ion-col>
+             <h3> vs </h3>
+          </ion-col>
+          <ion-col>
+            <h3> {{challenge.teams[1].teamName}} </h3>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </div>
   </div>
 
 

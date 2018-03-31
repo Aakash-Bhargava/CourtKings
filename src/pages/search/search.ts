@@ -11,6 +11,8 @@ import gql from 'graphql-tag';
 })
 export class SearchPage {
 
+  searchType = "Players";
+
   queryListPlayers: any;
   qPLayers: any;
   allUsers =  <any>[];
