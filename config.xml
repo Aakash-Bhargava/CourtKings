@@ -3,7 +3,7 @@
     <name>MyApp</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://35.13.113.196:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -94,4 +94,6 @@
     <allow-navigation href="http://35.20.161.92:8100" />
     <allow-navigation href="http://35.22.240.211:8100" />
     <allow-navigation href="http://10.0.1.14:8100" />
+    <allow-navigation href="http://10.0.1.19:8100" />
+    <plugin name="cordova-plugin-camera" spec="^4.0.2" />
 </widget>

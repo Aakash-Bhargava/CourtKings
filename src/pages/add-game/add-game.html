@@ -28,7 +28,7 @@
         <ion-spinner name="bubbles"></ion-spinner>
       </div>
       <ion-list no-lines *ngIf="courtQueryList.length !== 0">
-        <button ion-item *ngFor="let court of courtQueryList" (click)="setCourt(court)" text-capitalize>
+        <button ion-item *ngFor="let court of courtQueryList" (tap)="setCourt(court)" text-capitalize>
           {{ court.courtName }}
         </button>
       </ion-list>
@@ -44,14 +44,14 @@
   <div *ngIf="!!user" class="section">
     <h1 class="header">CHOOSE YOUR TEAM</h1>
     <ion-list no-lines *ngIf="!team">
-      <button ion-item *ngFor="let team of user.teams" (click)="setTeam(team)" text-capitalize>
+      <button ion-item *ngFor="let team of user.teams" (tap)="setTeam(team)" text-capitalize>
         {{ team.teamName }}
         &nbsp;
       </button>
     </ion-list>
     <div *ngIf="!!team" class="court-group">
       <button ion-button text-capitalize color="light" (tap)="clearTeam()">
-        {{ team.teamName }}
+        {{ team.teamName }} &nbsp;
         <ion-icon name="close"></ion-icon>
       </button>
     </div>

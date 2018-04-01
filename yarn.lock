@@ -62,6 +62,10 @@
   dependencies:
     tslib "^1.7.1"
 
+"@ionic-native/camera@^4.5.3":
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/camera/-/camera-4.6.0.tgz#2bc8305040dc7ecf3720f60793c1002f4198e862"
+
 "@ionic-native/core@4.5.3":
   version "4.5.3"
   resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-4.5.3.tgz#bd0fd39e7257ded4c55c3062bb73c9741a2263bc"
@@ -827,6 +831,10 @@ cordova-ios@4.5.4:
     shelljs "^0.5.3"
     xcode "^0.9.0"
     xml-escape "^1.1.0"
+
+cordova-plugin-camera@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-camera/-/cordova-plugin-camera-4.0.2.tgz#309410927ef40adc6bebd4b0e91df2c8c644f38a"
 
 cordova-plugin-device@^2.0.1:
   version "2.0.1"
