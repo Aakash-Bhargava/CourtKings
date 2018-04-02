@@ -150,6 +150,48 @@ export class SignUpPage {
     }
   }
 
+  takePhoto() {
+  let options: CameraOptions = {
+    quality: 50,
+    destinationType: 0,
+    targetWidth: 500,
+    targetHeight: 500,
+    encodingType: 0,
+    correctOrientation: true,
+    allowEdit: true
+  };
+  this.Camera.getPicture(options).then((ImageData) => {
+    let base64Image = "data:image/jpeg;base64," + ImageData;
+    this.imageUri = base64Image;
+  });
+}
+
+getPhoto() {
+  let options: CameraOptions = {
+    quality: 50,
+    destinationType: 0,
+    targetWidth: 500,
+    targetHeight: 500,
+    encodingType: 0,
+    sourceType: 0,
+    correctOrientation: true,
+    allowEdit: true,
+    mediaType: 2
+  };
+  this.Camera.getPicture(options).then((ImageData) => {
+    console.log(ImageData);
+    let base64Image = "data:image/jpeg;base64," + ImageData
+    this.imageUri = base64Image;
+    // let base64Image = "data:video/mov;base64," + ImageData;
+    // this.base64.encodeFile(ImageData).then((base64File: string) => {
+    //   this.imageUri = base64File;
+    //   console.log(base64File);
+    // }, (err) => {
+    //   console.log(err);
+    // });
+  });
+}
+
 
 
 }
