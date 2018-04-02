@@ -42,6 +42,25 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
   }
 `;
 
+
+const QUERY_TODAYS_CHALLENGE_BY_COURT_ID = gql`
+  query allChallengeses($courtId: ID!, $date: DateTime) {
+    allChallengeses(filter: {court:{id: $courtId}, date_gte: $date}) {
+      id
+      date
+      gameTime
+      status
+      teams {
+        teamName
+        teamImage
+        id
+      }
+    }
+  }
+`;
+
+
+
 const QUERY_ALL_COURTS = gql`
   query{
     allCourts {
@@ -55,6 +74,8 @@ const QUERY_ALL_COURTS = gql`
         gameTime
         teams {
           teamName
+          teamImage
+          id
         }
       }
     }
@@ -83,9 +104,15 @@ export default class CourtProvider {
     return this.allCourts;
   }
 
+  getTodaysChallenges(id) {
+    let now = new Date();
+    now.setDate(now.getDate()-1);
+    return this.apollo.query({query: QUERY_TODAYS_CHALLENGE_BY_COURT_ID, variables: {courtId: id, date: now }}).toPromise();
+  }
+
   getCourtById(id: string): Observable<CourtDetail> {
     return this.apollo
-      .query({ query: QUERY_COURT_DETAIL_BY_ID, variables: { courtId: id } })
+      .query({ query: QUERY_COURT_DETAIL_BY_ID, fetchPolicy: 'network-only', variables: { courtId: id } })
       .map(({ data }: any) => data.Court);
   }
 
