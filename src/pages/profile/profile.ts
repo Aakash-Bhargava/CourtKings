@@ -48,11 +48,6 @@ export class ProfilePage {
         }
 
      });
-
-
-
-
-
   }
 
   checkUserInfo() {

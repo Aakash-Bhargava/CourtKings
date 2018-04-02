@@ -28,9 +28,14 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
         teamName
       }
       challenges {
+        id
+        date
         gameTime
+        status
         teams {
           teamName
+          teamImage
+          id
         }
       }
     }
@@ -45,6 +50,8 @@ const QUERY_ALL_COURTS = gql`
       latitude
       longitude
       challenges {
+        date
+        status
         gameTime
         teams {
           teamName

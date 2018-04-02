@@ -5,13 +5,14 @@ page-sign-up {
   }
 
   img{
-    padding: 1%;
+    margin: auto;
   }
 
   ion-avatar{
     img{
-      height: 15%;
-      width: 40%;
+      height: 120px;
+      width: 120px;
+      //border: 2px solid white;
       margin: auto;
       display: block;
       border-radius: 50%;
@@ -37,6 +38,10 @@ page-sign-up {
 
   .item-ios{
     border-radius: 30px;
+  }
+
+  #sign-up-btn{
+    width: 95%;
   }
 
 }

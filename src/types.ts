@@ -3,6 +3,8 @@ export interface Challenge {
   coinsBet: number;
   court: Court;
   gameTime: string;
+  status: string;
+  date: any;
   teams: Array<Team>;
   winners: Team;
 }

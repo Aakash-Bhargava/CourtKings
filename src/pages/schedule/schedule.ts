@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
 import moment from 'moment';
+import UserProvider from '../../providers/user/user';
+
 import { Challenge, CourtDetail, Schedule } from '../../types';
+import {Apollo} from 'apollo-angular';
+import gql from 'graphql-tag';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @IonicPage()
 @Component({
@@ -9,37 +14,305 @@ import { Challenge, CourtDetail, Schedule } from '../../types';
   templateUrl: 'schedule.html',
 })
 export class SchedulePage {
+  userData: any;
+  user: any;
+  selectedTeam: any;
+  createdChallengeId: any;
   court: CourtDetail;
   schedules: Array<Schedule> = [];
-  hours: Array<string> = ['1PM', '2PM', '3PM', '4PM', '5PM', '6PM'];
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.court = this.navParams.get('court');
-    this.court.challenges.forEach((challenge: Challenge) => {
-      const hour = moment(challenge.gameTime).hour();
-      const schedule: Schedule = {
-        hour: hour >= 12 ? (hour - 12) + 'PM' : hour + 'AM',
-        teams: challenge.teams.map(t => t.teamName),
-      };
-      this.schedules.push(schedule);
+  time = "11am";
+  today = new Date();
+  challenges: any;
+  todaysChallenges = <any>[];
+  selectedTimePending = <any>[];
+  selectedTimeSchedulued = <any>[];
+  date: String = new Date().toISOString();
+
+  constructor(
+    public apollo: Apollo,
+    public alertCtrl: AlertController,
+    public _DomSanitizer: DomSanitizer,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public toastCtrl: ToastController) {
+      this.court = this.navParams.get('court');
+      // console.log(this.court);
+      // console.log(this.court.challenges);
+      // console.log("This is today");
+      // console.log(this.today.getDate());
+      // console.log(this.today.getMonth());
+      // console.log(this.today.getFullYear());
+      this.userData = this.checkUserInfo();
+      this.userData.refetch().then(({data}) => {
+        if(data){
+          this.user = data;
+          this.user = this.user.user;
+        }
+     });
+  }
+
+  ionViewDidLoad(){
+    //if challenge is today push to todaysChallenges
+    for (let challenge of this.court.challenges){
+       var challengeDate = new Date(challenge.date);
+       if(challengeDate.getDate() == this.today.getDate() &&
+          challengeDate.getMonth() == this.today.getMonth() &&
+          challengeDate.getFullYear() == this.today.getFullYear()){
+            this.todaysChallenges.push(challenge);
+            if(challenge.gameTime == this.time && challenge.status == "Pending"){
+              this.selectedTimePending.push(challenge);
+            }
+            if(challenge.gameTime == this.time && challenge.status == "Scheduled"){
+              if(this.selectedTimeSchedulued.size >= 3){
+                continue;
+              }
+              this.selectedTimeSchedulued.push(challenge);
+            }
+          }
+    }
+  }
+
+
+  timeChange(){
+    this.selectedTimePending = [];
+    this.selectedTimeSchedulued = [];
+    console.log(this.time);
+
+    for( let challenge of this.todaysChallenges){
+      if(challenge.gameTime == this.time){
+        if(challenge.status == "Pending"){
+          this.selectedTimePending.push(challenge);
+        }
+        else{
+          this.selectedTimeSchedulued.push(challenge);
+        }
+      }
+    }
+    console.log("At" + this.time + "there are these challenges");
+    console.log(this.selectedTimePending);
+    console.log(this.selectedTimeSchedulued);
+  }
+
+
+  play(challenge){
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Select your team.');
+    //load your teams
+    for (let team of this.user.teams) {
+      alert.addInput({
+        type: 'radio',
+        label: team.teamName,
+        value: team,
+        checked: false
+      },
+    );
+    }
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'Select',
+      handler: data => {
+        this.selectedTeam =  data;
+        if(this.selectedTeam.id == challenge.teams[0].id){
+          let toast = this.toastCtrl.create({
+            message: 'Dont ever play yourself!',
+            position: 'top',
+            duration: 3000
+          });
+          toast.present();
+          return;
+        }
+        this.acceptChallenge(challenge).then(({data}) => {
+          this.pendingToScheduled(challenge).then(({data}) => {
+            let toast = this.toastCtrl.create({
+              message: 'Game Scheduled!',
+              position: 'top',
+              duration: 3000
+            });
+            toast.present();
+          });
+
+        });
+
+      }
+    });
+    alert.present();
+    console.log(challenge);
+  }
+
+  acceptChallenge(challenge){
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation addToChallengesOnTeam($challengesChallengesId: ID!, $teamsTeamId: ID!) {
+        addToChallengesOnTeam(challengesChallengesId: $challengesChallengesId, teamsTeamId: $teamsTeamId){
+          teamsTeam{
+            id
+          }
+        }
+      }
+      `,
+      variables: {
+        challengesChallengesId: challenge.id,
+        teamsTeamId: this.selectedTeam.id
+      }
+
+    }).toPromise();
+  }
+
+  pendingToScheduled(challenge){
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation updateChallenges($id: ID!, $status: String) {
+        updateChallenges(id:$id, status:$status) {
+          id
+        }
+      }
+      `, variables: {
+        id: challenge.id,
+        status: "Scheduled",
+      }
+    }).toPromise();
+  }
+
+
+  //alert that shows user's teams and will create an pending challenge.
+  addToQueue() {
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Select your team.');
+    //load your teams
+    for (let team of this.user.teams) {
+      alert.addInput({
+        type: 'radio',
+        label: team.teamName,
+        value: team,
+        checked: false
+      },
+    );
+    }
+
+    alert.addButton('Cancel');
+    alert.addButton({
+      text: 'Select',
+      handler: data => {
+
+        this.selectedTeam =  data;
+
+        //mutation to create a challenge, status: "pending", Team: {{data}} -- this is selected team's id
+        //gameTime: this.time, court: this.court.id
+        this.addPendingChallenge().then(({data}) => {
+        //get the challenge Id once its created
+          this.createdChallengeId = data.createChallenges.id;
+          //add challenge to court
+          this.addToChallengesOnCourt().then(({data}) =>{
+        //add link between single user team and created pending challenge
+            this.addChallengeToTeam().then(({data}) =>{
+              let toast = this.toastCtrl.create({
+                message: 'Added to the Queue!',
+                position: 'top',
+                duration: 3000
+              });
+              toast.present();
+            });
+          });
+
+        });
+
+      }
+    });
+    alert.present();
+  }
+
+
+  checkUserInfo() {
+  return this.apollo.watchQuery({
+    query: gql`
+      query{
+        user{
+          id
+          name
+          streetName
+          coins
+          profilePic
+          teams{
+            id
+            teamName
+            teamImage
+          }
+         }
+        }
+    `
     });
   }
 
-  isHourOpen(hour: string): boolean {
-    const find = this.schedules.find((s: Schedule) => s.hour === hour);
-    return !find;
+  addPendingChallenge(){
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation createChallenges($status: String!,
+                          $gameTime: String!
+                          $date: DateTime!,
+                          ){
+
+        createChallenges(status: $status,
+                    gameTime: $gameTime,
+                    date: $date,
+                    ){
+                      id
+                    }
+                  }
+      `,
+      variables: {
+        status: "Pending",
+        gameTime: this.time,
+        date: this.date,
+        // teamId: this.selectedTeam.id,
+        // court: this.court.id
+      }
+    }).toPromise();
+
   }
 
-  findTeams(hour: string): Array<string> {
-    return this.schedules.find((s: Schedule) => s.hour === hour).teams;
+
+  addChallengeToTeam() {
+    console.log("inside addChallengeToTeam");
+    console.log(this.selectedTeam.id);
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation addToChallengesOnTeam($challengesChallengesId: ID!, $teamsTeamId: ID!) {
+        addToChallengesOnTeam(challengesChallengesId: $challengesChallengesId, teamsTeamId: $teamsTeamId){
+          teamsTeam{
+            id
+          }
+        }
+      }
+      `,
+      variables: {
+        challengesChallengesId: this.createdChallengeId,
+        teamsTeamId: this.selectedTeam.id
+      }
+
+    }).toPromise();
+    //this.refreshPage();
   }
 
-  goback() {
-    this.navCtrl.pop();
+  addToChallengesOnCourt() {
+
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation addToChallengesOnCourt($challengesChallengesId: ID!, $courtCourtId: ID!) {
+        addToChallengesOnCourt(challengesChallengesId: $challengesChallengesId, courtCourtId: $courtCourtId){
+          courtCourt{
+            id
+          }
+        }
+      }
+      `,
+      variables: {
+        challengesChallengesId: this.createdChallengeId,
+        courtCourtId: this.court.id
+      }
+
+    }).toPromise();
+    //this.refreshPage();
   }
 
-  addGame(hour: string) {
-    if (this.isHourOpen(hour)) {
-      this.navCtrl.push('AddGamePage', { court: this.court, hour });
-    }
-  }
 }
