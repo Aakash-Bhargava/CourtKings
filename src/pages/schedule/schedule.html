@@ -1,17 +1,20 @@
-<ion-buttons start>
-  <button ion-button icon-only large (tap)="goback()">
-    <ion-icon name="arrow-round-back" color="dark"></ion-icon>
-  </button>
-</ion-buttons>
-
-
 <ion-content>
-  <div>
-    <ion-datetime disabled displayFormat="MMMM DD" [(ngModel)]="date"></ion-datetime>
-  </div>
+
+  <ion-row id="headerContent">
+    <ion-col text-left>
+      <button ion-button icon-only clear (tap)="goback()">
+        <ion-icon name="arrow-round-back" color="dark"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col>
+       <ion-datetime disabled displayFormat="MMMM DD" [(ngModel)]="date"></ion-datetime>
+    </ion-col>
+    <ion-col>
+    </ion-col>
+  </ion-row>
 
   <div class="court-name">
-    <h1 text-capitalize>{{ court.courtName }}</h1>
+    <h1 text-capitalize bold>{{ court.courtName }}</h1>
   </div>
   <!-- <div class="court-king-info">
     <h3>{{ court.courtKings.teamName }}</h3>
@@ -32,7 +35,7 @@
     <h3> 12 </h3>
   </div>
 
-    <h5>Today</h5>
+  <h5>Today</h5>
 
   <ion-segment [(ngModel)]="time" color="dark" (ionChange)="timeChange()">
       <ion-segment-button value="11am">
@@ -70,7 +73,7 @@
   </ion-segment>
 
   <div id="schedule-content" text-center padding-top>
-    <h5> Scheduled </h5>
+    <h5 font-weight="bold"> Scheduled </h5>
 
     <!--  if There are no games scheduled -->
     <div *ngIf="selectedTimeSchedulued.length == 0">

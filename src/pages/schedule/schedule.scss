@@ -1,12 +1,16 @@
 page-schedule {
+
+//centers everything on the page.
+
   div {
     text-align: center;
     padding: 0px;
     width: 100%;
 
     .court-name {
-      h1 {
+      h1{
         font-size: 18px;
+        font-weight: bold;
       }
     }
 
@@ -41,16 +45,26 @@ page-schedule {
 
     .standings-header {
       h3 {
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 500;
       }
     }
+
+    h5{
+      font-weight: bold;
+    }
   }
 
-
+  #headerContent{
+    height: 4%;
+  }
   #schedule-content{
     border-bottom: 1px solid grey;
+    h5{
+      font-weight: bold;
+    }
   }
+
 
   ion-item {
     .open {
