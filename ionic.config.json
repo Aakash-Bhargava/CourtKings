@@ -1,6 +1,6 @@
 {
   "name": "CourtKings",
-  "app_id": "",
+  "app_id": "e7febe12",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
