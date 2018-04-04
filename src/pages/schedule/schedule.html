@@ -36,12 +36,46 @@
   </div> -->
 
   <h5>Today</h5>
-  <ion-scroll style="height: 60px;" scrollX="true">
-    <ion-segment [(ngModel)]="time" color="dark" (ionChange)="timeChange()" style="width: 500px; padding: 0 10px;">
-      <ion-segment-button *ngFor="let hour of hours" [value]="hour">
-        {{hour}}
+
+  <!-- <ion-segment [(ngModel)]="time" color="dark" (ionChange)="timeChange()">
+      <ion-segment-button value="11am">
+        11 am
       </ion-segment-button>
-    </ion-segment>
+      <ion-segment-button value="12pm">
+        12 pm
+      </ion-segment-button>
+      <ion-segment-button value="1pm">
+        1 pm
+      </ion-segment-button>
+      <ion-segment-button value="2pm">
+        2 pm
+      </ion-segment-button>
+      <ion-segment-button value="3pm">
+        3 pm
+      </ion-segment-button>
+  </ion-segment>
+  <ion-segment [(ngModel)]="time" color="dark">
+      <ion-segment-button value="4pm">
+        4 pm
+      </ion-segment-button>
+      <ion-segment-button value="5pm">
+        5 pm
+      </ion-segment-button>
+      <ion-segment-button value="6pm">
+        6 pm
+      </ion-segment-button>
+      <ion-segment-button value="7pm">
+        7 pm
+      </ion-segment-button>
+      <ion-segment-button value="8pm">
+        8 pm
+      </ion-segment-button>
+  </ion-segment> -->
+
+  <ion-scroll scrollX="true" text-center>
+    <div class="scrollTimes" *ngFor="let time of timeArray" id="{{time}}" (tap)="changeTime(time)">
+      <p>{{time}}</p>
+    </div>
   </ion-scroll>
 
   <div id="schedule-content" text-center padding-top>
