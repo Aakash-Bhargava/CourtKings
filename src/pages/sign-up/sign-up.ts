@@ -125,8 +125,8 @@ export class SignUpPage {
   }
 
   changePic() {
-    console.log("clicked");
-    let options: CameraOptions = {
+    console.log('clicked');
+    const options: CameraOptions = {
       quality: 50,
       destinationType: 0,
       targetWidth: 500,
@@ -139,19 +139,19 @@ export class SignUpPage {
     };
     if (this.platform.is('android')) {
       this.Camera.getPicture(options).then((ImageData) => {
-        let base64Image = "data:image/jpeg;base64," + ImageData;
+        const base64Image = 'data:image/jpeg;base64,' + ImageData;
         this.imageUri = base64Image;
       });
     } else if (this.platform.is('ios')) {
       this.Camera.getPicture(options).then((ImageData) => {
-        let base64Image = "data:image/jpeg;base64," + ImageData;
+        const base64Image = 'data:image/jpeg;base64,' + ImageData;
         this.imageUri = base64Image;
-      })
+      });
     }
   }
 
   takePhoto() {
-  let options: CameraOptions = {
+  const options: CameraOptions = {
     quality: 50,
     destinationType: 0,
     targetWidth: 500,
@@ -161,13 +161,13 @@ export class SignUpPage {
     allowEdit: true
   };
   this.Camera.getPicture(options).then((ImageData) => {
-    let base64Image = "data:image/jpeg;base64," + ImageData;
+    const base64Image = 'data:image/jpeg;base64,' + ImageData;
     this.imageUri = base64Image;
   });
 }
 
 getPhoto() {
-  let options: CameraOptions = {
+  const options: CameraOptions = {
     quality: 50,
     destinationType: 0,
     targetWidth: 500,
@@ -180,9 +180,9 @@ getPhoto() {
   };
   this.Camera.getPicture(options).then((ImageData) => {
     console.log(ImageData);
-    let base64Image = "data:image/jpeg;base64," + ImageData
+    const base64Image = 'data:image/jpeg;base64,' + ImageData;
     this.imageUri = base64Image;
-    // let base64Image = "data:video/mov;base64," + ImageData;
+    // const base64Image = 'data:video/mov;base64,' + ImageData;
     // this.base64.encodeFile(ImageData).then((base64File: string) => {
     //   this.imageUri = base64File;
     //   console.log(base64File);

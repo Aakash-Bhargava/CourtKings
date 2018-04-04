@@ -18,6 +18,7 @@ import { setContext } from 'apollo-link-context';
 import { Apollo, ApolloModule } from 'apollo-angular';
 
 import { Camera } from '@ionic-native/camera';
+import { OneSignal } from '@ionic-native/onesignal';
 
 import CourtProvider from '../providers/court/court';
 import UserProvider from '../providers/user/user';
@@ -49,7 +50,8 @@ import TeamProvider from '../providers/team/team';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     UserProvider,
     TeamProvider,
-    Camera
+    Camera,
+    OneSignal,
   ]
 })
 export class AppModule {

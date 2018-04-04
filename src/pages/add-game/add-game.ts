@@ -25,7 +25,7 @@ export class AddGamePage {
   private teamTerm$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private courtTerm$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private schedules: Array<Schedule> = [];
-  private hours: Array<string> = ['1PM', '2PM', '3PM', '4PM', '5PM', '6PM'];
+  private hours: Array<string> = ['11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM'];
 
   constructor(
     private navCtrl: NavController,

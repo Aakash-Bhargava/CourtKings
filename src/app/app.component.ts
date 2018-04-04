@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
+import { OneSignal } from '@ionic-native/onesignal';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 @Component({
@@ -9,7 +10,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 export class MyApp {
   rootPage: any = 'WelcomePage';
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(
+    platform: Platform,
+    statusBar: StatusBar,
+    splashScreen: SplashScreen,
+    private oneSignal: OneSignal,
+  ) {
     if (window.localStorage.getItem('graphcoolToken') != null) {
      this.rootPage = 'TabsPage';
    }
@@ -23,27 +29,29 @@ export class MyApp {
       splashScreen.hide();
 
       if (platform.is('cordova')) {
-        const iosSettings = {};
-        iosSettings['kOSSettingsKeyAutoPrompt'] = false; // will not prompt users when start app 1st time
-        iosSettings['kOSSettingsKeyInAppLaunchURL'] = false; // false opens safari with Launch URL
+        const iosSettings = {
+          kOSSettingsKeyAutoPrompt: false,  // will not prompt users when start app 1st time
+          kOSSettingsKeyInAppLaunchURL: false, // false opens safari with Launch URL
+        };
 
         // OneSignal Code start:
         // Enable to debug issues:
-        window['plugins'].OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
+        // this.oneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
 
-        const notificationOpenedCallback = function(jsonData) {
+        const notificationOpenedCallback = (jsonData) => {
           console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
           if (jsonData.notification.payload.additionalData != null) {
-            console.log('Here we access addtional data');
+            // console.log('Here we access addtional data');
             if (jsonData.notification.payload.additionalData.openURL != null) {
-              console.log('Here we access the openURL sent in the notification data');
+              // console.log('Here we access the openURL sent in the notification data');
             }
           }
         };
 
-        window['plugins'].OneSignal
+        this.oneSignal
           .startInit('b3e8dd7c-50dc-406c-ba1c-4eade7ae9d32')
-          .inFocusDisplaying(window['plugins'].OneSignal.OSInFocusDisplayOption.Notification)
+          // .iosSettings(iosSettings)
+          .inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.Notification)
           .handleNotificationOpened(notificationOpenedCallback)
           .endInit();
       }

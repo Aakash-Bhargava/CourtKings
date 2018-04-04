@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 @IonicPage()
 @Component({
   selector: 'page-intro',
@@ -15,11 +15,11 @@ export class IntroPage {
     console.log('ionViewDidLoad IntroPage');
   }
 
-  goToHomePage(){
+  goToHomePage() {
     this.navCtrl.setRoot('TabsPage');
   }
 
-  goToCreateTeamPage(){
+  goToCreateTeamPage() {
     this.navCtrl.setRoot('CreateTeamPage');
   }
 

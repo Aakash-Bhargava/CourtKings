@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
-import moment from 'moment';
-import UserProvider from '../../providers/user/user';
-
-import { Challenge, CourtDetail, Schedule } from '../../types';
+import { AlertController, IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import CourtProvider from '../../providers/court/court';
+import { Subscription } from 'rxjs/Subscription';
+import { CourtDetail, Schedule } from '../../types';
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -14,19 +13,20 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: 'schedule.html',
 })
 export class SchedulePage {
-  userData: any;
-  user: any;
-  selectedTeam: any;
-  createdChallengeId: any;
-  court: CourtDetail;
-  schedules: Array<Schedule> = [];
-  time = "11am";
-  today = new Date();
-  challenges: any;
-  todaysChallenges = <any>[];
-  selectedTimePending = <any>[];
-  selectedTimeSchedulued = <any>[];
-  date: String = new Date().toISOString();
+  private userData: any;
+  private user: any;
+  private selectedTeam: any;
+  private createdChallengeId: any;
+  private court: CourtDetail;
+  private schedules: Array<Schedule> = [];
+  private time = '11AM';
+  private today = new Date();
+  private challenges: any;
+  private todaysChallenges = <any>[];
+  private selectedTimePending = <any>[];
+  private selectedTimeSchedulued = <any>[];
+  private date: String = new Date().toISOString();
+  private hours: Array<string> = ['11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM'];
 
   constructor(
     public apollo: Apollo,
@@ -34,71 +34,75 @@ export class SchedulePage {
     public _DomSanitizer: DomSanitizer,
     public navCtrl: NavController,
     public navParams: NavParams,
+    public courtProvider: CourtProvider,
     public toastCtrl: ToastController) {
       this.court = this.navParams.get('court');
-      // console.log(this.court);
-      // console.log(this.court.challenges);
-      // console.log("This is today");
-      // console.log(this.today.getDate());
-      // console.log(this.today.getMonth());
-      // console.log(this.today.getFullYear());
       this.userData = this.checkUserInfo();
       this.userData.refetch().then(({data}) => {
-        if(data){
+        if (data) {
           this.user = data;
           this.user = this.user.user;
         }
      });
   }
 
-  ionViewDidLoad(){
-    //if challenge is today push to todaysChallenges
-    for (let challenge of this.court.challenges){
-       var challengeDate = new Date(challenge.date);
-       if(challengeDate.getDate() == this.today.getDate() &&
-          challengeDate.getMonth() == this.today.getMonth() &&
-          challengeDate.getFullYear() == this.today.getFullYear()){
-            this.todaysChallenges.push(challenge);
-            if(challenge.gameTime == this.time && challenge.status == "Pending"){
-              this.selectedTimePending.push(challenge);
-            }
-            if(challenge.gameTime == this.time && challenge.status == "Scheduled"){
-              if(this.selectedTimeSchedulued.size >= 3){
-                continue;
-              }
-              this.selectedTimeSchedulued.push(challenge);
-            }
+  ionViewDidLoad() {
+    this.getTodaysChallenges();
+  }
+
+  getTodaysChallenges() {
+
+    this.todaysChallenges = [];
+    this.selectedTimePending = [];
+    this.selectedTimeSchedulued = [];
+    // if challenge is today push to todaysChallenges
+    this.courtProvider.getTodaysChallenges(this.court.id).then(({data}) => {
+      console.log('getAllChallenges');
+      console.log(data);
+      this.todaysChallenges = data;
+      this.todaysChallenges = this.todaysChallenges.allChallengeses;
+      console.log(this.todaysChallenges);
+      for (const challenge of this.todaysChallenges) {
+        console.log(challenge);
+        if (challenge.gameTime === this.time && challenge.status === 'Pending') {
+          this.selectedTimePending.push(challenge);
+        }
+        if (challenge.gameTime === this.time && challenge.status === 'Scheduled') {
+          if (this.selectedTimeSchedulued.size >= 3) {
+            continue;
           }
-    }
+          this.selectedTimeSchedulued.push(challenge);
+        }
+      }
+    });
   }
 
 
-  timeChange(){
+  timeChange() {
     this.selectedTimePending = [];
     this.selectedTimeSchedulued = [];
     console.log(this.time);
 
-    for( let challenge of this.todaysChallenges){
-      if(challenge.gameTime == this.time){
-        if(challenge.status == "Pending"){
+    for (const challenge of this.todaysChallenges) {
+      if (challenge.gameTime === this.time) {
+        if (challenge.status === 'Pending') {
           this.selectedTimePending.push(challenge);
-        }
-        else{
+        } else {
           this.selectedTimeSchedulued.push(challenge);
         }
       }
     }
-    console.log("At" + this.time + "there are these challenges");
+    console.log('At' + this.time + 'there are these challenges');
     console.log(this.selectedTimePending);
     console.log(this.selectedTimeSchedulued);
   }
 
 
-  play(challenge){
-    let alert = this.alertCtrl.create();
+  play(challenge) {
+    const alert = this.alertCtrl.create();
     alert.setTitle('Select your team.');
-    //load your teams
-    for (let team of this.user.teams) {
+    // load your teams
+    for (const team of this.user.teams) {
       alert.addInput({
         type: 'radio',
         label: team.teamName,
@@ -113,8 +117,8 @@ export class SchedulePage {
       text: 'Select',
       handler: data => {
         this.selectedTeam =  data;
-        if(this.selectedTeam.id == challenge.teams[0].id){
-          let toast = this.toastCtrl.create({
+        if (this.selectedTeam.id === challenge.teams[0].id) {
+          const toast = this.toastCtrl.create({
             message: 'Dont ever play yourself!',
             position: 'top',
             duration: 3000
@@ -124,7 +128,8 @@ export class SchedulePage {
         }
         this.acceptChallenge(challenge).then(({data}) => {
           this.pendingToScheduled(challenge).then(({data}) => {
-            let toast = this.toastCtrl.create({
+            this.getTodaysChallenges();
+            const toast = this.toastCtrl.create({
               message: 'Game Scheduled!',
               position: 'top',
               duration: 3000
@@ -140,7 +145,7 @@ export class SchedulePage {
     console.log(challenge);
   }
 
-  acceptChallenge(challenge){
+  acceptChallenge(challenge) {
     return this.apollo.mutate({
       mutation: gql`
       mutation addToChallengesOnTeam($challengesChallengesId: ID!, $teamsTeamId: ID!) {
@@ -159,28 +164,34 @@ export class SchedulePage {
     }).toPromise();
   }
 
-  pendingToScheduled(challenge){
+  pendingToScheduled(challenge) {
     return this.apollo.mutate({
       mutation: gql`
       mutation updateChallenges($id: ID!, $status: String) {
-        updateChallenges(id:$id, status:$status) {
+        updateChallenges(
+          id:$id,
+          status:$status,
+          notification: {
+            type: Schedule
+          }
+        ) {
           id
         }
       }
       `, variables: {
         id: challenge.id,
-        status: "Scheduled",
+        status: 'Scheduled',
       }
     }).toPromise();
   }
 
 
-  //alert that shows user's teams and will create an pending challenge.
+  // alert that shows user's teams and will create an pending challenge.
   addToQueue() {
-    let alert = this.alertCtrl.create();
+    const alert = this.alertCtrl.create();
     alert.setTitle('Select your team.');
-    //load your teams
-    for (let team of this.user.teams) {
+    // load your teams
+    for (const team of this.user.teams) {
       alert.addInput({
         type: 'radio',
         label: team.teamName,
@@ -197,16 +208,32 @@ export class SchedulePage {
 
         this.selectedTeam =  data;
 
-        //mutation to create a challenge, status: "pending", Team: {{data}} -- this is selected team's id
-        //gameTime: this.time, court: this.court.id
+         // if already in queue alert
+         if (this.selectedTimePending) {
+          for (const challenge of this.selectedTimePending) {
+            console.log(challenge.teams[0].id);
+            console.log(this.selectedTeam.id);
+            if (challenge.teams[0].id === this.selectedTeam.id) {
+              const alert = this.alertCtrl.create({
+                title: 'Team already in the queue',
+                buttons: ['OK']
+              });
+              alert.present();
+              return;
+            }
+          }
+        }
+
+        // mutation to create a challenge, status: 'pending', Team: {{data}} -- this is selected team's id
+        // gameTime: this.time, court: this.court.id
         this.addPendingChallenge().then(({data}) => {
-        //get the challenge Id once its created
+        // get the challenge Id once its created
           this.createdChallengeId = data.createChallenges.id;
-          //add challenge to court
-          this.addToChallengesOnCourt().then(({data}) =>{
-        //add link between single user team and created pending challenge
-            this.addChallengeToTeam().then(({data}) =>{
-              let toast = this.toastCtrl.create({
+          // add challenge to court
+          this.addToChallengesOnCourt().then(({data}) => {
+        // add link between single user team and created pending challenge
+            this.addChallengeToTeam().then(({data}) => {
+              const toast = this.toastCtrl.create({
                 message: 'Added to the Queue!',
                 position: 'top',
                 duration: 3000
@@ -244,7 +271,7 @@ export class SchedulePage {
     });
   }
 
-  addPendingChallenge(){
+  addPendingChallenge() {
     return this.apollo.mutate({
       mutation: gql`
       mutation createChallenges($status: String!,
@@ -261,7 +288,7 @@ export class SchedulePage {
                   }
       `,
       variables: {
-        status: "Pending",
+        status: 'Pending',
         gameTime: this.time,
         date: this.date,
         // teamId: this.selectedTeam.id,
@@ -273,7 +300,7 @@ export class SchedulePage {
 
 
   addChallengeToTeam() {
-    console.log("inside addChallengeToTeam");
+    console.log('inside addChallengeToTeam');
     console.log(this.selectedTeam.id);
     return this.apollo.mutate({
       mutation: gql`
@@ -291,7 +318,7 @@ export class SchedulePage {
       }
 
     }).toPromise();
-    //this.refreshPage();
+    // this.refreshPage();
   }
 
   addToChallengesOnCourt() {
@@ -312,7 +339,42 @@ export class SchedulePage {
       }
 
     }).toPromise();
-    //this.refreshPage();
+    // this.refreshPage();
+  }
+
+  // refresh() {
+  //   console.log('Refresh');
+  //   this.watch().subscribe(({ data }) => {
+  //     console.log(data);
+  //     this.todaysChallenges = [];
+  //     this.todaysChallenges = data;
+  //   });
+  // }
+
+  // watch() {
+  //   return this.apollo.watchQuery({
+  //     query: gql`
+  //     query allChallenges{
+  //       allChallenges{
+  //         id
+  //         date
+  //         status
+  //         gameTime
+  //         teams {
+  //           teamName
+  //           teamImage
+  //           id
+  //         }
+  //       }
+  //     }
+  //     `,
+  //     pollInterval: 10000
+  //   });
+  // }
+
+
+  goback() {
+    this.navCtrl.pop();
   }
 
 }

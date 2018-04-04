@@ -11,7 +11,7 @@ import gql from 'graphql-tag';
 })
 export class SearchPage {
 
-  searchType = "Players";
+  searchType = 'Players';
 
   queryListPlayers: any;
   qPLayers: any;
@@ -35,35 +35,35 @@ export class SearchPage {
 
   ionViewDidLoad() {
 
-    //get all user info
-    this.getAllUserInfo().then(({data})=> {
+    // get all user info
+    this.getAllUserInfo().then(({data}) => {
         this.allUsersData = [];
         this.allUsers = data;
         this.allUsers = this.allUsers.allUsers;
         console.log(this.allUsers);
-        for (let user of this.allUsers) {
+        for (const user of this.allUsers) {
           this.allUsersData.push(user);
         }
       });
 
-      //get all teams info
-      this.getAllTeamInfo().then(({data})=> {
+      // get all teams info
+      this.getAllTeamInfo().then(({data}) => {
           this.allTeamsData = [];
           this.allTeams = data;
           this.allTeams = this.allTeams.allTeams;
-          for (let team of this.allTeams) {
+          for (const team of this.allTeams) {
             this.allTeamsData.push(team);
           }
         });
 
-    //load all courts
-    this.getAllCourtInfo().then(({data})=> {
+    // load all courts
+    this.getAllCourtInfo().then(({data}) => {
         this.allCourtsData = [];
         this.allCourts = data;
         this.allCourts = this.allCourts.allCourts;
-        console.log("ALL Courts");
+        console.log('ALL Courts');
         // console.log(this.allCourts);
-        for (let court of this.allCourts) {
+        for (const court of this.allCourts) {
           this.allCourtsData.push(court);
         }
         console.log(this.allCourtsData);
@@ -170,7 +170,7 @@ export class SearchPage {
     }
 
     this.queryListPlayers = this.queryListPlayers.filter((v) => {
-      if(v.name && this.qPLayers) {
+      if (v.name && this.qPLayers) {
         if (v.name.toLowerCase().indexOf(this.qPLayers.toLowerCase()) > -1) {
           return true;
         }
@@ -194,7 +194,7 @@ export class SearchPage {
     }
 
     this.queryListTeams = this.queryListTeams.filter((v) => {
-      if(v.teamName && this.qTeams) {
+      if (v.teamName && this.qTeams) {
         if (v.teamName.toLowerCase().indexOf(this.qTeams.toLowerCase()) > -1) {
           return true;
         }
@@ -218,7 +218,7 @@ export class SearchPage {
     }
 
     this.queryListCourts = this.queryListCourts.filter((v) => {
-      if(v.courtName && this.qCourts) {
+      if (v.courtName && this.qCourts) {
         if (v.courtName.toLowerCase().indexOf(this.qCourts.toLowerCase()) > -1) {
           return true;
         }
@@ -229,7 +229,7 @@ export class SearchPage {
   }
 
 
-  goToCourt(court){
+  goToCourt(court) {
     console.log(court);
     this.navCtrl.push('MapDetailPage', { court: court });
   }

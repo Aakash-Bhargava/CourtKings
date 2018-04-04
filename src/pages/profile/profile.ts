@@ -33,7 +33,7 @@ export class ProfilePage {
   ionViewDidEnter() {
       this.data = this.checkUserInfo();
       this.data.refetch().then(({data}) => {
-        if(data){
+        if (data) {
           this.userInfo = data;
           this.userInfo = this.userInfo.user;
           this.name = this.userInfo.name;
@@ -75,7 +75,7 @@ export class ProfilePage {
     });
   }
 
-  goToCreatePage(){
+  goToCreatePage() {
     this.navCtrl.push('CreateTeamPage', {
       user: this.userInfo
     });

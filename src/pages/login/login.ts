@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
-
+import { User } from '../../types';
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 
@@ -11,16 +11,20 @@ import gql from 'graphql-tag';
 })
 export class LoginPage {
 
-  email: any;
-  password: any;
+  private email: string;
+  private password: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-              public toastCtrl: ToastController, public apollo: Apollo) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public toastCtrl: ToastController,
+    public apollo: Apollo,
+  ) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
-  }
+  // ionViewDidLoad() {
+  //   console.log('ionViewDidLoad LoginPage');
+  // }
 
   goToSignUpPage() {
     this.navCtrl.push('SignUpPage');
@@ -31,21 +35,21 @@ export class LoginPage {
       this.signIn().then(({data}) => {
         if (data) {
           userInfo.data = data;
-          console.log(userInfo.data.signinUser.token);
+          // console.log(userInfo.data.signinUser.token);
           window.localStorage.setItem('graphcoolToken', userInfo.data.signinUser.token);
-          console.log(userInfo.data);
+          // console.log(userInfo.data);
         }
       }).then(() => {
-        this.navCtrl.push('TabsPage');
+        this.navCtrl.push('HomePage');
       }).catch(() => {
         console.log('view was not dismissed');
-        this.showToast();
+        this.showToast('Login failed, Please try again.');
       });
     }
 
-    showToast() {
+  showToast(message) {
     const toast = this.toastCtrl.create({
-      message: 'Login failed, Please try again.',
+      message,
       duration: 2500,
       position: 'top'
     });
@@ -53,22 +57,22 @@ export class LoginPage {
     toast.present(toast);
   }
 
-    signIn() {
-      return this.apollo.mutate({
-        mutation: gql`
-        mutation signinUser($email: String!,
-                            $password: String!){
-          signinUser(email: {email: $email, password: $password}){
-            token
-          }
+  signIn() {
+    return this.apollo.mutate({
+      mutation: gql`
+      mutation signinUser($email: String!,
+                          $password: String!){
+        signinUser(email: {email: $email, password: $password}){
+          token
         }
-        `,
-        variables: {
-          email: this.email,
-          password: this.password
-        }
-      }).toPromise();
-    }
+      }
+      `,
+      variables: {
+        email: this.email,
+        password: this.password
+      }
+    }).toPromise();
+  }
 
 
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, AlertController, ToastController } from 'ionic-angular';
+import { AlertController, IonicPage, NavController, NavParams, Platform, ToastController } from 'ionic-angular';
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -30,19 +30,19 @@ export class CreateTeamPage {
               public platform: Platform, private Camera: Camera) {
   }
   ionViewDidLoad() {
-    this.getAllUserInfo().then(({data})=> {
+    this.getAllUserInfo().then(({data}) => {
         this.allUsersData = [];
         this.allUsers = data;
         this.allUsers = this.allUsers.allUsers;
-        //console.log(this.allUsers);
-        for (let user of this.allUsers) {
-          if (user.id != this.userId) {
+        // console.log(this.allUsers);
+        for (const user of this.allUsers) {
+          if (user.id !== this.userId) {
             this.allUsersData.push(user);
           }
         }
       });
 
-      if(this.navParams.get('user')){
+      if (this.navParams.get('user')) {
         this.user = this.navParams.get('user');
         this.team.push(this.user);
       }
@@ -90,7 +90,7 @@ export class CreateTeamPage {
     }
 
     this.queryList = this.queryList.filter((v) => {
-      if(v.name && this.q) {
+      if (v.name && this.q) {
         if (v.name.toLowerCase().indexOf(this.q.toLowerCase()) > -1) {
           return true;
         }
@@ -101,16 +101,16 @@ export class CreateTeamPage {
   }
 
   addUser(user) {
-    if(user.email == this.user.email){
-      let alert = this.alertCtrl.create({
-        title: 'Warning!',
-        subTitle: "You are already the on the roster of your own team!",
-        buttons: ['Ok']
-      });
-      alert.present();
-      return;
-    }
-    let confirm = this.alertCtrl.create({
+    // if (user.email === this.user.email) {
+    //   const alert = this.alertCtrl.create({
+    //     title: 'Warning!',
+    //     subTitle: 'You are already the on the roster of your own team!',
+    //     buttons: ['Ok']
+    //   });
+    //   alert.present();
+    //   return;
+    // }
+    const confirm = this.alertCtrl.create({
       title: 'Recruit player',
       message: 'Do you want to recruit ' + user.name +  ' to this team?',
       buttons: [
@@ -124,27 +124,24 @@ export class CreateTeamPage {
           text: 'Yes',
           handler: () => {
             console.log('Yes clicked');
-            //the user is already on the team
-            if(this.team.includes(user)){
-              let alert = this.alertCtrl.create({
+            // the user is already on the team
+            if (this.team.includes(user)) {
+              const alert = this.alertCtrl.create({
                 title: 'Warning!',
-                subTitle: "This player is already on your team's roster!",
+                subTitle: 'This player is already on your team\'s roster!',
                 buttons: ['Ok']
               });
               alert.present();
-            }
-            //the team already has 3 players
-            else if(this.team.length == 3){
-              let alert = this.alertCtrl.create({
+            } else if (this.team.length === 3) { // the team already has 3 players
+              const alert = this.alertCtrl.create({
                 title: 'Warning!',
-                subTitle: "Your team's roster is full!",
+                subTitle: 'Your team\'s roster is full!',
                 buttons: ['Ok']
               });
               alert.present();
-            }
-            else{
+            } else {
               this.team.push(user);
-              console.log("Current team");
+              console.log('Current team');
               console.log(this.team);
             }
 
@@ -156,13 +153,13 @@ export class CreateTeamPage {
   }
 
 
-  validateTeam(){
+  validateTeam() {
 
-    //missing top information
-    if(!this.teamName || !this.homeTown){
-      let alert = this.alertCtrl.create({
+    // missing top information
+    if (!this.teamName || !this.homeTown) {
+      const alert = this.alertCtrl.create({
         title: 'Warning!',
-        subTitle: "Your team is missing some information",
+        subTitle: 'Your team is missing some information',
         buttons: ['Ok']
       });
       alert.present();
@@ -170,15 +167,15 @@ export class CreateTeamPage {
     }
 
 
-    if(this.team.length == 3){
+    if (this.team.length === 3) {
 
-      for (let player of this.team){
+      for (const player of this.team) {
         this.teamIds.push(player.id);
       }
 
       this.createTeam().then(({data}) => {
         if (data) {
-          let alert = this.alertCtrl.create({
+          const alert = this.alertCtrl.create({
             title: 'Team successfully made!',
             buttons: ['Ok']
           });
@@ -190,11 +187,10 @@ export class CreateTeamPage {
       }, (errors) => {
         console.log(errors);
       });
-    }
-    else{
-      let alert = this.alertCtrl.create({
+    } else {
+      const alert = this.alertCtrl.create({
         title: 'Warning!',
-        subTitle: "Your team's roster is not full! You must have 3 players.",
+        subTitle: 'Your team\'s roster is not full! You must have 3 players.',
         buttons: ['Ok']
       });
       alert.present();
@@ -203,11 +199,13 @@ export class CreateTeamPage {
   }
 
 
-  createTeam(){
+  createTeam() {
     return this.apollo.mutate({
       mutation: gql`
-      mutation createTeam($teamName: String!, $homeTown: String, $teamImage: String, $playerId: [ID!]){
-        createTeam(teamName: $teamName, homeTown: $homeTown, teamImage: $teamImage, playersIds: $playerId){
+      mutation createTeam($teamName: String!, $homeTown: String, $teamImage: String, $playerId: [ID!], $type: String){
+        createTeam(teamName: $teamName, homeTown: $homeTown, teamImage: $teamImage, playersIds: $playerId, notification: {
+          type: NewTeam
+        }){
                      id
                    }
                  }
@@ -223,8 +221,8 @@ export class CreateTeamPage {
 
 
   changePic() {
-    console.log("clicked");
-    let options: CameraOptions = {
+    console.log('clicked');
+    const options: CameraOptions = {
       quality: 50,
       destinationType: 0,
       targetWidth: 500,
@@ -237,14 +235,14 @@ export class CreateTeamPage {
     };
     if (this.platform.is('android')) {
       this.Camera.getPicture(options).then((ImageData) => {
-        let base64Image = "data:image/jpeg;base64," + ImageData;
+        const base64Image = 'data:image/jpeg;base64,' + ImageData;
         this.teamImage = base64Image;
       });
     } else if (this.platform.is('ios')) {
       this.Camera.getPicture(options).then((ImageData) => {
-        let base64Image = "data:image/jpeg;base64," + ImageData;
+        const base64Image = 'data:image/jpeg;base64,' + ImageData;
         this.teamImage = base64Image;
-      })
+      });
     }
   }
 }

@@ -1,9 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
-import map from 'rxjs/add/operator/map';
 import { Court, CourtDetail } from '../../types';
 
 
@@ -42,6 +40,23 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
   }
 `;
 
+const QUERY_TODAYS_CHALLENGE_BY_COURT_ID = gql`
+  query allChallengeses($courtId: ID!, $date: DateTime) {
+    allChallengeses(filter: {court:{id: $courtId}, date_gte: $date}) {
+      id
+      date
+      gameTime
+      status
+      teams {
+        teamName
+        teamImage
+        id
+      }
+    }
+  }
+`;
+
+
 const QUERY_ALL_COURTS = gql`
   query{
     allCourts {
@@ -55,6 +70,8 @@ const QUERY_ALL_COURTS = gql`
         gameTime
         teams {
           teamName
+          teamImage
+          id
         }
       }
     }
@@ -67,7 +84,7 @@ export default class CourtProvider {
   private readonly allCourts: Observable<Array<Court>> = this._allCourts.asObservable();
   private fetching = true;
 
-  constructor(private http: HttpClient, private apollo: Apollo) {
+  constructor(private apollo: Apollo) {
     this.fetchCourts().subscribe((courts) => this.fetching = false);
   }
 
@@ -85,8 +102,14 @@ export default class CourtProvider {
 
   getCourtById(id: string): Observable<CourtDetail> {
     return this.apollo
-      .query({ query: QUERY_COURT_DETAIL_BY_ID, variables: { courtId: id } })
+      .query({ query: QUERY_COURT_DETAIL_BY_ID, fetchPolicy: 'network-only', variables: { courtId: id } })
       .map(({ data }: any) => data.Court);
+  }
+
+  getTodaysChallenges(id) {
+    const now = new Date();
+    now.setDate(now.getDate() - 1);
+    return this.apollo.query({query: QUERY_TODAYS_CHALLENGE_BY_COURT_ID, variables: {courtId: id, date: now }}).toPromise();
   }
 
   search(term: BehaviorSubject<string>, debounce = 400): Observable<Array<Court>> {

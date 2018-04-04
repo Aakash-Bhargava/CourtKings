@@ -1,4 +1,16 @@
 page-login {
+  .spinner-container {
+    width: 100%;
+    text-align: center;
+    padding: 50%;
+    color: white;
+    ion-spinner * {
+      width: 28px;
+      height: 28px;
+      stroke: #444;
+      fill: white;
+    }
+  }
 
   ion-content{
     background: black !important;

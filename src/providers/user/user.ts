@@ -61,6 +61,27 @@ export default class UserProvider {
     return obs;
   }
 
+  updatePlayerId(playerId: string) {
+    this.fetchCurrentUser().subscribe((user: User) => {
+      console.log(user.id);
+      console.log(user.email);
+      this.apollo.mutate({
+        mutation: gql`
+          mutation updateUser($id: ID!, $playerid: String) {
+            updateUser(id: $id, playerId: $playerid) {
+              id
+              playerId
+            }
+          }
+        `,
+        variables: {
+          id: user.id,
+          playerid: playerId,
+        }
+      }).subscribe(({ data }) => { console.log(data.updateUser.id, data.updateUser.playerId); });
+    });
+  }
+
   getCurrentUser(): Observable<User> {
     return this.currentUser;
   }

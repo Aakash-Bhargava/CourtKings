@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
-import map from 'rxjs/add/operator/map';
-import filter from 'rxjs/add/operator/filter';
 import { Team, TeamDetail } from '../../types';
 
 const QUERY_TEAM_DETAIL_BY_ID = gql`
