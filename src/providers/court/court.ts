@@ -57,6 +57,7 @@ const QUERY_TODAYS_CHALLENGE_BY_COURT_ID = gql`
 `;
 
 
+
 const QUERY_ALL_COURTS = gql`
   query{
     allCourts {
