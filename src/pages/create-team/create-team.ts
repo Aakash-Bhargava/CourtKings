@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, NavController, NavParams, Platform, ToastController } from 'ionic-angular';
+import { ActionSheetController, AlertController, IonicPage, NavController, NavParams, Platform, ToastController } from 'ionic-angular';
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -27,7 +27,7 @@ export class CreateTeamPage {
 
   constructor(public _DomSanitizer: DomSanitizer, public navCtrl: NavController, public navParams: NavParams, public apollo: Apollo,
               public alertCtrl: AlertController, public toastCtrl: ToastController,
-              public platform: Platform, private Camera: Camera) {
+              public platform: Platform, private Camera: Camera, public actionSheetCtrl: ActionSheetController) {
   }
   ionViewDidLoad() {
     this.getAllUserInfo().then(({data}) => {
@@ -101,15 +101,6 @@ export class CreateTeamPage {
   }
 
   addUser(user) {
-    // if (user.email === this.user.email) {
-    //   const alert = this.alertCtrl.create({
-    //     title: 'Warning!',
-    //     subTitle: 'You are already the on the roster of your own team!',
-    //     buttons: ['Ok']
-    //   });
-    //   alert.present();
-    //   return;
-    // }
     const confirm = this.alertCtrl.create({
       title: 'Recruit player',
       message: 'Do you want to recruit ' + user.name +  ' to this team?',
@@ -218,6 +209,75 @@ export class CreateTeamPage {
       }
     }).toPromise();
   }
+
+
+
+  presentActionSheet() {
+   let actionSheet = this.actionSheetCtrl.create({
+     buttons: [
+       {
+         text: 'Take Photo',
+         handler: () => {
+           this.takePhoto();
+         }
+       },
+       {
+         text: 'Choose Photo',
+         handler: () => {
+           this.getPhoto();
+         }
+       },
+       {
+         text: 'Cancel',
+         role: 'cancel',
+         handler: () => {
+           console.log('Cancel clicked');
+         }
+       }
+     ]
+   });
+
+   actionSheet.present();
+ }
+
+ takePhoto() {
+ const options: CameraOptions = {
+   quality: 50,
+   destinationType: 0,
+   targetWidth: 500,
+   targetHeight: 500,
+   encodingType: 0,
+   correctOrientation: true,
+   allowEdit: true
+ };
+ this.Camera.getPicture(options).then((ImageData) => {
+   const base64Image = 'data:image/jpeg;base64,' + ImageData;
+   this.teamImage = base64Image;
+ }, (err) => {
+      console.log(err);
+ });
+}
+
+getPhoto() {
+ const options: CameraOptions = {
+   quality: 50,
+   destinationType: 0,
+   targetWidth: 500,
+   targetHeight: 500,
+   encodingType: 0,
+   sourceType: 0,
+   correctOrientation: true,
+   allowEdit: true,
+   mediaType: 2
+ };
+ this.Camera.getPicture(options).then((ImageData) => {
+   console.log(ImageData);
+   const base64Image = 'data:image/jpeg;base64,' + ImageData;
+   this.teamImage = base64Image;
+ }, (err) => {
+      console.log(err);
+ });
+}
 
 
   changePic() {
