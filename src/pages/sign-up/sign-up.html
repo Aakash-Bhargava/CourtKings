@@ -3,12 +3,12 @@
   <img src="../../assets/imgs/basketcrown-e.png"/>
 
   <div id="profile-info" padding *ngIf="!imageUri">
-    <button id="add-photo-btn" ion-button large round icon-only color="dark" (tap)="takePhoto()">
+    <button id="add-photo-btn" ion-button large round icon-only color="dark" (tap)="presentActionSheet()">
         <ion-icon name="camera"></ion-icon>
     </button>
   </div>
   <div id="profile-info" padding *ngIf="imageUri">
-    <ion-avatar (click)="getPhoto()">
+    <ion-avatar (click)="presentActionSheet()">
       <img id="profile-image" [src]="_DomSanitizer.bypassSecurityTrustUrl(imageUri)">
     </ion-avatar>
   </div>

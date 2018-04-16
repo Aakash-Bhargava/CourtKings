@@ -1,3 +1,28 @@
 page-create-team {
 
+  .takePhoto{
+    height: 90px;
+    width: 90px;
+    background-color: black;
+    border-radius: 50%;
+    // display: inline-block;
+
+
+    ion-icon{
+      padding: 10px;
+      font-size: 4.8em;
+    }
+  }
+
+  ion-avatar{
+    .team-image{
+        height: 90px;
+        width: 90px;
+        border-radius: 50%;
+    }
+
+  }
+
+
+
 }

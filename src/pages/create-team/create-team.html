@@ -1,41 +1,59 @@
-<ion-content text-center>
+<!-- <ion-header>
+  <ion-navbar hideBackButton color="clear">
+    <ion-title> Create a team</ion-title>
+  </ion-navbar>
+</ion-header> -->
 
-  <ion-item text-center>
-      <button ion-button item-start clear color="dark">
-        <ion-icon name="arrow-back"></ion-icon>
-      </button>
-      <h4> Create a team </h4>
-  </ion-item>
+
+<ion-content>
+  <ion-grid  *ngIf="!teamImage">
+    <ion-row>
+      <ion-col col-3>
+        <div class="takePhoto" text-center>
+          <ion-icon color="light" name="camera" (tap)="presentActionSheet()"></ion-icon>
+        </div>
+      </ion-col>
+      <ion-col col-9>
+        <ion-item>
+          <ion-icon name="basketball" item-start></ion-icon>
+          <ion-input placeholder="Choose a Team Name" [(ngModel)]= "teamName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="search" item-start></ion-icon>
+          <ion-input placeholder="Your home Town" [(ngModel)]= "homeTown"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid  *ngIf="teamImage">
+    <ion-row>
+      <ion-col col-3>
+        <ion-avatar (click)="presentActionSheet()">
+          <img class="team-image" [src]="_DomSanitizer.bypassSecurityTrustUrl(teamImage)">
+        </ion-avatar>
+      </ion-col>
+      <ion-col col-9>
+        <ion-item>
+          <ion-icon name="basketball" item-start></ion-icon>
+          <ion-input placeholder="Choose a Team Name" [(ngModel)]= "teamName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="search" item-start></ion-icon>
+          <ion-input placeholder="Your home Town" [(ngModel)]= "homeTown"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <ion-list>
-    <ion-item>
-      <ion-icon name="basketball" item-start></ion-icon>
-      <ion-input placeholder="Choose a Team Name" [(ngModel)]= "teamName"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="search" item-start></ion-icon>
-      <ion-input placeholder="Your home Town" [(ngModel)]= "homeTown"></ion-input>
-    </ion-item>
-
-    <ion-item (click)="changePic()" *ngIf="!teamImage">
-      <ion-icon name="image" item-start></ion-icon>
-      <ion-input readonly="True" placeholder="Choose a Team Photo" [(ngModel)]= "teamImage"></ion-input>
-    </ion-item>
-    <ion-item (click)="changePic()" *ngIf="teamImage">
-      <ion-icon name="image" item-start></ion-icon>
-      <ion-avatar (click)="changePic()">
-        <img id="profile-image" [src]="_DomSanitizer.bypassSecurityTrustUrl(teamImage)">
-      </ion-avatar>
-    </ion-item>
-
-  </ion-list>
-
-  <ion-list>
-    <h5>Current Roster</h5>
+    <h5 padding>Current Roster</h5>
     <ion-list>
       <ion-item *ngFor="let user of team" text-capitalize>
-        {{user.name}}
+        <ion-avatar item-start class="profile-pic">
+          <img  [src]="_DomSanitizer.bypassSecurityTrustUrl(user.profilePic)">
+        </ion-avatar>
+        <h3 class="player-name">@{{ user.streetName }}</h3>
       </ion-item>
     </ion-list>
 
@@ -57,6 +75,7 @@
 
 
 </ion-content>
-<ion-footer>
+
+<ion-footer padding="0px">
     <button color="dark" ion-button full (tap)="validateTeam()">Create Team</button>
 </ion-footer>

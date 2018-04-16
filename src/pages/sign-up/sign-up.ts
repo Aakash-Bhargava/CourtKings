@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, ToastController} from 'ionic-angular';
+import { ActionSheetController, IonicPage, NavController, NavParams, Platform, ToastController} from 'ionic-angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
@@ -23,12 +23,41 @@ export class SignUpPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public apollo: Apollo,
               public toastCtrl: ToastController, private Camera: Camera, public _DomSanitizer: DomSanitizer,
-              private platform: Platform) {
+              private platform: Platform, public actionSheetCtrl: ActionSheetController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SignUpPage');
   }
+
+  presentActionSheet() {
+   let actionSheet = this.actionSheetCtrl.create({
+     buttons: [
+       {
+         text: 'Take Photo',
+         handler: () => {
+           this.takePhoto();
+         }
+       },
+       {
+         text: 'Choose Photo',
+         handler: () => {
+           this.getPhoto();
+         }
+       },
+       {
+         text: 'Cancel',
+         role: 'cancel',
+         handler: () => {
+           console.log('Cancel clicked');
+         }
+       }
+     ]
+   });
+
+   actionSheet.present();
+ }
+
 
   signUp() {
     console.log(this.name);
@@ -163,6 +192,8 @@ export class SignUpPage {
   this.Camera.getPicture(options).then((ImageData) => {
     const base64Image = 'data:image/jpeg;base64,' + ImageData;
     this.imageUri = base64Image;
+  }, (err) => {
+       console.log(err);
   });
 }
 
@@ -182,13 +213,8 @@ getPhoto() {
     console.log(ImageData);
     const base64Image = 'data:image/jpeg;base64,' + ImageData;
     this.imageUri = base64Image;
-    // const base64Image = 'data:video/mov;base64,' + ImageData;
-    // this.base64.encodeFile(ImageData).then((base64File: string) => {
-    //   this.imageUri = base64File;
-    //   console.log(base64File);
-    // }, (err) => {
-    //   console.log(err);
-    // });
+  }, (err) => {
+       console.log(err);
   });
 }
 
