@@ -20,7 +20,7 @@
   <div [ngSwitch]="searchType">
     <div *ngSwitchCase="'Players'">
       <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchPlayers($event)" placeholder="Search Players" showCancelButton="true"></ion-searchbar>
-      <div *ngIf="queryListPlayers">
+      <div *ngIf="queryListPlayers && queryListPlayers != ''">
         <ion-list-header>
           Username
           <span style="float: right"> Wins </span>
@@ -32,8 +32,8 @@
           </button>
         </ion-list>
       </div>
-    <div *ngIf="!queryListPlayers || queryListPlayers == ''">
-      <div class="empty" padding>
+    <div *ngIf="!queryListPlayers || queryListPlayers == ''" text-center>
+      <div class="empty">
         <h2 padding>Search for Players</h2>
       </div>
     </div>
@@ -41,7 +41,7 @@
 
   <div *ngSwitchCase="'Teams'">
     <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchTeams($event)" placeholder="Search Teams" showCancelButton="true"></ion-searchbar>
-    <div *ngIf="queryListTeams">
+    <div *ngIf="queryListTeams && queryListTeams != ''">
       <ion-list-header>
         Team Name
         <span style="float: right"> Wins </span>
@@ -55,8 +55,8 @@
       </ion-list>
     </div>
 
-  <div *ngIf="!queryListTeams || queryListTeams == ''">
-    <div class="empty" padding>
+  <div *ngIf="!queryListTeams || queryListTeams == ''" text-center>
+    <div class="empty">
       <h2 padding>Search for Teams</h2>
     </div>
   </div>
@@ -64,15 +64,15 @@
 
   <div *ngSwitchCase="'Courts'">
     <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchCourts($event)" placeholder="Search Courts" showCancelButton="true"></ion-searchbar>
-    <div *ngIf="queryListCourts">
+    <div *ngIf="queryListCourts && queryListCourts != ''">
       <ion-list>
         <button ion-item *ngFor="let court of queryListCourts" text-capitalize (tap)="goToCourt(court)">
           {{court.courtName}}
         </button>
       </ion-list>
     </div>
-    <div *ngIf="!queryListCourts || queryListCourts == ''">
-      <div class="empty" padding>
+    <div *ngIf="!queryListCourts || queryListCourts == ''" text-center>
+      <div class="empty">
         <h2 padding>Search for Courts</h2>
       </div>
     </div>
