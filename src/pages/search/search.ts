@@ -83,6 +83,7 @@ export class SearchPage {
           coins
           winTotal
           lossTotal
+          profilePic
           courtsRuled
           teams{
             id

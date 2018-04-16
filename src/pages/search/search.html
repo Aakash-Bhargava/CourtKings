@@ -26,10 +26,13 @@
           <span style="float: right"> Wins </span>
         </ion-list-header>
         <ion-list>
-          <button ion-item *ngFor="let user of queryListPlayers" text-capitalize text-capitalize detail-none no-lines>
+          <ion-item *ngFor="let user of queryListPlayers" text-capitalize detail-none no-lines>
+            <ion-avatar item-start>
+              <img [src]="user.profilePic">
+            </ion-avatar>
             {{user.name}}
             <h3 item-end> {{user.winTotal}}</h3>
-          </button>
+          </ion-item>
         </ion-list>
       </div>
     <div *ngIf="!queryListPlayers || queryListPlayers == ''" text-center>
@@ -47,11 +50,11 @@
         <span style="float: right"> Wins </span>
       </ion-list-header>
       <ion-list>
-        <button ion-item *ngFor="let team of queryListTeams" text-capitalize detail-none no-lines>
+        <ion-item *ngFor="let team of queryListTeams" text-capitalize detail-none no-lines>
+          <ion-icon ios="ios-basketball-outline" md="md-basketball"></ion-icon>
           {{team.teamName}}
           <h3 item-end> {{team.wins}}</h3>
-        </button>
-
+        </ion-item>
       </ion-list>
     </div>
 
