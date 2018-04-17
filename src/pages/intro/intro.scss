@@ -1,4 +1,42 @@
 page-intro {
+  .scroll-content {
+    overflow-y: hidden !important;
+  }
+  .introbg {
+    .background {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      transform: scale(1.3);
+      filter: blur(1px);
+    }
+    .logo {
+      width: 100%;
+      text-align: center;
+      position: absolute;
+      left: 0;
+      top: 0;
+      img {
+        margin-top: 15%;
+        width: 70%;
+        z-index: 10;
+      }
+    }
+    .black {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: black;
+      opacity: 0.8;
+    }
+  }
+  ion-slide img {
+    width: 70% !important;
+  }
   button{
     color: white;
   }
