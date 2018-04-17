@@ -1,6 +1,16 @@
+<ion-header>
+
+    <ion-toolbar>
+      <ion-title>
+        Profile
+      </ion-title>
+    </ion-toolbar>
+
+  </ion-header>
+
 <ion-content>
   <ion-grid text-center>
-    <ion-label id="name">{{this.name}}</ion-label>
+    <ion-label id="name">{{this.user.name}}</ion-label>
 
     <div id="profile-info" padding *ngIf="!this.profilePic">
       <button id="add-photo-btn" ion-button large round icon-only color="dark" (tap)="changePic()">
@@ -13,7 +23,7 @@
       </ion-avatar>
     </div>
 
-    <ion-label id="streetName">@{{this.streetName}}</ion-label>
+    <ion-label id="streetName">@{{this.user.streetName}}</ion-label>
 
     <ion-row>
       <ion-col>
@@ -28,13 +38,13 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        {{this.courtsRuled}}
+        {{this.user.courtsRuled}}
       </ion-col>
       <ion-col>
-        {{this.winTotal}} - {{this.lossTotal}}
+        {{this.user.winTotal}} - {{this.user.lossTotal}}
       </ion-col>
       <ion-col>
-        {{this.coins}}
+        {{this.user.coins}}
       </ion-col>
     </ion-row>
 
@@ -49,7 +59,7 @@
       My Teams
     </ion-list-header>
 
-      <button ion-item *ngFor="let team of teams" text-capitalize>
+      <button ion-item *ngFor="let team of user.teams" text-capitalize>
         <ion-avatar item-start>
           <img [src]="_DomSanitizer.bypassSecurityTrustUrl(team.teamImage)">
         </ion-avatar>

@@ -110,7 +110,7 @@ export default class CourtProvider {
   getTodaysChallenges(id) {
     const now = new Date();
     now.setDate(now.getDate() - 1);
-    return this.apollo.query({query: QUERY_TODAYS_CHALLENGE_BY_COURT_ID, variables: {courtId: id, date: now }}).toPromise();
+    return this.apollo.query({query: QUERY_TODAYS_CHALLENGE_BY_COURT_ID, variables: {courtId: id, date: now }, fetchPolicy: 'network-only'}).toPromise();
   }
 
   search(term: BehaviorSubject<string>, debounce = 400): Observable<Array<Court>> {

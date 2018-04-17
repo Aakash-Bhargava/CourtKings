@@ -12,12 +12,15 @@ page-search {
   .segment-ios .segment-activated {
     background-color: #f8f8f8 !important;
     color: black !important;
-    border-bottom: 2px solid #FF2222 !important;
+    border-bottom: 2px solid #222 !important;
     opacity: 1 !important;
   }
-  
+
   ion-icon {
     font-size: 1em;
+  }
+  h3 {
+    font-weight: bold !important;
   }
 
 }

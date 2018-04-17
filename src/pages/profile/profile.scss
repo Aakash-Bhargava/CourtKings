@@ -3,11 +3,13 @@ page-profile {
 
   .toolbar-background, .tabbar{
     border : none !important;
-    background-color: black !important;
+    // background-color: black !important;
   }
 
   ion-grid{
-    background-color: black;
+    background: linear-gradient(#232526, #414345);
+    // background-size: cover;
+    // background-image: url("../../assets/imgs/baskethigh.jpg");
     color: white;
   }
 

@@ -61,6 +61,7 @@ export class SchedulePage {
     this.todaysChallenges = [];
     this.selectedTimePending = [];
     this.selectedTimeSchedulued = [];
+
     //if challenge is today push to todaysChallenges
     this.courtProvider.getTodaysChallenges(this.court.id).then(({data}) =>{
       console.log("getAllChallenges");
@@ -81,9 +82,17 @@ export class SchedulePage {
         }
       }
     });
+
+    //Changing first element to match 11am
+    this.oldTag = document.getElementById(this.time);
+    this.oldTag.style.backgroundColor = "#2c2c2c";
+    this.oldTag.style.color="white";
   }
 
   changeTime(time){
+    if (this.time == time) {
+      return;
+    }
     this.selectedTimePending = [];
     this.selectedTimeSchedulued = [];
     this.time = time;

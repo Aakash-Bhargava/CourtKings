@@ -15,7 +15,7 @@ import gql from 'graphql-tag';
 export class ProfilePage {
 
   data: any;
-  userInfo = <any>{};
+  user = <any>{};
   name: any;
   streetName: any;
   coins: any;
@@ -31,53 +31,44 @@ export class ProfilePage {
   }
 
   ionViewDidEnter() {
-      this.data = this.checkUserInfo();
-      this.data.refetch().then(({data}) => {
+      this.checkUserInfo().then(({data}) => {
         if (data) {
-          this.userInfo = data;
-          this.userInfo = this.userInfo.user;
-          this.name = this.userInfo.name;
-          this.streetName = this.userInfo.streetName;
-          this.coins = this.userInfo.coins;
-          this.winTotal = this.userInfo.winTotal;
-          this.lossTotal = this.userInfo.lossTotal;
-          this.courtsRuled = this.userInfo.courtsRuled;
-          this.teams = this.userInfo.teams;
-          this.profilePic = this.userInfo.profilePic;
-          console.log(this.userInfo);
+          this.user = data;
+          this.user = this.user.user;
+          console.log(this.user);
         }
-
      });
   }
 
   checkUserInfo() {
-  return this.apollo.watchQuery({
-    query: gql`
-      query{
-        user{
-          id
-          email
-          name
-          streetName
-          coins
-          winTotal
-          lossTotal
-          courtsRuled
-          profilePic
-          teams{
+    return this.apollo.query({
+      query: gql`
+        query{
+          user{
             id
-            teamName
-            teamImage
+            email
+            name
+            streetName
+            coins
+            winTotal
+            lossTotal
+            courtsRuled
+            profilePic
+            teams{
+              id
+              teamName
+              teamImage
+            }
+           }
           }
-         }
-        }
-    `
-    });
+      `
+    }).toPromise();
+
   }
 
   goToCreatePage() {
     this.navCtrl.push('CreateTeamPage', {
-      user: this.userInfo
+      user: this.user
     });
   }
 
