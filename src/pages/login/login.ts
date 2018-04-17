@@ -40,7 +40,7 @@ export class LoginPage {
           // console.log(userInfo.data);
         }
       }).then(() => {
-        this.navCtrl.push('HomePage');
+        this.navCtrl.push('TabsPage');
       }).catch(() => {
         console.log('view was not dismissed');
         this.showToast('Login failed, Please try again.');
