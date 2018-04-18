@@ -82,9 +82,17 @@ export class HomePage {
     };
 
     this.map = GoogleMaps.create('map', mapOptions);
+    const iconImage = {
+      url: 'assets/imgs/home.png',
+      size: {
+          width: 32,
+          height: 32
+      }
+    };
     this.map.one(GoogleMapsEvent.MAP_READY)
       .then(() => {
         this.map.addMarker({
+          icon: iconImage,
           animation: 'DROP',
           position: campus,
         });
@@ -107,8 +115,15 @@ export class HomePage {
 
   addMarker(court: Court) {
     const coords = new LatLng(court.latitude, court.longitude);
+    const iconImage = {
+      url: 'assets/imgs/pin.png',
+      size: {
+          width: 32,
+          height: 32
+      }
+    };
     this.map.addMarker({
-      icon: 'blue',
+      icon: iconImage,
       animation: 'DROP',
       position: coords,
     })
