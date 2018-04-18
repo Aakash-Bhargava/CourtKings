@@ -1,22 +1,16 @@
-<ion-content>
+<ion-header>
 
-  <ion-row id="headerContent">
-    <ion-col text-left>
-      <button ion-button icon-only clear (tap)="goback()">
-        <ion-icon name="arrow-round-back" color="dark"></ion-icon>
-      </button>
-    </ion-col>
-    <ion-col>
-       <ion-datetime disabled displayFormat="MMMM DD" [(ngModel)]="date"></ion-datetime>
-    </ion-col>
-    <ion-col>
-    </ion-col>
-  </ion-row>
+  <ion-navbar>
+    <ion-title>{{date | amDateFormat:'LL' }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content>
 
   <div class="court-name">
     <h1 text-capitalize bold>{{ court.courtName }}</h1>
   </div>
-  <div class="court-king-info">
+  <div class="court-king-info" *ngIf="court.courtKings">
     <h3>{{ court.courtKings.teamName }}</h3>
     <div class="avatar-group">
       <img [src]="court.courtKings.players[0].profilePic">
@@ -25,23 +19,16 @@
     </div>
     <h3>{{ court.courtKings.wins }}</h3>
   </div>
-  <!-- <div class="court-king-info">
-    <h3> Court King Name</h3>
-    <div class="avatar-group">
-      <img [src]="">
-      <img [src]="">
-      <img [src]="">
-    </div>
-    <h3> 12 </h3>
-  </div> -->
+  <div class="court-king-info" *ngIf="!court.courtKings">
+    <h3>No Court King on this court!</h3>
+  </div>
 
   <h5>Today</h5>
-  <ion-scroll style="height: 60px;" scrollX="true">
-    <ion-segment [(ngModel)]="time" color="dark" (ionChange)="timeChange()" style="width: 500px; padding: 0 10px;">
-      <ion-segment-button *ngFor="let hour of hours" [value]="hour">
-        {{hour}}
-      </ion-segment-button>
-    </ion-segment>
+
+  <ion-scroll scrollX="true" text-center>
+    <div class="scrollTimes" *ngFor="let time of timeArray" id="{{time}}" (click)="changeTime(time)">
+      <p>{{time}}</p>
+    </div>
   </ion-scroll>
 
   <div id="schedule-content" text-center padding-top>
@@ -124,17 +111,19 @@
 
   <div id="queue-content">
     <h5> Queued </h5>
-    <ion-item (tap)="addToQueue()" text-center>
-      <ion-icon item-start name="add"></ion-icon>
-      <h3 item-start>Add your team to queue at {{time}}</h3>
-    </ion-item>
-    <ion-item *ngFor="let challenge of selectedTimePending">
-      <ion-avatar item-start>
-        <img [src]="_DomSanitizer.bypassSecurityTrustUrl(challenge.teams[0].teamImage)">
-      </ion-avatar>
-      <h3 item-start> {{challenge.teams[0].teamName}} want to play. </h3>
-      <button ion-button item-end small round color="light" (tap)="play(challenge)">Play</button>
-    </ion-item>
+    <ion-list>
+      <ion-item (tap)="addToQueue()">
+        <ion-icon item-start name="add"></ion-icon>
+        <h3>Add your team to queue at {{time}}</h3>
+      </ion-item>
+      <ion-item *ngFor="let challenge of selectedTimePending">
+        <ion-avatar item-start>
+          <img [src]="_DomSanitizer.bypassSecurityTrustUrl(challenge.teams[0].teamImage)">
+        </ion-avatar>
+        <h3 item-start> {{challenge.teams[0].teamName}} wants to play. </h3>
+        <button ion-button item-end small round color="light" (tap)="play(challenge)">Play</button>
+      </ion-item>
+    </ion-list>
   </div>
 
 </ion-content>

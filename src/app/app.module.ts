@@ -19,6 +19,7 @@ import { Apollo, ApolloModule } from 'apollo-angular';
 
 import { Camera } from '@ionic-native/camera';
 import { OneSignal } from '@ionic-native/onesignal';
+import { MomentModule } from 'angular2-moment';
 
 import CourtProvider from '../providers/court/court';
 import UserProvider from '../providers/user/user';
@@ -35,7 +36,8 @@ import TeamProvider from '../providers/team/team';
     HttpLinkModule,
     IonicModule.forRoot(MyApp),
     SuperTabsModule.forRoot(),
-    ApolloModule
+    ApolloModule,
+    MomentModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

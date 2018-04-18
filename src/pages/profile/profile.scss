@@ -3,29 +3,29 @@ page-profile {
 
   .toolbar-background, .tabbar{
     border : none !important;
-    background-color: black !important;
+    // background-color: black !important;
   }
 
   ion-grid{
-    background-color: black;
+    background: linear-gradient(#232526, #414345);
+    // background-size: cover;
+    // background-image: url("../../assets/imgs/baskethigh.jpg");
     color: white;
   }
 
   #name{
     margin-bottom: .3em;
     font-size: 1.9rem;
-
   }
 
   #streetName{
     font-size: 1.35rem;
   }
 
-
   ion-avatar{
     img{
-      height: 15%;
-      width: 40%;
+      height: 100px;
+      width: 100px;
       margin: auto;
       display: block;
       border-radius: 50%;

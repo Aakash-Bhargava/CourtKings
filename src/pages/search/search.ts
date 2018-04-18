@@ -75,7 +75,7 @@ export class SearchPage {
   return this.apollo.query({
     query: gql`
       query{
-        allUsers{
+        allUsers(orderBy: name_ASC){
           id
           email
           name
@@ -83,6 +83,7 @@ export class SearchPage {
           coins
           winTotal
           lossTotal
+          profilePic
           courtsRuled
           teams{
             id
@@ -97,7 +98,7 @@ export class SearchPage {
   return this.apollo.query({
     query: gql`
       query{
-        allTeams{
+        allTeams(orderBy: wins_DESC){
           id
           teamName
           wins
@@ -111,7 +112,7 @@ export class SearchPage {
   return this.apollo.query({
     query: gql`
       query{
-        allCourts{
+        allCourts (orderBy: courtName_ASC) {
           id
           courtName
           challenges{
@@ -231,7 +232,7 @@ export class SearchPage {
 
   goToCourt(court) {
     console.log(court);
-    this.navCtrl.push('MapDetailPage', { court: court });
+    this.navCtrl.push('SchedulePage', { court: court });
   }
 
 }

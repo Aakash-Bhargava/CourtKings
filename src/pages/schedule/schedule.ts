@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { AlertController, IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import moment from 'moment';
+import UserProvider from '../../providers/user/user';
 import CourtProvider from '../../providers/court/court';
-import { CourtDetail, Schedule } from '../../types';
+
+import { Challenge, CourtDetail, Schedule } from '../../types';
+
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -12,20 +16,22 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: 'schedule.html',
 })
 export class SchedulePage {
-  private userData: any;
-  private user: any;
-  private selectedTeam: any;
-  private createdChallengeId: any;
-  private court: CourtDetail;
-  private schedules: Array<Schedule> = [];
-  private time = '11AM';
-  private today = new Date();
-  private challenges: any;
-  private todaysChallenges = <any>[];
-  private selectedTimePending = <any>[];
-  private selectedTimeSchedulued = <any>[];
-  private date: String = new Date().toISOString();
-  private hours: Array<string> = ['11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM'];
+  userData: any;
+  user: any;
+  selectedTeam: any;
+  createdChallengeId: any;
+  court: CourtDetail;
+  schedules: Array<Schedule> = [];
+  oldTag: any;
+  newTag: any;
+  timeArray = ['11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'];
+  time = '11am';
+  today = new Date();
+  challenges: any;
+  todaysChallenges = <any>[];
+  selectedTimePending = <any>[];
+  selectedTimeSchedulued = <any>[];
+  date: String = new Date().toISOString();
 
   constructor(
     public apollo: Apollo,
@@ -48,7 +54,6 @@ export class SchedulePage {
   ionViewDidLoad() {
     this.getTodaysChallenges();
   }
-
   getTodaysChallenges() {
 
     this.todaysChallenges = [];
@@ -74,13 +79,35 @@ export class SchedulePage {
         }
       }
     });
+
+    // Changing first element to match 11am
+    this.oldTag = document.getElementById(this.time);
+    this.oldTag.style.backgroundColor = '#2c2c2c';
+    this.oldTag.style.color = 'white';
   }
 
-
-  timeChange() {
+  changeTime(time) {
+    if (this.time === time) {
+      return;
+    }
     this.selectedTimePending = [];
     this.selectedTimeSchedulued = [];
-    console.log(this.time);
+    this.time = time;
+
+    if (this.oldTag) {
+      const newT = document.getElementById(time);
+      newT.style.backgroundColor = '#2c2c2c';
+      newT.style.color = 'white';
+      this.oldTag.style.backgroundColor = 'white';
+      this.oldTag.style.color = 'gray';
+      this.oldTag = newT;
+    } else {
+      const newT = document.getElementById(time);
+      newT.style.backgroundColor = '#2c2c2c';
+      newT.style.color = 'white';
+      this.oldTag = newT;
+    }
+
 
     for (const challenge of this.todaysChallenges) {
       if (challenge.gameTime === this.time) {
@@ -162,6 +189,7 @@ export class SchedulePage {
     }).toPromise();
   }
 
+  // someone accepts a queued team and pending becomes scheduled.
   pendingToScheduled(challenge) {
     return this.apollo.mutate({
       mutation: gql`
@@ -206,12 +234,12 @@ export class SchedulePage {
 
         this.selectedTeam =  data;
 
-         // if already in queue alert
-         if (this.selectedTimePending) {
+        // if already in queue alert
+        if (this.selectedTimePending) {
           for (const challenge of this.selectedTimePending) {
             console.log(challenge.teams[0].id);
             console.log(this.selectedTeam.id);
-            if (challenge.teams[0].id === this.selectedTeam.id) {
+            if ( challenge.teams[0].id === this.selectedTeam.id) {
               const alert = this.alertCtrl.create({
                 title: 'Team already in the queue',
                 buttons: ['OK']
@@ -222,15 +250,17 @@ export class SchedulePage {
           }
         }
 
-        // mutation to create a challenge, status: 'pending', Team: {{data}} -- this is selected team's id
-        // gameTime: this.time, court: this.court.id
+        // mutation to create a challenge, status: 'pending',
+        // Team: {{data}} -- this is selected team's id gameTime: this.time, court: this.court.id
         this.addPendingChallenge().then(({data}) => {
-        // get the challenge Id once its created
+          // get the challenge Id once its created
           this.createdChallengeId = data.createChallenges.id;
           // add challenge to court
           this.addToChallengesOnCourt().then(({data}) => {
-        // add link between single user team and created pending challenge
+            // add link between single user team and created pending challenge
             this.addChallengeToTeam().then(({data}) => {
+              // this.refresh();
+              this.getTodaysChallenges();
               const toast = this.toastCtrl.create({
                 message: 'Added to the Queue!',
                 position: 'top',
@@ -295,8 +325,6 @@ export class SchedulePage {
   }
 
   addChallengeToTeam() {
-    console.log('inside addChallengeToTeam');
-    console.log(this.selectedTeam.id);
     return this.apollo.mutate({
       mutation: gql`
       mutation addToChallengesOnTeam($challengesChallengesId: ID!, $teamsTeamId: ID!) {
@@ -369,5 +397,4 @@ export class SchedulePage {
   goback() {
     this.navCtrl.pop();
   }
-
 }

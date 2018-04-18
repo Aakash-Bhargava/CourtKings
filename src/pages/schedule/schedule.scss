@@ -2,6 +2,24 @@ page-schedule {
 
 //centers everything on the page.
 
+
+  ion-scroll{
+    white-space: nowrap;
+    height: 75px;
+    width: 100%;
+    .scrollTimes{
+      display: inline-block;
+      // max-width: 15%;
+      width: 60px;
+      height: 60px;
+      line-height: 30px;
+      border: 1px solid lightgray;
+      color: gray;
+      border-radius: 50%;
+      margin: 10px;
+    }
+  }
+
   div {
     text-align: center;
     padding: 0px;
