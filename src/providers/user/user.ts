@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
-import { User } from '../../types';
+import { User, UserDetail } from '../../types';
 
 const QUERY_CURRENT_USER = gql`
   query{
@@ -13,12 +13,45 @@ const QUERY_CURRENT_USER = gql`
       name
       streetName
       coins
-      winTotal
-      lossTotal
       courtsRuled
       teams{
         id
         teamName
+        challengesWon {
+          id
+        }
+        notifications {
+          type
+          challenge {
+            id
+            teams {
+              id
+              teamName
+            }
+            date
+            gameTime
+            court {
+              id
+              courtName
+            }
+          }
+        }
+      }
+      notifications {
+        type
+        challenge {
+          id
+          teams {
+            id
+            teamName
+          }
+          date
+          gameTime
+          court {
+            id
+            courtName
+          }
+        }
       }
     }
   }
@@ -32,11 +65,13 @@ const QUERY_ALL_USERS = gql`
       name
       streetName
       coins
-      winTotal
-      lossTotal
       courtsRuled
+      profilePic
       teams{
         id
+        challengesWon {
+          id
+        }
       }
     }
   }
@@ -46,13 +81,15 @@ const QUERY_ALL_USERS = gql`
 export default class UserProvider {
   private _allUsers: BehaviorSubject<Array<User>> = new BehaviorSubject<Array<User>>([]);
   private readonly allUsers: Observable<Array<User>> = this._allUsers.asObservable();
-  private currentUser: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+  private currentUser: BehaviorSubject<UserDetail> = new BehaviorSubject<UserDetail>(null);
+  private fetching = true;
 
   constructor(public http: HttpClient, public apollo: Apollo) {
     this.fetchCurrentUser();
+    this.fetchAllUsers().subscribe((users) => this.fetching = false);
   }
 
-  fetchCurrentUser(): Observable<User> {
+  fetchCurrentUser(): Observable<UserDetail> {
     const obs =  this.apollo
       .query({ query: QUERY_CURRENT_USER })
       .map(({ data }: any) => data.user);
@@ -62,7 +99,7 @@ export default class UserProvider {
   }
 
   updatePlayerId(playerId: string) {
-    this.fetchCurrentUser().subscribe((user: User) => {
+    this.fetchCurrentUser().subscribe((user: UserDetail) => {
       console.log(user.id);
       console.log(user.email);
       this.apollo.mutate({
@@ -82,7 +119,7 @@ export default class UserProvider {
     });
   }
 
-  getCurrentUser(): Observable<User> {
+  getCurrentUser(): Observable<UserDetail> {
     return this.currentUser;
   }
 
@@ -97,4 +134,22 @@ export default class UserProvider {
     return this.allUsers;
   }
 
+  search(term: BehaviorSubject<string>, debounce = 400): Observable<Array<User>> {
+    return term
+      .debounceTime(debounce)
+      .distinctUntilChanged()
+      .map((keyword: string) => {
+        if (!keyword) {
+          return [];
+        }
+        return this._allUsers.getValue().filter((user: User) => {
+          if (user.name && keyword) {
+            if (user.name.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+              return true;
+            }
+            return false;
+          }
+        });
+      });
+  }
 }

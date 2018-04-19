@@ -58,8 +58,6 @@ export class CreateTeamPage {
           name
           streetName
           coins
-          winTotal
-          lossTotal
           courtsRuled
           teams{
             id

@@ -4,7 +4,7 @@ import moment from 'moment';
 import UserProvider from '../../providers/user/user';
 import CourtProvider from '../../providers/court/court';
 
-import { Challenge, CourtDetail, Schedule } from '../../types';
+import { Challenge, CourtDetail, Schedule, UserDetail } from '../../types';
 
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
@@ -20,7 +20,7 @@ export class SchedulePage {
   user: any;
   selectedTeam: any;
   createdChallengeId: any;
-  court: CourtDetail;
+  court: CourtDetail = null;
   schedules: Array<Schedule> = [];
   oldTag: any;
   newTag: any;
@@ -31,6 +31,7 @@ export class SchedulePage {
   todaysChallenges = <any>[];
   selectedTimePending = <any>[];
   selectedTimeSchedulued = <any>[];
+  emptySlots: Array<any> = Array(3);
   date: String = new Date().toISOString();
 
   constructor(
@@ -40,87 +41,45 @@ export class SchedulePage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public courtProvider: CourtProvider,
-    public toastCtrl: ToastController) {
-      this.court = this.navParams.get('court');
-      this.userData = this.checkUserInfo();
-      this.userData.refetch().then(({data}) => {
-        if (data) {
-          this.user = data;
-          this.user = this.user.user;
-        }
-     });
+    public toastCtrl: ToastController,
+    private userProvider: UserProvider) {
   }
 
   ionViewDidLoad() {
+    this.userProvider.fetchCurrentUser().subscribe((user: UserDetail) => {
+      this.user = user;
+    });
     this.getTodaysChallenges();
   }
+
   getTodaysChallenges() {
+    const id = this.navParams.get('id');
+    this.courtProvider
+      .getCourtById(id)
+      .subscribe((court: CourtDetail) => {
+        this.court = court;
 
-    this.todaysChallenges = [];
-    this.selectedTimePending = [];
-    this.selectedTimeSchedulued = [];
-    // if challenge is today push to todaysChallenges
-    this.courtProvider.getTodaysChallenges(this.court.id).then(({data}) => {
-      console.log('getAllChallenges');
-      console.log(data);
-      this.todaysChallenges = data;
-      this.todaysChallenges = this.todaysChallenges.allChallengeses;
-      console.log(this.todaysChallenges);
-      for (const challenge of this.todaysChallenges) {
-        console.log(challenge);
-        if (challenge.gameTime === this.time && challenge.status === 'Pending') {
-          this.selectedTimePending.push(challenge);
-        }
-        if (challenge.gameTime === this.time && challenge.status === 'Scheduled') {
-          if (this.selectedTimeSchedulued.size >= 3) {
-            continue;
-          }
-          this.selectedTimeSchedulued.push(challenge);
-        }
-      }
-    });
-
-    // Changing first element to match 11am
-    this.oldTag = document.getElementById(this.time);
-    this.oldTag.style.backgroundColor = '#2c2c2c';
-    this.oldTag.style.color = 'white';
+        console.log(court.challenges);
+        this.todaysChallenges = court.challenges.filter(t => moment(t.date) >= moment().subtract(1, 'days'));
+        console.log(this.todaysChallenges);
+        this.selectedTimePending = this.todaysChallenges
+          .filter(c => c.gameTime === this.time && c.status === 'Pending');
+        this.selectedTimeSchedulued = this.todaysChallenges
+          .filter(c => c.gameTime === this.time && c.status === 'Scheduled');
+        this.emptySlots = Array(3 - this.selectedTimeSchedulued.length);
+      });
   }
 
   changeTime(time) {
-    if (this.time === time) {
-      return;
-    }
-    this.selectedTimePending = [];
-    this.selectedTimeSchedulued = [];
-    this.time = time;
+    if (this.time !== time) {
+      this.time = time;
 
-    if (this.oldTag) {
-      const newT = document.getElementById(time);
-      newT.style.backgroundColor = '#2c2c2c';
-      newT.style.color = 'white';
-      this.oldTag.style.backgroundColor = 'white';
-      this.oldTag.style.color = 'gray';
-      this.oldTag = newT;
-    } else {
-      const newT = document.getElementById(time);
-      newT.style.backgroundColor = '#2c2c2c';
-      newT.style.color = 'white';
-      this.oldTag = newT;
+      this.selectedTimePending = this.todaysChallenges
+        .filter(c => c.gameTime === this.time && c.status === 'Pending');
+      this.selectedTimeSchedulued = this.todaysChallenges
+        .filter(c => c.gameTime === this.time && c.status === 'Scheduled');
+      this.emptySlots = Array(3 - this.selectedTimeSchedulued.length);
     }
-
-
-    for (const challenge of this.todaysChallenges) {
-      if (challenge.gameTime === this.time) {
-        if (challenge.status === 'Pending') {
-          this.selectedTimePending.push(challenge);
-        } else {
-          this.selectedTimeSchedulued.push(challenge);
-        }
-      }
-    }
-    console.log('At' + this.time + 'there are these challenges');
-    console.log(this.selectedTimePending);
-    console.log(this.selectedTimeSchedulued);
   }
 
 
@@ -193,13 +152,18 @@ export class SchedulePage {
   pendingToScheduled(challenge) {
     return this.apollo.mutate({
       mutation: gql`
-      mutation updateChallenges($id: ID!, $status: String) {
+      mutation updateChallenges($id: ID!, $status: String, $team1Id: ID!, $team2Id: ID!) {
         updateChallenges(
           id:$id,
           status:$status,
-          notification: {
+          notification: [{
             type: Schedule
-          }
+            teamId: $team1Id
+          },
+          {
+            type: Schedule
+            teamId: $team2Id
+          }]
         ) {
           id
         }
@@ -207,6 +171,8 @@ export class SchedulePage {
       `, variables: {
         id: challenge.id,
         status: 'Scheduled',
+        team1Id: this.selectedTeam.id,
+        team2Id: challenge.teams[0].id,
       }
     }).toPromise();
   }
@@ -277,28 +243,6 @@ export class SchedulePage {
     alert.present();
   }
 
-
-  checkUserInfo() {
-  return this.apollo.watchQuery({
-    query: gql`
-      query{
-        user{
-          id
-          name
-          streetName
-          coins
-          profilePic
-          teams{
-            id
-            teamName
-            teamImage
-          }
-         }
-        }
-    `
-    });
-  }
-
   addPendingChallenge() {
     return this.apollo.mutate({
       mutation: gql`
@@ -341,7 +285,6 @@ export class SchedulePage {
       }
 
     }).toPromise();
-    // this.refreshPage();
   }
 
   addToChallengesOnCourt() {
@@ -360,39 +303,7 @@ export class SchedulePage {
         courtCourtId: this.court.id
       }
     }).toPromise();
-    // this.refreshPage();
   }
-
-  // refresh() {
-  //   console.log('Refresh');
-  //   this.watch().subscribe(({ data }) => {
-  //     console.log(data);
-  //     this.todaysChallenges = [];
-  //     this.todaysChallenges = data;
-  //   });
-  // }
-
-  // watch() {
-  //   return this.apollo.watchQuery({
-  //     query: gql`
-  //     query allChallenges{
-  //       allChallenges{
-  //         id
-  //         date
-  //         status
-  //         gameTime
-  //         teams {
-  //           teamName
-  //           teamImage
-  //           id
-  //         }
-  //       }
-  //     }
-  //     `,
-  //     pollInterval: 10000
-  //   });
-  // }
-
 
   goback() {
     this.navCtrl.pop();

@@ -19,8 +19,6 @@ export class ProfilePage {
   name: any;
   streetName: any;
   coins: any;
-  winTotal: any;
-  lossTotal: any;
   courtsRuled: any;
   teams: any;
   profilePic: any;
@@ -50,8 +48,6 @@ export class ProfilePage {
             name
             streetName
             coins
-            winTotal
-            lossTotal
             courtsRuled
             profilePic
             teams{

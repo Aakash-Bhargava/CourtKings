@@ -10,33 +10,35 @@ export interface Challenge {
 }
 
 export interface User {
-  coins: number;
-  courtsRuled: number;
   email: string;
   id: string;
-  lossTotal: number;
   name: string;
   profilePic: string;
   streetName: string;
+  coins: number;
   teams: Array<Team>;
-  winTotal: number;
+}
+
+export interface UserDetail extends User {
+  teams: Array<TeamDetail>;
+  notifications: Array<Notification>;
+  courtsRuled: number;
 }
 
 export interface Team {
   id: string;
   homeTown: string;
-  losses: number;
   players: Array<User>;
   teamImage: string;
-  wins: number;
   teamName: string;
+  challengesWon: Array<Challenge>;
 }
 
 export interface TeamDetail extends Team {
   challenges: Array<Challenge>;
-  challengesWon: Array<Challenge>;
   courtsRuled: Array<Court>;
   playAt: Array<Court>;
+  notifications: Array<Notification>;
 }
 
 export interface Court {
@@ -55,4 +57,10 @@ export interface CourtDetail extends Court {
 export type Schedule = {
   hour: string,
   teams: Array<string>,
+};
+
+export type Notification = {
+  type: 'NewTeam' | 'Schedule',
+  challenge: Challenge,
+  createdAt: string,
 };

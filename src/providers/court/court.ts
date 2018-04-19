@@ -12,7 +12,6 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
       courtKings {
         id
         teamName
-        wins
         players {
           profilePic
         }
@@ -22,7 +21,6 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
       longitude
       standings {
         id
-        wins
         teamName
       }
       challenges {
@@ -39,24 +37,6 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
     }
   }
 `;
-
-const QUERY_TODAYS_CHALLENGE_BY_COURT_ID = gql`
-  query allChallengeses($courtId: ID!, $date: DateTime) {
-    allChallengeses(filter: {court:{id: $courtId}, date_gte: $date}) {
-      id
-      date
-      gameTime
-      status
-      teams {
-        teamName
-        teamImage
-        id
-      }
-    }
-  }
-`;
-
-
 
 const QUERY_ALL_COURTS = gql`
   query{
@@ -105,12 +85,6 @@ export default class CourtProvider {
     return this.apollo
       .query({ query: QUERY_COURT_DETAIL_BY_ID, fetchPolicy: 'network-only', variables: { courtId: id } })
       .map(({ data }: any) => data.Court);
-  }
-
-  getTodaysChallenges(id) {
-    const now = new Date();
-    now.setDate(now.getDate() - 1);
-    return this.apollo.query({query: QUERY_TODAYS_CHALLENGE_BY_COURT_ID, variables: {courtId: id, date: now }, fetchPolicy: 'network-only'}).toPromise();
   }
 
   search(term: BehaviorSubject<string>, debounce = 400): Observable<Array<Court>> {

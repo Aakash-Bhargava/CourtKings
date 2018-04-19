@@ -15,7 +15,6 @@ const QUERY_TEAM_DETAIL_BY_ID = gql`
         id
         courtName
       }
-      wins
       players {
         id
         coins
@@ -49,6 +48,9 @@ const QUERY_ALL_TEAMS = gql`
     allTeams{
       id
       teamName
+      challengesWon {
+        id
+      }
     }
   }
 `;

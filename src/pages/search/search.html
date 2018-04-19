@@ -19,67 +19,93 @@
 
   <div [ngSwitch]="searchType">
     <div *ngSwitchCase="'Players'">
-      <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchPlayers($event)" placeholder="Search Players" showCancelButton="true"></ion-searchbar>
-      <div *ngIf="queryListPlayers && queryListPlayers != ''">
+      <ion-searchbar
+      (input)="playerTerm$.next($event.target.value)"
+      placeholder="Search Players"
+      showCancelButton="true"
+      [ngModel]="playerTerm$.getValue()"
+      (ionCancel)="playerQueryList = []"
+      ></ion-searchbar>
+      <div *ngIf="playerSearching" class="spinner-container">
+          <ion-spinner name="bubbles"></ion-spinner>
+      </div>
+      <div *ngIf="playerQueryList.length === 0 && !playerSearching" text-center>
+        <div class="empty">
+          <h2 padding>Search for Players</h2>
+        </div>
+      </div>
+      <div *ngIf="playerQueryList.length !== 0">
         <ion-list-header>
           Username
           <span style="float: right"> Wins </span>
         </ion-list-header>
         <ion-list>
-          <ion-item *ngFor="let user of queryListPlayers" text-capitalize detail-none no-lines>
+          <ion-item *ngFor="let user of playerQueryList" text-capitalize detail-none no-lines>
             <ion-avatar item-start>
               <img [src]="user.profilePic">
             </ion-avatar>
             {{user.name}}
-            <h3 item-end> {{user.winTotal}}</h3>
+            <h3 item-end> {{ getWins(user) }} </h3>
           </ion-item>
         </ion-list>
       </div>
-    <div *ngIf="!queryListPlayers || queryListPlayers == ''" text-center>
-      <div class="empty">
-        <h2 padding>Search for Players</h2>
+    </div>
+
+    <div *ngSwitchCase="'Teams'">
+      <ion-searchbar
+      (input)="teamTerm$.next($event.target.value)"
+      placeholder="Search Teams"
+      showCancelButton="true"
+      [ngModel]="teamTerm$.getValue()"
+      (ionCancel)="teamQueryList = []"
+      ></ion-searchbar>
+      <div *ngIf="teamSearching" class="spinner-container">
+          <ion-spinner name="bubbles"></ion-spinner>
+      </div>
+      <div *ngIf="teamQueryList.length === 0 && !teamSearching" text-center>
+        <div class="empty">
+          <h2 padding>Search for Teams</h2>
+        </div>
+      </div>
+      <div *ngIf="teamQueryList.length !== 0">
+        <ion-list-header>
+          Team Name
+          <span style="float: right"> Wins </span>
+        </ion-list-header>
+        <ion-list>
+          <ion-item *ngFor="let team of teamQueryList" text-capitalize detail-none no-lines (tap)="goToTeam(team)">
+            <ion-icon ios="ios-basketball-outline" md="md-basketball" padding-right></ion-icon>
+            {{team.teamName}}
+            <h3 item-end> {{ team.challengesWon.length }} </h3>
+          </ion-item>
+        </ion-list>
       </div>
     </div>
-  </div>
 
-  <div *ngSwitchCase="'Teams'">
-    <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchTeams($event)" placeholder="Search Teams" showCancelButton="true"></ion-searchbar>
-    <div *ngIf="queryListTeams && queryListTeams != ''">
-      <ion-list-header>
-        Team Name
-        <span style="float: right"> Wins </span>
-      </ion-list-header>
-      <ion-list>
-        <ion-item *ngFor="let team of queryListTeams" text-capitalize detail-none no-lines>
-          <ion-icon ios="ios-basketball-outline" md="md-basketball" padding-right></ion-icon>
-          {{team.teamName}}
-          <h3 item-end> {{team.wins}}</h3>
-        </ion-item>
-      </ion-list>
-    </div>
-
-  <div *ngIf="!queryListTeams || queryListTeams == ''" text-center>
-    <div class="empty">
-      <h2 padding>Search for Teams</h2>
-    </div>
-  </div>
-</div>
-
-  <div *ngSwitchCase="'Courts'">
-    <ion-searchbar spellcheck="true" autocomplete="true" autocorrect="true" (ionInput)="searchCourts($event)" placeholder="Search Courts" showCancelButton="true"></ion-searchbar>
-    <div *ngIf="queryListCourts && queryListCourts != ''">
-      <ion-list>
-        <button ion-item *ngFor="let court of queryListCourts" text-capitalize (tap)="goToCourt(court)">
-          {{court.courtName}}
-        </button>
-      </ion-list>
-    </div>
-    <div *ngIf="!queryListCourts || queryListCourts == ''" text-center>
-      <div class="empty">
-        <h2 padding>Search for Courts</h2>
+    <div *ngSwitchCase="'Courts'">
+      <ion-searchbar
+      (input)="courtTerm$.next($event.target.value)"
+      placeholder="Search Courts"
+      showCancelButton="true"
+      [ngModel]="courtTerm$.getValue()"
+      (ionCancel)="courtQueryList = []"
+      ></ion-searchbar>
+      <div *ngIf="courtSearching" class="spinner-container">
+          <ion-spinner name="bubbles"></ion-spinner>
+      </div>
+      <div *ngIf="courtQueryList.length === 0 && !courtSearching" text-center>
+        <div class="empty">
+          <h2 padding>Search for Courts</h2>
+        </div>
+      </div>
+      <div *ngIf="courtQueryList.length !== 0">
+        <ion-list>
+          <button ion-item *ngFor="let court of courtQueryList" text-capitalize (tap)="goToCourt(court)">
+            {{court.courtName}}
+          </button>
+        </ion-list>
       </div>
     </div>
-  </div>
 
   </div>
 

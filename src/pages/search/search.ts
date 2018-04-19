@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
+import { BehaviorSubject } from 'rxjs/Rx';
+import UserProvider from '../../providers/user/user';
+import TeamProvider from '../../providers/team/team';
+import { Challenge, Court, Schedule, Team, User  } from '../../types';
+import CourtProvider from '../../providers/court/court';
 
 
 @IonicPage()
@@ -13,226 +18,57 @@ export class SearchPage {
 
   searchType = 'Players';
 
-  queryListPlayers: any;
-  qPLayers: any;
-  allUsers =  <any>[];
-  allUsersData = <any>[];
+  private playerSearching = false;
+  private courtSearching = false;
+  private teamSearching = false;
+  private playerQueryList: Array<User> = [];
+  private teamQueryList: Array<Team> = [];
+  private courtQueryList: Array<Court> = [];
+  private playerTerm$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private teamTerm$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private courtTerm$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  queryListTeams: any;
-  qTeams: any;
-  allTeams =  <any>[];
-  allTeamsData = <any>[];
-
-
-  queryListCourts: any;
-  qCourts: any;
-  allCourts =  <any>[];
-  allCourtsData = <any>[];
-
-
-  constructor(public apollo: Apollo, public navCtrl: NavController, public navParams: NavParams) {
-  }
-
-  ionViewDidLoad() {
-
-    // get all user info
-    this.getAllUserInfo().then(({data}) => {
-        this.allUsersData = [];
-        this.allUsers = data;
-        this.allUsers = this.allUsers.allUsers;
-        console.log(this.allUsers);
-        for (const user of this.allUsers) {
-          this.allUsersData.push(user);
-        }
-      });
-
-      // get all teams info
-      this.getAllTeamInfo().then(({data}) => {
-          this.allTeamsData = [];
-          this.allTeams = data;
-          this.allTeams = this.allTeams.allTeams;
-          for (const team of this.allTeams) {
-            this.allTeamsData.push(team);
-          }
-        });
-
-    // load all courts
-    this.getAllCourtInfo().then(({data}) => {
-        this.allCourtsData = [];
-        this.allCourts = data;
-        this.allCourts = this.allCourts.allCourts;
-        console.log('ALL Courts');
-        // console.log(this.allCourts);
-        for (const court of this.allCourts) {
-          this.allCourtsData.push(court);
-        }
-        console.log(this.allCourtsData);
-      });
-  }
-
-
-  getAllUserInfo() {
-  return this.apollo.query({
-    query: gql`
-      query{
-        allUsers(orderBy: name_ASC){
-          id
-          email
-          name
-          streetName
-          coins
-          winTotal
-          lossTotal
-          profilePic
-          courtsRuled
-          teams{
-            id
-          }
-         }
-        }
-    `
-    }).toPromise();
-  }
-
-  getAllTeamInfo() {
-  return this.apollo.query({
-    query: gql`
-      query{
-        allTeams(orderBy: wins_DESC){
-          id
-          teamName
-          wins
-         }
-        }
-    `
-    }).toPromise();
-  }
-
-  getAllCourtInfo() {
-  return this.apollo.query({
-    query: gql`
-      query{
-        allCourts (orderBy: courtName_ASC) {
-          id
-          courtName
-          challenges{
-            id
-            date
-            teams{
-              id
-              teamName
-              teamImage
-              wins
-              players{
-                id
-                name
-                profilePic
-              }
-            }
-            gameTime
-            status
-          }
-         }
-        }
-    `
-    }).toPromise();
-  }
-
-
-  initializePlayers(): void {
-    this.queryListPlayers = this.allUsersData;
-    console.log(this.queryListPlayers);
-  }
-
-  initializeTeams(): void {
-    this.queryListTeams = this.allTeamsData;
-    console.log(this.queryListTeams);
-  }
-
-  initializeCourts(): void {
-    this.queryListCourts = this.allCourtsData;
-    console.log(this.queryListCourts);
-  }
-
-
-
-
-  searchPlayers(searchbar) {
-    // Reset items back to all of the items
-    this.initializePlayers();
-
-    // set q to the value of the searchbar
-    this.qPLayers = searchbar.srcElement.value;
-
-    // if the value is an empty string don't filter the items
-    if (!this.qPLayers) {
-      this.queryListPlayers = [];
-      return;
-    }
-
-    this.queryListPlayers = this.queryListPlayers.filter((v) => {
-      if (v.name && this.qPLayers) {
-        if (v.name.toLowerCase().indexOf(this.qPLayers.toLowerCase()) > -1) {
-          return true;
-        }
-        return false;
-      }
+  constructor(
+    public apollo: Apollo,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private teamProvider: TeamProvider,
+    private courtProvider: CourtProvider,
+    private userProvider: UserProvider,
+  ) {
+    this.teamTerm$.subscribe((term: string) => this.teamSearching = !!term);
+    this.courtTerm$.subscribe((term: string) => this.courtSearching = !!term);
+    this.playerTerm$.subscribe((term: string) => this.playerSearching = !!term);
+    this.teamProvider.search(this.teamTerm$).subscribe((result: Array<Team>) => {
+      this.teamQueryList = result;
+      this.teamSearching = false;
     });
-    console.log(this.qPLayers, this.queryListPlayers.length);
-  }
-
-  searchTeams(searchbar) {
-    // Reset items back to all of the items
-    this.initializeTeams();
-
-    // set q to the value of the searchbar
-    this.qTeams = searchbar.srcElement.value;
-
-    // if the value is an empty string don't filter the items
-    if (!this.qTeams) {
-      this.queryListTeams = [];
-      return;
-    }
-
-    this.queryListTeams = this.queryListTeams.filter((v) => {
-      if (v.teamName && this.qTeams) {
-        if (v.teamName.toLowerCase().indexOf(this.qTeams.toLowerCase()) > -1) {
-          return true;
-        }
-        return false;
-      }
+    this.courtProvider.search(this.courtTerm$).subscribe((result: Array<Court>) => {
+      this.courtQueryList = result;
+      this.courtSearching = false;
     });
-    console.log(this.qTeams, this.queryListTeams.length);
-  }
-
-  searchCourts(searchbar) {
-    // Reset items back to all of the items
-    this.initializeCourts();
-
-    // set q to the value of the searchbar
-    this.qCourts = searchbar.srcElement.value;
-
-    // if the value is an empty string don't filter the items
-    if (!this.qCourts) {
-      this.queryListCourts = [];
-      return;
-    }
-
-    this.queryListCourts = this.queryListCourts.filter((v) => {
-      if (v.courtName && this.qCourts) {
-        if (v.courtName.toLowerCase().indexOf(this.qCourts.toLowerCase()) > -1) {
-          return true;
-        }
-        return false;
-      }
+    this.userProvider.search(this.playerTerm$).subscribe((result: Array<User>) => {
+      this.playerQueryList = result;
+      this.playerSearching = false;
     });
-    console.log(this.qCourts, this.queryListCourts.length);
   }
 
+  goToTeam(team: Team) {
+    this.navCtrl.push('TeamProfilePage', { id: team.id });
+  }
 
-  goToCourt(court) {
-    console.log(court);
+  goToCourt(court: Court) {
     this.navCtrl.push('SchedulePage', { court: court });
+  }
+
+  // goToUser(user: User) {
+  //   this.navCtrl.push('SchedulePage', { court: court });
+  // }
+
+  getWins(user: User) {
+    let challengesWon = [];
+    user.teams.forEach((team: Team) => { challengesWon = challengesWon.concat(team.challengesWon); });
+    return challengesWon.length;
   }
 
 }

@@ -6,124 +6,74 @@
 
 </ion-header>
 <ion-content>
-
-  <div class="court-name">
-    <h1 text-capitalize bold>{{ court.courtName }}</h1>
+  <div *ngIf="!court && !user" class="spinner-container">
+    <ion-spinner name="bubbles"></ion-spinner>
   </div>
-  <div class="court-king-info" *ngIf="court.courtKings">
-    <h3>{{ court.courtKings.teamName }}</h3>
-    <div class="avatar-group">
-      <img [src]="court.courtKings.players[0].profilePic">
-      <img [src]="court.courtKings.players[1].profilePic">
-      <img [src]="court.courtKings.players[2].profilePic">
+  <div *ngIf="court && user">
+    <div class="court-name">
+      <h1 text-capitalize bold>{{ court.courtName }}</h1>
     </div>
-    <h3>{{ court.courtKings.wins }}</h3>
-  </div>
-  <div class="court-king-info" *ngIf="!court.courtKings">
-    <h3>No Court King on this court!</h3>
-  </div>
-
-  <h5>Today</h5>
-
-  <ion-scroll scrollX="true" text-center>
-    <div class="scrollTimes" *ngFor="let time of timeArray" id="{{time}}" (click)="changeTime(time)">
-      <p>{{time}}</p>
+    <div class="court-king-info" *ngIf="court.courtKings">
+      <h3>{{ court.courtKings.teamName }}</h3>
+      <div class="avatar-group">
+        <img [src]="court.courtKings.players[0].profilePic">
+        <img [src]="court.courtKings.players[1].profilePic">
+        <img [src]="court.courtKings.players[2].profilePic">
+      </div>
+      <h3>{{ court.courtKings.wins }}</h3>
     </div>
-  </ion-scroll>
-
-  <div id="schedule-content" text-center padding-top>
-    <h5 font-weight="bold"> Scheduled </h5>
-
-    <!--  if There are no games scheduled -->
-    <div *ngIf="selectedTimeSchedulued.length == 0">
-      <ion-item no-lines>
-        <h3> Game Slot Available </h3>
-      </ion-item>
-      <ion-item no-lines>
-        <h3> Game Slot Available </h3>
-      </ion-item>
-      <ion-item no-lines>
-        <h3> Game Slot Available </h3>
-      </ion-item>
+    <div class="court-king-info" *ngIf="!court.courtKings">
+      <h3>No Court King on this court!</h3>
     </div>
 
-    <!--  if There are 1 games scheduled -->
-    <div *ngIf="selectedTimeSchedulued.length == 1">
+    <h5>Today</h5>
+
+    <ion-scroll scrollX="true" text-center>
+      <div
+        [class]="time === t ? 'activeTime' : 'plainTime'"
+        *ngFor="let t of timeArray"
+        (click)="changeTime(t)"
+      >
+        <p>{{t}}</p>
+      </div>
+    </ion-scroll>
+
+    <div id="schedule-content" text-center padding-top>
+      <h5 font-weight="bold"> Scheduled </h5>
+
       <ion-item no-lines *ngFor="let challenge of selectedTimeSchedulued">
         <ion-row>
           <ion-col>
             <h3> {{challenge.teams[0].teamName}} </h3>
           </ion-col>
           <ion-col>
-             <h3> vs </h3>
+              <h3> vs </h3>
           </ion-col>
           <ion-col>
             <h3> {{challenge.teams[1].teamName}} </h3>
           </ion-col>
         </ion-row>
       </ion-item>
-      <ion-item no-lines>
-        <h3> Game Slot Available </h3>
-      </ion-item>
-      <ion-item no-lines>
+      <ion-item no-lines *ngFor="let n of emptySlots">
         <h3> Game Slot Available </h3>
       </ion-item>
     </div>
 
-    <!--  if There are 2 games scheduled -->
-    <div *ngIf="selectedTimeSchedulued.length == 2">
-      <ion-item no-lines *ngFor="let challenge of selectedTimeSchedulued">
-        <ion-row>
-          <ion-col>
-            <h3> {{challenge.teams[0].teamName}} </h3>
-          </ion-col>
-          <ion-col>
-             <h3> vs </h3>
-          </ion-col>
-          <ion-col>
-            <h3> {{challenge.teams[1].teamName}} </h3>
-          </ion-col>
-        </ion-row>
-      </ion-item>
-      <ion-item no-lines>
-        <h3> Game Slot Available </h3>
-      </ion-item>
-    </div>
-
-    <!--  if There are 3 games scheduled -->
-    <div *ngIf="selectedTimeSchedulued.length == 3" >
-      <ion-item no-lines *ngFor="let challenge of selectedTimeSchedulued">
-        <ion-row>
-          <ion-col>
-            <h3> {{challenge.teams[0].teamName}} </h3>
-          </ion-col>
-          <ion-col>
-             <h3> vs </h3>
-          </ion-col>
-          <ion-col>
-            <h3> {{challenge.teams[1].teamName}} </h3>
-          </ion-col>
-        </ion-row>
-      </ion-item>
+    <div id="queue-content">
+      <h5> Queued </h5>
+      <ion-list>
+        <ion-item (tap)="addToQueue()">
+          <ion-icon item-start name="add"></ion-icon>
+          <h3>Add your team to queue at {{time}}</h3>
+        </ion-item>
+        <ion-item *ngFor="let challenge of selectedTimePending">
+          <ion-avatar item-start>
+            <img [src]="_DomSanitizer.bypassSecurityTrustUrl(challenge.teams[0].teamImage)">
+          </ion-avatar>
+          <h3 item-start> {{challenge.teams[0].teamName}} </h3>
+          <button ion-button item-end small round color="light" (tap)="play(challenge)">Play</button>
+        </ion-item>
+      </ion-list>
     </div>
   </div>
-
-
-  <div id="queue-content">
-    <h5> Queued </h5>
-    <ion-list>
-      <ion-item (tap)="addToQueue()">
-        <ion-icon item-start name="add"></ion-icon>
-        <h3>Add your team to queue at {{time}}</h3>
-      </ion-item>
-      <ion-item *ngFor="let challenge of selectedTimePending">
-        <ion-avatar item-start>
-          <img [src]="_DomSanitizer.bypassSecurityTrustUrl(challenge.teams[0].teamImage)">
-        </ion-avatar>
-        <h3 item-start> {{challenge.teams[0].teamName}} wants to play. </h3>
-        <button ion-button item-end small round color="light" (tap)="play(challenge)">Play</button>
-      </ion-item>
-    </ion-list>
-  </div>
-
 </ion-content>

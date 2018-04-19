@@ -20,9 +20,9 @@ export class MapDetailPage {
   }
 
   ionViewDidLoad() {
-    const court = this.navParams.get('court');
+    const id = this.navParams.get('id');
     this.courtProvider
-      .getCourtById(court.id)
+      .getCourtById(id)
       .subscribe((court: CourtDetail) => this.court = court);
   }
 

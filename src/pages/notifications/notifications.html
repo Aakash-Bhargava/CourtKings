@@ -1,25 +1,25 @@
-<!--
-  Generated template for the NotificationsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
     <ion-title>Notifications</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content>
-  <ion-item text-wrap>
-    <ion-icon name="logo-usd" item-start></ion-icon>
-    <h3>You just lost 2 coins. You answered incorrectly regarding your recent game.</h3>
-  </ion-item>
-  <ion-item text-wrap>
-    <ion-icon name="ios-basketball-outline" item-start></ion-icon>
-    <h3>You just lost 2 coins. You answered incorrectly regarding your recent game.</h3>
-  </ion-item>
+  <div *ngIf="!notifications && loading" class="spinner-container">
+      <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+  <div *ngIf="!notifications && !loading" class="spinner-container">
+    <span>You don't have any notification</span>
+</div>
+  <div *ngIf="notifications">
+    <ion-item text-wrap *ngFor="let notification of notifications">
+      <ion-icon
+        [name]="notification.type === 'Schedule' ? 'ios-basketball-outline' : 'ios-basketball-outline' "
+        item-start
+      ></ion-icon>
+      <h3 *ngIf="notification.type === 'Schedule'">
+        {{ notification.challenge.teams[0].teamName }} vs. {{ notification.challenge.teams[1].teamName }} is scheduled at court {{ notification.challenge.court.courtName }} at {{ notification.challenge.gameTime }}
+      </h3>
+    </ion-item>
+  </div>
 </ion-content>
