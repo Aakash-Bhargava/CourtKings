@@ -38,8 +38,8 @@ export class HomePage {
     private userProvider: UserProvider,
   ) {
     platform.ready().then(() => {
-      this.navCtrl.push('SchedulePage', { id: 'cje7iinnj4ywu0189yhx9bz7z' });
-      // this.loadMap();
+      // this.navCtrl.push('SchedulePage', { id: 'cje7iinnj4ywu0189yhx9bz7z' });
+      this.loadMap();
       // this.navCtrl.push('MapDetailPage', { id: 'cje7iinnj4ywu0189yhx9bz7z' });
       // this.navCtrl.push('TeamProfilePage', { id: 'cjehxya9877co0189hv57ihtj' });
     });

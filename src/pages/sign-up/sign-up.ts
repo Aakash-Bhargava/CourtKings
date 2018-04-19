@@ -71,15 +71,16 @@ export class SignUpPage {
 
 
   loginEvent(event) {
-    if (!this.name || !this.email || !this.password) {
+    //if there is any information missing during signup then create toast
+    if (!this.name || !this.email || !this.password || !this.streetName) {
       const toast = this.toastCtrl.create({
         message: 'There is some information missing. Try again.',
         duration: 3000,
         position: 'top'
       });
       toast.present();
-    } else {
-
+    }
+    else{
         this.createUser().then(({data}) => {
           if (data) {
             this.SignIn().then(({data}) => {
@@ -102,7 +103,7 @@ export class SignUpPage {
           }
         }, (errors) => {
           console.log(errors);
-          if (errors === 'Error: GraphQL error: User already exists with that information') {
+          if (errors == 'Error: GraphQL error: User already exists with that information') {
             const toast = this.toastCtrl.create({
               message: 'User already exists with that information. Try again.',
               duration: 3000,

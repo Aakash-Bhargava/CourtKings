@@ -4,7 +4,7 @@ import moment from 'moment';
 import UserProvider from '../../providers/user/user';
 import CourtProvider from '../../providers/court/court';
 
-import { Challenge, CourtDetail, Schedule, UserDetail } from '../../types';
+import { Challenge, CourtDetail, Schedule, Team, UserDetail } from '../../types';
 
 import {Apollo} from 'apollo-angular';
 import gql from 'graphql-tag';
@@ -183,11 +183,11 @@ export class SchedulePage {
     const alert = this.alertCtrl.create();
     alert.setTitle('Select your team.');
     // load your teams
-    for (const team of this.user.teams) {
+    for (const team of this.getTeamList()) {
       alert.addInput({
         type: 'radio',
         label: team.teamName,
-        value: team,
+        value: team.id,
         checked: false
       },
     );
@@ -303,6 +303,13 @@ export class SchedulePage {
         courtCourtId: this.court.id
       }
     }).toPromise();
+  }
+
+  getTeamList(): Array<Team> {
+    const teams = this.user.teams.filter((team: Team) => {
+      return !this.selectedTeam.includes(team) && !this.selectedTeam.includes(team);
+    });
+    return teams;
   }
 
   goback() {
