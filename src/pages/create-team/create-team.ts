@@ -30,6 +30,14 @@ export class CreateTeamPage {
               public platform: Platform, private Camera: Camera, public actionSheetCtrl: ActionSheetController) {
   }
   ionViewDidLoad() {
+
+    this.getUserInfo().then(({data}) => {
+      this.user = data;
+      this.user = this.user.user;
+      console.log(this.user);
+      this.team.push(this.user);
+    });
+
     this.getAllUserInfo().then(({data}) => {
         this.allUsersData = [];
         this.allUsers = data;
@@ -57,12 +65,31 @@ export class CreateTeamPage {
           email
           name
           streetName
-          coins
-          winTotal
-          lossTotal
-          courtsRuled
           teams{
             id
+          }
+         }
+        }
+    `
+    }).toPromise();
+  }
+
+  getUserInfo() {
+  return this.apollo.query({
+    query: gql`
+      query{
+        user{
+          id
+          email
+          name
+          streetName
+          teams{
+            id
+            players{
+              id
+              name
+              streetName
+            }
           }
          }
         }

@@ -50,8 +50,11 @@
     <h5 padding>Current Roster</h5>
     <ion-list>
       <ion-item *ngFor="let user of team" text-capitalize>
-        <ion-avatar item-start class="profile-pic">
+        <ion-avatar *ngIf="user.profilePic" item-start class="profile-pic">
           <img  [src]="_DomSanitizer.bypassSecurityTrustUrl(user.profilePic)">
+        </ion-avatar>
+        <ion-avatar *ngIf="!user.profilePic" item-start class="profile-pic">
+          <img src="../../assets/imgs/mockProfile.jpg">
         </ion-avatar>
         <h3 class="player-name">@{{ user.streetName }}</h3>
       </ion-item>
