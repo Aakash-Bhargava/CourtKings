@@ -16,6 +16,9 @@ export class CreateTeamPage {
   queryList: any;
   allUsers =  <any>[];
   allUsersData = <any>[];
+
+  teammates = <any>[];
+
   userId: any;
   q: any;
 
@@ -36,24 +39,25 @@ export class CreateTeamPage {
       this.user = this.user.user;
       console.log(this.user);
       this.team.push(this.user);
+
+      for (let team of this.user.teams){
+        console.log(team);
+        for( let player of team.players){
+          this.teammates.push(player);
+        }
+      }
     });
 
     this.getAllUserInfo().then(({data}) => {
         this.allUsersData = [];
         this.allUsers = data;
         this.allUsers = this.allUsers.allUsers;
-        // console.log(this.allUsers);
         for (const user of this.allUsers) {
-          if (user.id !== this.userId) {
+          if (user.id !== this.userId && user.teams.length < 5 && !this.teammates.includes(user)) {
             this.allUsersData.push(user);
           }
         }
       });
-
-      if (this.navParams.get('user')) {
-        this.user = this.navParams.get('user');
-        this.team.push(this.user);
-      }
   }
 
   getAllUserInfo() {
@@ -65,6 +69,7 @@ export class CreateTeamPage {
           email
           name
           streetName
+          profilePic
           teams{
             id
           }
@@ -83,6 +88,7 @@ export class CreateTeamPage {
           email
           name
           streetName
+          profilePic
           teams{
             id
             players{
@@ -199,11 +205,18 @@ export class CreateTeamPage {
           });
           alert.present();
           console.log(data);
-
-          this.navCtrl.push('ProfilePage');
+          this.navCtrl.setRoot('TabsPage');
         }
       }, (errors) => {
         console.log(errors);
+        if (errors == 'Error: GraphQL error: A unique constraint would be violated on Team. Details: Field name = teamName') {
+          const toast = this.toastCtrl.create({
+            message: 'Team already exists with that name. Try again.',
+            duration: 3000,
+            position: 'top'
+          });
+          toast.present();
+        }
       });
     } else {
       const alert = this.alertCtrl.create({
@@ -216,14 +229,11 @@ export class CreateTeamPage {
 
   }
 
-
   createTeam() {
     return this.apollo.mutate({
       mutation: gql`
-      mutation createTeam($teamName: String!, $homeTown: String, $teamImage: String, $playerId: [ID!], $type: String){
-        createTeam(teamName: $teamName, homeTown: $homeTown, teamImage: $teamImage, playersIds: $playerId, notification: {
-          type: NewTeam
-        }){
+      mutation createTeam($teamName: String!, $homeTown: String, $teamImage: String, $playerId: [ID!]){
+        createTeam(teamName: $teamName, homeTown: $homeTown, teamImage: $teamImage, playersIds: $playerId){
                      id
                    }
                  }
@@ -235,6 +245,10 @@ export class CreateTeamPage {
         playerId: this.teamIds
       }
     }).toPromise();
+  }
+
+  goToTabsPage(){
+    this.navCtrl.push('TabsPage');
   }
 
 

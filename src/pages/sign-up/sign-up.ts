@@ -69,14 +69,31 @@ export class SignUpPage {
     this.navCtrl.push('LoginPage');
   }
 
+  validateEmail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+  }
+
 
   loginEvent(event) {
+
+    if(!this.validateEmail(this.email)){
+      const toast = this.toastCtrl.create({
+        message: 'The email provided is invalid. Please try again.',
+        duration: 3000,
+        position: 'middle'
+      });
+      toast.present();
+      return;
+    }
+
+
     //if there is any information missing during signup then create toast
     if (!this.name || !this.email || !this.password || !this.streetName) {
       const toast = this.toastCtrl.create({
-        message: 'There is some information missing. Try again.',
+        message: 'There is some information missing. Please fill in all fields.',
         duration: 3000,
-        position: 'top'
+        position: 'middle'
       });
       toast.present();
     }
@@ -90,11 +107,11 @@ export class SignUpPage {
               this.navCtrl.push('IntroPage');
             }, (errors) => {
                 console.log(errors);
-                if (errors === 'GraphQL error: No user found with that information') {
+                if (errors == 'GraphQL error: No user found with that information') {
                   const toast = this.toastCtrl.create({
                     message: 'User already exists with that information. Try again.',
                     duration: 3000,
-                    position: 'top'
+                    position: 'middle'
                   });
                   toast.present();
                 }
@@ -107,7 +124,7 @@ export class SignUpPage {
             const toast = this.toastCtrl.create({
               message: 'User already exists with that information. Try again.',
               duration: 3000,
-              position: 'top'
+              position: 'middle'
             });
             toast.present();
           }

@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { PendingChallengesPage } from './pending-challenges';
+import { TodaysChallenges } from './todays-challenges';
 
 @NgModule({
   declarations: [
-    PendingChallengesPage,
+    TodaysChallenges,
   ],
   imports: [
-    IonicPageModule.forChild(PendingChallengesPage),
+    IonicPageModule.forChild(TodaysChallenges),
   ],
   exports: [
-    PendingChallengesPage,
+    TodaysChallenges,
   ]
 })
 export class PendingChallengesPageModule {}
