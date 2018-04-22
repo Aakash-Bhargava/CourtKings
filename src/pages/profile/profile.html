@@ -1,5 +1,4 @@
 <ion-header>
-
     <ion-toolbar>
       <ion-title>
         Profile
@@ -12,14 +11,14 @@
   <ion-grid text-center>
     <ion-label id="name">{{this.user.name}}</ion-label>
 
-    <div id="profile-info" padding *ngIf="!this.profilePic">
+    <div id="profile-info" padding *ngIf="!user.profilePic">
       <button id="add-photo-btn" ion-button large round icon-only color="dark" (tap)="changePic()">
           <ion-icon name="camera"></ion-icon>
       </button>
     </div>
-    <div id="profile-info" padding *ngIf="profilePic">
+    <div id="profile-info" padding *ngIf="user.profilePic">
       <ion-avatar (click)="changePic()">
-        <img id="profile-image" [src]="_DomSanitizer.bypassSecurityTrustUrl(this.profilePic)">
+        <img id="profile-image" [src]="_DomSanitizer.bypassSecurityTrustUrl(user.profilePic)">
       </ion-avatar>
     </div>
 
@@ -38,7 +37,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        {{this.user.courtsRuled}}
+        <!-- {{this.user.courtsRuled}} -->
       </ion-col>
       <ion-col>
         <!-- {{this.user.winTotal}} - {{this.user.lossTotal}} -->
@@ -50,7 +49,7 @@
 
     <ion-row>
       <ion-col>
-          <button ion-button small round outline color="lights"> Edit Profile</button>
+          <button ion-button small round outline color="light"> Edit Profile</button>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -60,9 +59,10 @@
     </ion-list-header>
 
       <button ion-item *ngFor="let team of user.teams" text-capitalize>
-        <ion-avatar item-start>
+        <ion-avatar *ngIf="team.teamImage" item-start>
           <img [src]="_DomSanitizer.bypassSecurityTrustUrl(team.teamImage)">
         </ion-avatar>
+        <ion-icon *ngIf="!team.teamImage" item-start name="basketball"></ion-icon>
         {{team.teamName}}
       </button>
 
@@ -73,12 +73,11 @@
 
   </ion-list>
 
+  <button ion-item (click)="goToTodaysChallenges()">
+    <h3>Today's Games</h3>
+  </button>
   <ion-item>
-    <h3>Pending Challenges</h3>
-  </ion-item>
-
-  <ion-item>
-    <h3>Finished Challenges</h3>
+    <h3>Finished Games</h3>
   </ion-item>
 
 </ion-content>

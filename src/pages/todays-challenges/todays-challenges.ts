@@ -10,10 +10,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-pending-challenges',
-  templateUrl: 'pending-challenges.html',
+  selector: 'page-todays-challenges',
+  templateUrl: 'todays-challenges.html',
 })
-export class PendingChallengesPage {
+export class TodaysChallenges {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }

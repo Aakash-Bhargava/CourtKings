@@ -1,9 +1,11 @@
-<!-- <ion-header>
-  <ion-navbar hideBackButton color="clear">
+<ion-header>
+  <ion-navbar hideBackButton>
+    <button ion-button clear icon-only (tap)="goToTabsPage()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
     <ion-title> Create a team</ion-title>
   </ion-navbar>
-</ion-header> -->
-
+</ion-header>
 
 <ion-content>
   <ion-grid  *ngIf="!teamImage">
@@ -51,7 +53,7 @@
     <ion-list>
       <ion-item *ngFor="let user of team" text-capitalize>
         <ion-avatar *ngIf="user.profilePic" item-start class="profile-pic">
-          <img  [src]="_DomSanitizer.bypassSecurityTrustUrl(user.profilePic)">
+          <img [src]="_DomSanitizer.bypassSecurityTrustUrl(user.profilePic)">
         </ion-avatar>
         <ion-avatar *ngIf="!user.profilePic" item-start class="profile-pic">
           <img src="../../assets/imgs/mockProfile.jpg">
@@ -64,7 +66,7 @@
     <div *ngIf="queryList">
       <ion-list>
         <button ion-item *ngFor="let user of queryList" (click)="addUser(user)" text-capitalize>
-          {{user.name}}
+          @{{user.streetName}}
         </button>
       </ion-list>
     </div>

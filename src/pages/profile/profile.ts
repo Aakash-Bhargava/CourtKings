@@ -48,12 +48,29 @@ export class ProfilePage {
             name
             streetName
             coins
-            courtsRuled
             profilePic
             teams{
               id
               teamName
               teamImage
+              challenges{
+                id
+                date
+                gameTime
+                status
+                teams{
+                  id
+                  teamName
+                }
+                court{
+                  id
+                  courtName
+                }
+
+              }
+              challengesWon{
+                id
+              }
             }
            }
           }
@@ -64,6 +81,12 @@ export class ProfilePage {
 
   goToCreatePage() {
     this.navCtrl.push('CreateTeamPage', {
+      user: this.user
+    });
+  }
+
+  goToTodaysChallenges(){
+    this.navCtrl.push('TodaysChallenges', {
       user: this.user
     });
   }

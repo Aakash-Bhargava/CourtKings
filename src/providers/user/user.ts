@@ -13,7 +13,6 @@ const QUERY_CURRENT_USER = gql`
       name
       streetName
       coins
-      courtsRuled
       teams{
         id
         teamName
@@ -65,7 +64,6 @@ const QUERY_ALL_USERS = gql`
       name
       streetName
       coins
-      courtsRuled
       profilePic
       teams{
         id
