@@ -5,13 +5,13 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="!notifications && loading" class="spinner-container">
+  <div *ngIf="notifications.length === 0 && loading" class="spinner-container">
       <ion-spinner name="bubbles"></ion-spinner>
   </div>
-  <div *ngIf="!notifications && !loading" class="spinner-container">
+  <div *ngIf="notifications.length === 0 && !loading" class="spinner-container">
     <span>You don't have any notification</span>
 </div>
-  <div *ngIf="notifications">
+  <div *ngIf="notifications.length > 0">
     <ion-item text-wrap *ngFor="let notification of notifications">
       <ion-icon
         [name]="notification.type === 'Schedule' ? 'ios-basketball-outline' : 'ios-basketball-outline' "

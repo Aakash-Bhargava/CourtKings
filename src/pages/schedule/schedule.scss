@@ -2,7 +2,9 @@ page-schedule {
 
 //centers everything on the page.
 
-
+  .schedule-button {
+    margin-top: -10px;
+  }
   ion-scroll{
     white-space: nowrap;
     height: 75px;

@@ -10,15 +10,19 @@
 <ion-content padding>
   <div class="section">
     <ion-icon name="basketball"></ion-icon>
-    <p>Jumpmen vs. MSU Callers just ended.
+    <p>{{ challenge.teams[0].teamName}} vs. {{ challenge.teams[1].teamName }} just ended.
     <br />You have 24 hours to confirm who won.</p>
   </div>
   <div class="section">
-    <button ion-button color="dark" round outline block>MSU Ballers</button>
-    <button ion-button color="dark" round outline block>Jumpmen</button>
+    <button [class]="active === challenge.teams[0].id ? 'activeButton' : 'plainButton'" ion-button color="dark" round outline block (tap)="active = challenge.teams[0].id">
+      {{ challenge.teams[0].teamName}}
+    </button>
+    <button [class]="active === challenge.teams[1].id ? 'activeButton' : 'plainButton'" ion-button color="dark" round outline block (tap)="active = challenge.teams[1].id">
+      {{ challenge.teams[1].teamName}}
+    </button>
   </div>
   <div class="section">
-    <button ion-button color="secondary" round outline>Confirm</button>
+    <button ion-button color="secondary" round [disabled]="!active" (tap)="vote()">Confirm</button>
   </div>
   <div class="notes">
     <ion-icon name="ios-warning-outline"></ion-icon>

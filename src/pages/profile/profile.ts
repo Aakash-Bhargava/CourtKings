@@ -48,7 +48,6 @@ export class ProfilePage {
             name
             streetName
             coins
-            courtsRuled
             profilePic
             teams{
               id

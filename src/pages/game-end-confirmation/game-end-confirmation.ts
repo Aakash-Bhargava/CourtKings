@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the GameEndConfirmationPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import TeamProvider from '../../providers/team/team';
+import { Challenge, Team } from '../../types';
 
 @IonicPage()
 @Component({
@@ -15,11 +10,26 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class GameEndConfirmationPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  challenge: Challenge = null;
+  active: string = null;
+  teamId: string = null;
+  callback: Function = null;
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public teamProvider: TeamProvider,
+  ) {
+    this.challenge = this.navParams.get('challenge');
+    this.teamId = this.navParams.get('teamId');
+    this.callback = this.navParams.get('callback');
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad GameEndConfirmationPage');
+  vote() {
+    this.teamProvider.createVote(this.challenge.id, this.active, this.teamId)
+    .then(() => {
+      this.callback();
+      this.navCtrl.pop();
+    });
   }
 
 }

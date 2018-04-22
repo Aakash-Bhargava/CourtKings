@@ -7,6 +7,7 @@ export interface Challenge {
   date: any;
   teams: Array<Team>;
   winners: Team;
+  votes: Array<Vote>;
 }
 
 export interface User {
@@ -22,7 +23,6 @@ export interface User {
 export interface UserDetail extends User {
   teams: Array<TeamDetail>;
   notifications: Array<Notification>;
-  courtsRuled: number;
 }
 
 export interface Team {
@@ -32,6 +32,11 @@ export interface Team {
   teamImage: string;
   teamName: string;
   challengesWon: Array<Challenge>;
+}
+
+export interface Vote {
+  voteFor: Team;
+  voteFrom: Team;
 }
 
 export interface TeamDetail extends Team {
@@ -51,7 +56,6 @@ export interface Court {
 
 export interface CourtDetail extends Court {
   courtKings: Team;
-  standings: Array<Team>;
 }
 
 export type Schedule = {

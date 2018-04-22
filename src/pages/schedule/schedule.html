@@ -6,14 +6,14 @@
 
 </ion-header>
 <ion-content>
-  <div *ngIf="!court && !user" class="spinner-container">
+  <div *ngIf="!court || !user" class="spinner-container">
     <ion-spinner name="bubbles"></ion-spinner>
   </div>
   <div *ngIf="court && user">
     <div class="court-name">
       <h1 text-capitalize bold>{{ court.courtName }}</h1>
     </div>
-    <div class="court-king-info" *ngIf="court.courtKings">
+    <div class="court-king-info" *ngIf="court.courtKings" (tap)="openTeamProfile(court.courtKings.id)">
       <h3>{{ court.courtKings.teamName }}</h3>
       <div class="avatar-group">
         <img [src]="court.courtKings.players[0].profilePic">
@@ -44,6 +44,12 @@
       <ion-item no-lines *ngFor="let challenge of selectedTimeSchedulued">
         <ion-row>
           <ion-col>
+            <ion-icon
+              name="trophy"
+              *ngIf="challenge.winner && challenge.winner.id === challenge.teams[0].id"
+            ></ion-icon>
+          </ion-col>
+          <ion-col>
             <h3> {{challenge.teams[0].teamName}} </h3>
           </ion-col>
           <ion-col>
@@ -52,6 +58,65 @@
           <ion-col>
             <h3> {{challenge.teams[1].teamName}} </h3>
           </ion-col>
+          <ion-col>
+            <div *ngIf="challenge.winner">
+              <ion-icon
+                name="trophy"
+                *ngIf="challenge.winner.id === challenge.teams[1].id"
+              ></ion-icon>
+            </div>
+            <div *ngIf="challenge.status === 'Completed' && !challenge.winner">
+              <span>Conflits</span>
+            </div>
+            <div *ngIf="!challenge.winner">
+              <div *ngIf="!isHourPassed(challenge.gameTime)">
+                <span
+                  *ngIf="!isSelfTeam(challenge.teams[0].id)
+                    && !isSelfTeam(challenge.teams[1].id)"
+                >
+                  Waiting
+                </span>
+                <button
+                  class="schedule-button"
+                  *ngIf="challenge.teams[0].players[0].id === user.id
+                    || challenge.teams[1].players[0].id === user.id"
+                  ion-button
+                  small
+                  round
+                  color="light"
+                  (tap)="quit(challenge)"
+                >
+                  Quit
+                </button>
+              </div>
+              <div *ngIf="isHourPassed(challenge.gameTime)">
+                <button
+                  class="schedule-button"
+                  *ngIf="(challenge.teams[0].players[0].id === user.id
+                    || challenge.teams[1].players[0].id === user.id)
+                    && !isVoted(challenge)"
+                  ion-button
+                  small
+                  round
+                  color="light"
+                  (tap)="goToVote(challenge)"
+                >
+                  Vote
+                </button>
+                <span
+                  *ngIf="(challenge.teams[0].players[0].id !== user.id
+                  && challenge.teams[1].players[0].id !== user.id)"
+                >
+                  Voting
+                </span>
+                <span
+                  *ngIf="isVoted(challenge)"
+                >
+                  Voted
+                </span>
+              </div>
+            </div>
+          </ion-col>
         </ion-row>
       </ion-item>
       <ion-item no-lines *ngFor="let n of emptySlots">
@@ -59,10 +124,10 @@
       </ion-item>
     </div>
 
-    <div id="queue-content">
+    <div id="queue-content" *ngIf="!isHourPassed(time, 1)">
       <h5> Queued </h5>
       <ion-list>
-        <ion-item (tap)="addToQueue()">
+        <ion-item (tap)="addToQueue()" *ngIf="selectedTimePending.length === 0">
           <ion-icon item-start name="add"></ion-icon>
           <h3>Add your team to queue at {{time}}</h3>
         </ion-item>
@@ -71,9 +136,33 @@
             <img [src]="_DomSanitizer.bypassSecurityTrustUrl(challenge.teams[0].teamImage)">
           </ion-avatar>
           <h3 item-start> {{challenge.teams[0].teamName}} </h3>
-          <button ion-button item-end small round color="light" (tap)="play(challenge)">Play</button>
+          <button
+            *ngIf="!isSelfTeam(challenge.teams[0].id)"
+            ion-button
+            item-end
+            small
+            round
+            color="light"
+            (tap)="play(challenge)"
+          >
+            Play
+          </button>
+          <button
+            *ngIf="isSelfTeam(challenge.teams[0].id) && !isHourPassed(time)"
+            ion-button
+            item-end
+            small
+            round
+            color="light"
+            (tap)="cancel(challenge)"
+          >
+            Cancel
+          </button>
         </ion-item>
       </ion-list>
+    </div>
+    <div id="queue-content" *ngIf="isHourPassed(time, 1)">
+      <span>Time is passed</span>
     </div>
   </div>
 </ion-content>

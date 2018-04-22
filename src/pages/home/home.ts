@@ -138,7 +138,8 @@ export class HomePage {
 
   openDetail(court: Court) {
     console.log('opening MapDetailPage');
-    this.navCtrl.push('MapDetailPage', { id: court.id });
+    // this.navCtrl.push('MapDetailPage', { id: court.id });
+    this.navCtrl.push('SchedulePage', { id: court.id });
   }
 
   logoutUser() {

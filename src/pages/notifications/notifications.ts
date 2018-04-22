@@ -17,7 +17,7 @@ const compare = (a: Notification, b: Notification) => {
   templateUrl: 'notifications.html',
 })
 export class NotificationsPage {
-  notifications: Array<Notification> = null;
+  notifications: Array<Notification> = [];
   loading = true;
 
   constructor(
@@ -35,10 +35,6 @@ export class NotificationsPage {
       this.notifications = notifications.sort(compare);
       this.loading = false;
     });
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationsPage');
   }
 
 }
