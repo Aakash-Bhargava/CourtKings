@@ -12,7 +12,7 @@
     <ion-label id="name">{{this.user.name}}</ion-label>
 
     <div id="profile-info" padding *ngIf="!user.profilePic">
-      <button id="add-photo-btn" ion-button large round icon-only color="dark" (tap)="changePic()">
+      <button id="add-photo-btn" ion-button large round icon-only color="dark">
           <ion-icon name="camera"></ion-icon>
       </button>
     </div>
@@ -29,36 +29,36 @@
         Courts Ruled
       </ion-col>
       <ion-col>
-        Record <br /> W-L
+        Record <br />
       </ion-col>
       <ion-col>
         Coins Available
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row padding-bottom>
       <ion-col>
-        <!-- {{this.user.courtsRuled}} -->
+        {{this.courtsRuled}}
       </ion-col>
       <ion-col>
-        <!-- {{this.user.winTotal}} - {{this.user.lossTotal}} -->
+       {{this.wins}}-{{this.losses}}
       </ion-col>
       <ion-col>
         {{this.user.coins}}
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <!-- <ion-row>
       <ion-col>
           <button ion-button small round outline color="light"> Edit Profile</button>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
   </ion-grid>
   <ion-list>
     <ion-list-header text-left>
       My Teams
     </ion-list-header>
 
-      <button ion-item *ngFor="let team of user.teams" text-capitalize>
+      <button ion-item *ngFor="let team of user.teams" text-capitalize (tap)="goToTeamProfile(team)">
         <ion-avatar *ngIf="team.teamImage" item-start>
           <img [src]="_DomSanitizer.bypassSecurityTrustUrl(team.teamImage)">
         </ion-avatar>

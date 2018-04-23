@@ -8,40 +8,33 @@
         </button>
       </ion-buttons>
       <ion-title>
-        PENDING CHALLENGES
+        Todays Challenges
       </ion-title>
     </ion-toolbar>
-  
+
   </ion-header>
-  
-  
+
+
   <ion-content>
     <div class="header">
-      <h3>TODAY&nbsp;<ion-icon name="arrow-forward"></ion-icon></h3>
+      <h3>TODAY&nbsp;</h3>
     </div>
-    <div class="section">
-      <ion-item no-lines>
-        <h3 item-start>2PM</h3>
-        <button ion-button block color="dark">JUMPMEN VS BALLERS</button>
-      </ion-item>
-      <span class="at-court">@ WEST HOLMES COURT</span>
+
+    <div *ngIf="this.todaysChallenges.length > 0">
+      <div class="section" *ngFor="let challenge of this.todaysChallenges">
+        <ion-item no-lines >
+          <h3 item-start>{{challenge.gameTime}}</h3>
+          <button ion-button block color="dark">{{challenge.teams[0].teamName}} VS {{challenge.teams[1].teamName}}</button>
+        </ion-item>
+        <span class="at-court">@ {{challenge.court.courtName}}</span>
+      </div>
     </div>
-    <div class="section">
-      <ion-item no-lines>
-        <h3 item-start>3PM</h3>
-        <button ion-button block color="dark">THE OTHER GUYS VS BIG RINGS</button>
-      </ion-item>
-      <span class="at-court">@ WEST HOLMES COURT</span>
+
+    <div class="noGames" *ngIf="this.todaysChallenges.length == 0">
+      <h1>No games Scheduled Today</h1>
     </div>
-    <div class="section">
-      <ion-item no-lines>
-        <h3 item-start>5PM</h3>
-        <button ion-button block color="dark">JUMPMEN VS BIG RINGS</button>
-      </ion-item>
-      <span class="at-court">@ WEST HOLMES COURT</span>
-    </div>
+
     <ion-item no-lines>
       <button ion-button block color="light">ADD A GAME</button>
     </ion-item>
   </ion-content>
-  

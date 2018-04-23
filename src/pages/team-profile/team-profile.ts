@@ -10,30 +10,31 @@ import { TeamDetail } from '../../types';
   templateUrl: 'team-profile.html',
 })
 export class TeamProfilePage {
-  private team: TeamDetail;
+  //private team: TeamDetail;
+  team: any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private teamProvider: TeamProvider,
   ) {
-    this.teamProvider.getTeamById(this.navParams.get('id'))
-      .subscribe((team: TeamDetail) => this.team = team);
+    this.team = this.navParams.get('team');
+    console.log(this.team);
   }
 
   getTotalCoins(team: TeamDetail): number {
     return team.players.reduce((acc, player) => acc + player.coins, 0);
   }
 
-  openPendingChallenges() {
-    const challenges = this.team.challenges.filter(c => moment(c.gameTime) > moment());
-    this.navCtrl.push('PendingChallengesPage', { challenges });
-  }
-
-  openFinishedChallenges() {
-    const challenges = this.team.challenges.filter(c => moment(c.gameTime) < moment());
-    this.navCtrl.push('FinishedChallengesPage', { challenges });
-  }
+  // openPendingChallenges() {
+  //   const challenges = this.team.challenges.filter(c => moment(c.gameTime) > moment());
+  //   this.navCtrl.push('PendingChallengesPage', { challenges });
+  // }
+  //
+  // openFinishedChallenges() {
+  //   const challenges = this.team.challenges.filter(c => moment(c.gameTime) < moment());
+  //   this.navCtrl.push('FinishedChallengesPage', { challenges });
+  // }
 
   goback() {
     this.navCtrl.pop();

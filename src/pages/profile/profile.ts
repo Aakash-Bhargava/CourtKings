@@ -15,11 +15,13 @@ import gql from 'graphql-tag';
 export class ProfilePage {
 
   data: any;
+  wins: any;
+  losses: any;
+  courtsRuled: any;
   user = <any>{};
   name: any;
   streetName: any;
   coins: any;
-  courtsRuled: any;
   teams: any;
   profilePic: any;
 
@@ -34,8 +36,11 @@ export class ProfilePage {
           this.user = data;
           this.user = this.user.user;
           console.log(this.user);
+          this.getRecord();
+          this.getCourtsRuled();
         }
      });
+
   }
 
   checkUserInfo() {
@@ -53,6 +58,12 @@ export class ProfilePage {
               id
               teamName
               teamImage
+              homeTown
+              players{
+                id
+                name
+                profilePic
+              }
               challenges{
                 id
                 date
@@ -61,14 +72,17 @@ export class ProfilePage {
                 teams{
                   id
                   teamName
+                  homeTown
                 }
                 court{
                   id
                   courtName
                 }
-
               }
               challengesWon{
+                id
+              }
+              courtsRuled{
                 id
               }
             }
@@ -86,9 +100,44 @@ export class ProfilePage {
   }
 
   goToTodaysChallenges(){
-    this.navCtrl.push('TodaysChallenges', {
+    this.navCtrl.push('TodaysChallengesPage', {
       user: this.user
     });
+  }
+
+  goToTeamProfile(team){
+    console.log("GO TO TEAM");
+    console.log(team);
+    this.navCtrl.push('TeamProfilePage', {
+      team: team
+    });
+  }
+
+  getRecord(){
+    console.log(this.user.teams);
+    var winCnt = 0;
+    var totalGames = 0;
+    for(let team of this.user.teams){
+      winCnt += team.challengesWon.length;
+      for(let challenge of team.challenges){
+        if(challenge.status == "Completed"){
+          totalGames = totalGames + 1;
+        }
+      }
+    }
+    console.log(winCnt);
+    console.log(totalGames);
+    console.log(totalGames - winCnt);
+    this.wins = winCnt;
+    this.losses = totalGames - winCnt;
+  }
+
+  getCourtsRuled(){
+    var courtsRuled = 0;
+    for(let team of this.user.teams){
+      courtsRuled += team.courtsRuled.length;
+    }
+    this.courtsRuled = courtsRuled;
   }
 
 
