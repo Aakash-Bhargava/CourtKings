@@ -267,12 +267,12 @@ export default class TeamProvider {
                 playerId4: players[3].id,
                 playerId5: players[4].id,
                 playerId6: players[5].id,
-                playerCoins1: players[0].coins,
-                playerCoins2: players[1].coins,
-                playerCoins3: players[2].coins,
-                playerCoins4: players[3].coins,
-                playerCoins5: players[4].coins,
-                playerCoins6: players[5].coins,
+                playerCoins1: players[0].coins - 2,
+                playerCoins2: players[1].coins - 2,
+                playerCoins3: players[2].coins - 2,
+                playerCoins4: players[3].coins - 2,
+                playerCoins5: players[4].coins - 2,
+                playerCoins6: players[5].coins - 2,
               }
             })
             .map(({ data }: any) => data.updateChallenge)
