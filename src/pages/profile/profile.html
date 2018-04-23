@@ -29,29 +29,29 @@
         Courts Ruled
       </ion-col>
       <ion-col>
-        Record <br /> W-L
+        Record <br />
       </ion-col>
       <ion-col>
         Coins Available
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row padding-bottom>
       <ion-col>
-        <!-- {{this.user.courtsRuled}} -->
+        {{this.courtsRuled}}
       </ion-col>
       <ion-col>
-        <!-- {{this.user.winTotal}} - {{this.user.lossTotal}} -->
+       {{this.wins}}-{{this.losses}}
       </ion-col>
       <ion-col>
         {{this.user.coins}}
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <!-- <ion-row>
       <ion-col>
           <button ion-button small round outline color="light"> Edit Profile</button>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
   </ion-grid>
   <ion-list>
     <ion-list-header text-left>
