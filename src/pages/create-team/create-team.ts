@@ -27,13 +27,15 @@ export class CreateTeamPage {
   teamImage: any;
   team = <any>[];
   teamIds = <any>[];
+  previousPage: any;
 
   constructor(public _DomSanitizer: DomSanitizer, public navCtrl: NavController, public navParams: NavParams, public apollo: Apollo,
               public alertCtrl: AlertController, public toastCtrl: ToastController,
               public platform: Platform, private Camera: Camera, public actionSheetCtrl: ActionSheetController) {
+                this.previousPage = this.navParams.get("previousPage");
   }
-  ionViewDidLoad() {
 
+  ionViewDidLoad() {
     this.getUserInfo().then(({data}) => {
       this.user = data;
       this.user = this.user.user;
@@ -215,7 +217,13 @@ export class CreateTeamPage {
           });
           alert.present();
           console.log(data);
-          this.navCtrl.setRoot('TabsPage');
+          if(this.previousPage == "intro"){
+            this.navCtrl.setRoot('TabsPage');
+          }
+          else{
+            this.navCtrl.pop();
+          }
+
         }
       }, (errors) => {
         console.log(errors);
@@ -240,6 +248,8 @@ export class CreateTeamPage {
   }
 
   createTeam() {
+
+    console.log(this.user.teams.length);
 
     console.log(this.teamName);
     console.log(this.homeTown);
@@ -269,8 +279,6 @@ export class CreateTeamPage {
   goToTabsPage(){
     this.navCtrl.push('TabsPage');
   }
-
-
 
   presentActionSheet() {
    let actionSheet = this.actionSheetCtrl.create({
