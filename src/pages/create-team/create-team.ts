@@ -134,6 +134,34 @@ export class CreateTeamPage {
   }
 
   addUser(user) {
+    if(user.id == this.user.id){
+      const alert = this.alertCtrl.create({
+        title: 'Warning!',
+        subTitle: 'You cannot add yourself!',
+        buttons: ['Ok']
+      });
+      alert.present();
+      return;
+    }
+    if (this.team.includes(user)) {
+      const alert = this.alertCtrl.create({
+        title: 'Warning!',
+        subTitle: 'This player is already on your team\'s roster!',
+        buttons: ['Ok']
+      });
+      alert.present();
+      return;
+    }
+
+    if (this.team.length === 3) { // the team already has 3 players
+     const alert = this.alertCtrl.create({
+       title: 'Warning!',
+       subTitle: 'Your team\'s roster is full!',
+       buttons: ['Ok']
+     });
+     alert.present();
+     return;
+   }
     const confirm = this.alertCtrl.create({
       title: 'Recruit player',
       message: 'Do you want to recruit ' + user.name +  ' to this team?',
@@ -148,27 +176,9 @@ export class CreateTeamPage {
           text: 'Yes',
           handler: () => {
             console.log('Yes clicked');
-            // the user is already on the team
-            if (this.team.includes(user)) {
-              const alert = this.alertCtrl.create({
-                title: 'Warning!',
-                subTitle: 'This player is already on your team\'s roster!',
-                buttons: ['Ok']
-              });
-              alert.present();
-            } else if (this.team.length === 3) { // the team already has 3 players
-              const alert = this.alertCtrl.create({
-                title: 'Warning!',
-                subTitle: 'Your team\'s roster is full!',
-                buttons: ['Ok']
-              });
-              alert.present();
-            } else {
               this.team.push(user);
               console.log('Current team');
               console.log(this.team);
-            }
-
           }
         }
       ]
@@ -178,7 +188,7 @@ export class CreateTeamPage {
 
 
   validateTeam() {
-
+    console.log("1");
     // missing top information
     if (!this.teamName || !this.homeTown) {
       const alert = this.alertCtrl.create({
@@ -230,10 +240,18 @@ export class CreateTeamPage {
   }
 
   createTeam() {
+
+    console.log(this.teamName);
+    console.log(this.homeTown);
+    if(!this.teamImage){
+      this.teamImage = "";
+    }
+    console.log(this.teamIds);
+    console.log(this.user.id);
     return this.apollo.mutate({
       mutation: gql`
-      mutation createTeam($teamName: String!, $homeTown: String, $teamImage: String, $playerId: [ID!]){
-        createTeam(teamName: $teamName, homeTown: $homeTown, teamImage: $teamImage, playersIds: $playerId){
+      mutation createTeam($teamName: String!, $homeTown: String, $teamImage: String, $playerId: [ID!], $captainId: ID!){
+        createTeam(teamName: $teamName, homeTown: $homeTown, teamImage: $teamImage, playersIds: $playerId, captainId: $captainId){
                      id
                    }
                  }
@@ -242,7 +260,8 @@ export class CreateTeamPage {
         teamName: this.teamName,
         homeTown: this.homeTown,
         teamImage: this.teamImage,
-        playerId: this.teamIds
+        playerId: this.teamIds,
+        captainId: this.user.id
       }
     }).toPromise();
   }

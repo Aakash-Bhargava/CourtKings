@@ -58,7 +58,7 @@ export class SearchPage {
   }
 
   goToCourt(court: Court) {
-    this.navCtrl.push('SchedulePage', { court: court });
+    this.navCtrl.push('SchedulePage', { id: court.id });
   }
 
   // goToUser(user: User) {
