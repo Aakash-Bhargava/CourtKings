@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import {Apollo} from 'apollo-angular';
@@ -26,7 +26,7 @@ export class ProfilePage {
   profilePic: any;
 
 
-  constructor(public navCtrl: NavController, public apollo: Apollo, public _DomSanitizer: DomSanitizer) {
+  constructor(public navCtrl: NavController, public apollo: Apollo, public _DomSanitizer: DomSanitizer, public alertCtrl: AlertController) {
 
   }
 
@@ -94,8 +94,17 @@ export class ProfilePage {
   }
 
   goToCreatePage() {
+    if(this.user.teams.length == 5){
+      const alert = this.alertCtrl.create({
+        title: 'Warning!',
+        subTitle: 'You are on 5 teams. You may not join another',
+        buttons: ['Ok']
+      });
+      alert.present();
+      return;
+    }
     this.navCtrl.push('CreateTeamPage', {
-      user: this.user
+      user: this.user,
     });
   }
 

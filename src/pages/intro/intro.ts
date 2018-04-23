@@ -20,7 +20,9 @@ export class IntroPage {
   }
 
   goToCreateTeamPage() {
-    this.navCtrl.setRoot('CreateTeamPage');
+    this.navCtrl.push('CreateTeamPage', {
+      previousPage: "intro"
+    });
   }
 
 }
