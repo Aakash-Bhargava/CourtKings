@@ -64,15 +64,15 @@ export class HomePage {
   }
 
   addMap(lat: number, lng: number) {
-    // const home = new LatLng(lat, lng);
-    const campus = new LatLng(42.729863, -84.477767);
+    const home = new LatLng(lat, lng);
+    // const campus = new LatLng(42.729863, -84.477767);
     const mapOptions: GoogleMapOptions = {
       camera: {
-        target: campus,
+        target: home,
         zoom: 13,
       },
       controls: {
-        myLocationButton: true,
+        // myLocationButton: true,
         compass: true,
         zoom: true,
       },
@@ -94,8 +94,8 @@ export class HomePage {
       .then(() => {
         this.map.addMarker({
           icon: iconImage,
-          animation: 'DROP',
-          position: campus,
+          // animation: 'DROP',
+          position: home,
         });
         this.courtProvider.fetchCourts().subscribe((courts) => {
           courts.map(court => this.addMarker(court));
