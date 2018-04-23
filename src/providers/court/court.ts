@@ -38,6 +38,9 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
         teams {
           teamName
           teamImage
+          captain {
+            id
+          }
           id
           players {
             coins
@@ -61,6 +64,9 @@ const QUERY_ALL_COURTS = gql`
         status
         gameTime
         teams {
+          captain {
+            id
+          }
           teamName
           teamImage
           id

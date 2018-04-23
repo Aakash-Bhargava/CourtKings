@@ -11,6 +11,9 @@ const QUERY_TEAM_DETAIL_BY_ID = gql`
       id
       teamName
       homeTown
+      captain {
+        id
+      }
       courtsRuled {
         id
         courtName
@@ -37,6 +40,9 @@ const QUERY_TEAM_DETAIL_BY_ID = gql`
         gameTime
         teams {
           teamName
+          captain {
+            id
+          }
         }
       }
     }
@@ -48,6 +54,9 @@ const QUERY_ALL_TEAMS = gql`
     allTeams{
       id
       teamName
+      captain {
+        id
+      }
       challengesWon {
         id
       }

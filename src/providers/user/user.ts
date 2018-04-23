@@ -15,6 +15,9 @@ const QUERY_CURRENT_USER = gql`
       coins
       teams{
         id
+        captain {
+          id
+        }
         teamName
         players {
           id
@@ -71,6 +74,9 @@ const QUERY_ALL_USERS = gql`
       profilePic
       teams{
         id
+        captain {
+          id
+        }
         challengesWon {
           id
         }

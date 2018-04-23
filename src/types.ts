@@ -32,6 +32,7 @@ export interface Team {
   teamImage: string;
   teamName: string;
   challengesWon: Array<Challenge>;
+  captain: User;
 }
 
 export interface Vote {

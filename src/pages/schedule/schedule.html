@@ -78,8 +78,8 @@
                 </span>
                 <button
                   class="schedule-button"
-                  *ngIf="challenge.teams[0].players[0].id === user.id
-                    || challenge.teams[1].players[0].id === user.id"
+                  *ngIf="challenge.teams[0].captain.id === user.id
+                    || challenge.teams[1].captain.id === user.id"
                   ion-button
                   small
                   round
@@ -92,8 +92,8 @@
               <div *ngIf="isHourPassed(challenge.gameTime)">
                 <button
                   class="schedule-button"
-                  *ngIf="(challenge.teams[0].players[0].id === user.id
-                    || challenge.teams[1].players[0].id === user.id)
+                  *ngIf="(challenge.teams[0].captain.id === user.id
+                    || challenge.teams[1].captain.id === user.id)
                     && !isVoted(challenge)"
                   ion-button
                   small
@@ -104,8 +104,8 @@
                   Vote
                 </button>
                 <span
-                  *ngIf="(challenge.teams[0].players[0].id !== user.id
-                  && challenge.teams[1].players[0].id !== user.id)"
+                  *ngIf="(challenge.teams[0].captian.id !== user.id
+                  && challenge.teams[1].captain.id !== user.id)"
                 >
                   Voting
                 </span>
