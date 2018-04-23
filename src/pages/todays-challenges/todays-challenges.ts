@@ -13,7 +13,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   selector: 'page-todays-challenges',
   templateUrl: 'todays-challenges.html',
 })
-export class TodaysChallenges {
+export class TodaysChallengesPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }

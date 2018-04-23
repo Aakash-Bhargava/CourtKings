@@ -58,7 +58,7 @@
       My Teams
     </ion-list-header>
 
-      <button ion-item *ngFor="let team of user.teams" text-capitalize>
+      <button ion-item *ngFor="let team of user.teams" text-capitalize (tap)="goToTeamProfile(team)">
         <ion-avatar *ngIf="team.teamImage" item-start>
           <img [src]="_DomSanitizer.bypassSecurityTrustUrl(team.teamImage)">
         </ion-avatar>

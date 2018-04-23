@@ -53,6 +53,12 @@ export class ProfilePage {
               id
               teamName
               teamImage
+              homeTown
+              players{
+                id
+                name
+                profilePic
+              }
               challenges{
                 id
                 date
@@ -61,14 +67,17 @@ export class ProfilePage {
                 teams{
                   id
                   teamName
+                  homeTown
                 }
                 court{
                   id
                   courtName
                 }
-
               }
               challengesWon{
+                id
+              }
+              courtsRuled{
                 id
               }
             }
@@ -86,8 +95,16 @@ export class ProfilePage {
   }
 
   goToTodaysChallenges(){
-    this.navCtrl.push('TodaysChallenges', {
+    this.navCtrl.push('TodaysChallengesPage', {
       user: this.user
+    });
+  }
+
+  goToTeamProfile(team){
+    console.log("GO TO TEAM");
+    console.log(team);
+    this.navCtrl.push('TeamProfilePage', {
+      team: team
     });
   }
 
