@@ -1,18 +1,18 @@
 <ion-header>
-  <!-- <ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="searchType" color="dark">
+        <ion-segment-button value="Players">
+          Players
+        </ion-segment-button>
+        <ion-segment-button value="Teams">
+          Teams
+        </ion-segment-button>
+        <ion-segment-button value="Courts">
+          Courts
+        </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 
-  </ion-toolbar> -->
-  <ion-segment [(ngModel)]="searchType" color="dark">
-      <ion-segment-button value="Players">
-        Players
-      </ion-segment-button>
-      <ion-segment-button value="Teams">
-        Teams
-      </ion-segment-button>
-      <ion-segment-button value="Courts">
-        Courts
-      </ion-segment-button>
-  </ion-segment>
 </ion-header>
 
 <ion-content padding>

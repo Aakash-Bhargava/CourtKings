@@ -1,4 +1,7 @@
 page-team-profile {
+  .scroll-content {
+    overflow-y: hidden !important;
+  }
   .spinner-container {
     width: 100%;
     text-align: center;
