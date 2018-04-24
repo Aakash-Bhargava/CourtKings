@@ -36,11 +36,13 @@ export class SearchPage {
     private courtProvider: CourtProvider,
     private userProvider: UserProvider,
   ) {
+
     this.teamTerm$.subscribe((term: string) => this.teamSearching = !!term);
     this.courtTerm$.subscribe((term: string) => this.courtSearching = !!term);
     this.playerTerm$.subscribe((term: string) => this.playerSearching = !!term);
     this.teamProvider.search(this.teamTerm$).subscribe((result: Array<Team>) => {
       this.teamQueryList = result;
+      console.log(this.teamQueryList);
       this.teamSearching = false;
     });
     this.courtProvider.search(this.courtTerm$).subscribe((result: Array<Court>) => {
@@ -54,7 +56,7 @@ export class SearchPage {
   }
 
   goToTeam(team: Team) {
-    this.navCtrl.push('TeamProfilePage', { id: team.id });
+    this.navCtrl.push('TeamProfilePage', { team: team });
   }
 
   goToCourt(court: Court) {

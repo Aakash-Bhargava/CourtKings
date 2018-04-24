@@ -4,10 +4,15 @@ page-team-profile {
     text-align: center;
     padding: 50%;
   }
-  
+
   ion-grid {
     color: white;
-    background-image: url('https://static.pexels.com/photos/149988/pexels-photo-149988.jpeg');
+    background-image: url('../../assets/imgs/basket3.jpg');
+    background-size: cover;
+    ion-col {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
   }
   .name{
     margin-bottom: .1em;
@@ -35,6 +40,8 @@ page-team-profile {
 
   .location {
     margin-bottom: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
   }
 
   .player-name {
@@ -47,6 +54,8 @@ page-team-profile {
       height: 15%;
       width: 25%;
       margin: auto;
+      border-radius: 50%;
+      border: 2px solid white;
     }
   }
 }

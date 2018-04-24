@@ -12,6 +12,7 @@ import { TeamDetail } from '../../types';
 export class TeamProfilePage {
   //private team: TeamDetail;
   team: any;
+  players = <any>[];
 
   constructor(
     public navCtrl: NavController,
@@ -20,21 +21,12 @@ export class TeamProfilePage {
   ) {
     this.team = this.navParams.get('team');
     console.log(this.team);
+    this.players = [...this.team.players].reverse();
   }
 
   getTotalCoins(team: TeamDetail): number {
     return team.players.reduce((acc, player) => acc + player.coins, 0);
   }
-
-  // openPendingChallenges() {
-  //   const challenges = this.team.challenges.filter(c => moment(c.gameTime) > moment());
-  //   this.navCtrl.push('PendingChallengesPage', { challenges });
-  // }
-  //
-  // openFinishedChallenges() {
-  //   const challenges = this.team.challenges.filter(c => moment(c.gameTime) < moment());
-  //   this.navCtrl.push('FinishedChallengesPage', { challenges });
-  // }
 
   goback() {
     this.navCtrl.pop();

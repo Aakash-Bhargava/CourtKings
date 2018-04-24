@@ -1,55 +1,58 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{team.teamName}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
 <ion-content>
   <div *ngIf="!team" class="spinner-container">
     <ion-spinner name="bubbles"></ion-spinner>
   </div>
   <div *ngIf="team">
     <ion-grid text-center>
-      <ion-row>
-        <ion-col col-2><button color="light" ion-button clear (tap)="goback()">Back</button></ion-col>
-        <ion-col col-8><h1 class="name">{{ team.teamName }}</h1></ion-col>
-        <ion-col col-2></ion-col>
-      </ion-row>
-      <span class="notes location">{{ team.homeTown }}</span>
+      <span class="notes location" padding>{{ team.homeTown }}</span>
       <ion-slides pager>
-        <ion-slide *ngFor="let player of team.players">
+        <ion-slide *ngFor="let player of players">
           <ion-avatar class="profile-pic">
             <img  [src]="player.profilePic">
           </ion-avatar>
           <h3 class="player-name">@{{ player.streetName }}</h3>
-          <span class="notes player-notes">Center on College League</span>
+          <!-- <span class="notes player-notes">Center on College League</span> -->
         </ion-slide>
       </ion-slides>
       <ion-row>
         <ion-col>
-          <span class="notes">COURTS RULED</span>
+          <span class="notes">Courts Ruled</span>
         </ion-col>
         <ion-col>
-          <span class="notes">GAMES WON</span>
+          <span class="notes">Games Won</span>
         </ion-col>
         <ion-col>
-          <span class="notes">COINS AVAILABLE</span>
+          <span class="notes">Total Coins</span>
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row padding-bottom>
         <ion-col>
           {{ team.courtsRuled.length }}
         </ion-col>
         <ion-col>
-          <!-- {{ team.wins }} -->test
+          {{team._challengesWonMeta.count}}
         </ion-col>
         <ion-col>
-          TOTAL COINS
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <button ion-button small round outline (tap)="openChallenge()" color="light">Challenge</button>
+          {{getTotalCoins(team)}}
         </ion-col>
       </ion-row>
     </ion-grid>
     <ion-list>
-      <button ion-item (tap)="openPendingChallenges()">Pending Challenges</button>
-      <button ion-item (tap)="openFinishedChallenges()">Finished Challenges</button>
+      <ion-list-header>
+        Courts Ruled ({{team.courtsRuled.length}})
+      </ion-list-header>
+      <ion-item *ngFor="let court of team.courtsRuled">
+        <p>{{court.courtName}}</p>
+      </ion-item>
     </ion-list>
   </div>
 </ion-content>
