@@ -17,7 +17,7 @@
       </button>
     </div>
     <div id="profile-info" padding *ngIf="user.profilePic">
-      <ion-avatar (click)="changePic()">
+      <ion-avatar>
         <img id="profile-image" [src]="_DomSanitizer.bypassSecurityTrustUrl(user.profilePic)">
       </ion-avatar>
     </div>

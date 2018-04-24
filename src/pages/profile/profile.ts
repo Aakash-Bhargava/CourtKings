@@ -72,8 +72,6 @@ export class ProfilePage {
               challenges{
                 id
                 status
-<<<<<<< Updated upstream
-=======
                 winner{
                   id
                 }
@@ -89,7 +87,6 @@ export class ProfilePage {
               }
               challengesWon{
                 id
->>>>>>> Stashed changes
               }
               courtsRuled{
                 id
