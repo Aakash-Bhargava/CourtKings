@@ -7,7 +7,6 @@ page-todays-challenges {
       font-weight: 500;
     }
   }
-
   .section {
     text-align: center;
     border-bottom: solid 1px lightgray;
@@ -16,6 +15,26 @@ page-todays-challenges {
       font-size: 10px;
       color: orange;
     }
+  }
+
+  .courtInfo{
+    color: orange;
+    font-size: 12px;
+  }
+  .teamInfo{
+    .button-inner{
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+  }
+
+  .noGames{
+    margin: auto;
+    height: 100%;
+    padding-top: 50%;
+    vertical-align: middle;
+    text-align: center;
   }
 
 }

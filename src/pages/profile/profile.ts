@@ -72,6 +72,24 @@ export class ProfilePage {
               challenges{
                 id
                 status
+<<<<<<< Updated upstream
+=======
+                winner{
+                  id
+                }
+                teams{
+                  id
+                  teamName
+                  homeTown
+                }
+                court{
+                  id
+                  courtName
+                }
+              }
+              challengesWon{
+                id
+>>>>>>> Stashed changes
               }
               courtsRuled{
                 id
@@ -102,6 +120,12 @@ export class ProfilePage {
 
   goToTodaysChallenges(){
     this.navCtrl.push('TodaysChallengesPage', {
+      user: this.user
+    });
+  }
+
+  goToAllChallenges(){
+    this.navCtrl.push('AllChallengesPage', {
       user: this.user
     });
   }
