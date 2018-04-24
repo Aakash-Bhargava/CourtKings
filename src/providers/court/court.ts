@@ -21,6 +21,9 @@ const QUERY_COURT_DETAIL_BY_ID = gql`
       longitude
       challenges {
         id
+        notification {
+          id
+        }
         date
         gameTime
         status
@@ -116,12 +119,18 @@ const PENDING_TO_SCHEDULED = gql`
 `;
 
 const QUIT_CHALLENGE = gql`
-  mutation updateChallenges($challengeId: ID!, $opponentId: ID!) {
-    updateChallenges(
+  mutation updateChallenges($challengeId: ID!, $opponentId: ID!, $nId1: ID!, $nId2: ID!) {
+    a: updateChallenges(
       id: $challengeId,
       status: Pending,
-      teamsIds: [$opponentId]
+      teamsIds: [$opponentId],
     ) {
+      id
+    }
+    b: deleteNotification(id: $nId1) {
+      id
+    }
+    c: deleteNotification(id: $nId2) {
       id
     }
   }
@@ -181,10 +190,10 @@ export default class CourtProvider {
       .map(({ data }: any) => data.createChallenges.id);
   }
 
-  quitChallenge(challengeId: string, opponentId: string) {
+  quitChallenge(challengeId: string, opponentId: string, nId1: string, nId2: string) {
     return this.apollo.mutate({
       mutation: QUIT_CHALLENGE,
-      variables: { challengeId, opponentId },
+      variables: { challengeId, opponentId, nId1, nId2 },
     });
   }
 

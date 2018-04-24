@@ -1,11 +1,16 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Notifications</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (tap)="refresh()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <div *ngIf="notifications.length === 0 && loading" class="spinner-container">
+  <div *ngIf="loading" class="spinner-container">
       <ion-spinner name="bubbles"></ion-spinner>
   </div>
   <div *ngIf="notifications.length === 0 && !loading" class="spinner-container">

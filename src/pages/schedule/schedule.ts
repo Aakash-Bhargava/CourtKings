@@ -163,7 +163,7 @@ export class SchedulePage {
     if (this.isSelfTeam(opponentId)) {
       opponentId = challenge.teams[1].id;
     }
-    this.courtProvider.quitChallenge(challenge.id, opponentId).subscribe(() => {
+    this.courtProvider.quitChallenge(challenge.id, opponentId, challenge.notification[0].id, challenge.notification[1].id).subscribe(() => {
       this.getTodaysChallenges();
     });
   }

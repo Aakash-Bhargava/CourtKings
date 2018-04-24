@@ -8,6 +8,7 @@ export interface Challenge {
   teams: Array<Team>;
   winners: Team;
   votes: Array<Vote>;
+  notification: Array<Notification>;
 }
 
 export interface User {
@@ -68,4 +69,5 @@ export type Notification = {
   type: 'NewTeam' | 'Schedule',
   challenge: Challenge,
   createdAt: string,
+  team: Team;
 };

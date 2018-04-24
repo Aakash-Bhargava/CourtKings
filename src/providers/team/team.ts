@@ -77,6 +77,9 @@ const CREATE_VOTE = gql`
     ){
       challenge {
         id
+        notification {
+          id
+        }
         teams {
           id
           players {

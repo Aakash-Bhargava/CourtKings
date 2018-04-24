@@ -3,7 +3,15 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
-import { User, UserDetail } from '../../types';
+import { Notification, User, UserDetail } from '../../types';
+
+const compare = (a: Notification, b: Notification) => {
+  if (a.createdAt < b.createdAt)
+    return -1;
+  if (a.createdAt > b.createdAt)
+    return 1;
+  return 0;
+};
 
 const QUERY_CURRENT_USER = gql`
   query{
@@ -30,6 +38,9 @@ const QUERY_CURRENT_USER = gql`
           type
           challenge {
             id
+            notification {
+              id
+            }
             teams {
               id
               teamName
@@ -85,6 +96,31 @@ const QUERY_ALL_USERS = gql`
   }
 `;
 
+const QUERY_ALL_NOTIFICATIONS = gql`
+  query {
+    allNotifications {
+      id
+      type
+      team {
+        id
+      }
+      challenge {
+        id
+        teams {
+          id
+          teamName
+        }
+        date
+        gameTime
+        court {
+          id
+          courtName
+        }
+      }
+    }
+  }
+`;
+
 @Injectable()
 export default class UserProvider {
   private _allUsers: BehaviorSubject<Array<User>> = new BehaviorSubject<Array<User>>([]);
@@ -98,11 +134,12 @@ export default class UserProvider {
   }
 
   fetchCurrentUser(): Observable<UserDetail> {
-    const obs =  this.apollo
+    const obs = this.apollo
       .query({ query: QUERY_CURRENT_USER })
       .map(({ data }: any) => data.user);
 
     obs.subscribe(this.currentUser);
+    console.log('fetchCurrentUser');
     return obs;
   }
 
@@ -159,5 +196,17 @@ export default class UserProvider {
           }
         });
       });
+  }
+
+  getNotifications() {
+    return this.apollo.query({ query: QUERY_ALL_NOTIFICATIONS, fetchPolicy: 'network-only', })
+    .map(({ data }: any) => data.allNotifications)
+    .map((n: Array<Notification>) => {
+      let notifications: Array<Notification> = this.currentUser.getValue().notifications;
+      const teamlist = this.currentUser.getValue().teams.map(t => t.id);
+      notifications = n.filter(i => teamlist.includes(i.team.id));
+      notifications = notifications.sort(compare);
+      return notifications;
+    });
   }
 }
