@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button (tap)="goback()">
+        <span ion-text color="primary" showWhen="ios">Back</span>
+        <ion-icon name="md-close" showWhen="android"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>
+      All Challenges
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="section" *ngFor="let challenge of this.allChallenges">
+    <ion-item no-lines text-center *ngIf="challenge.status == 'Scheduled'">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+              <ion-datetime displayFormat="MM/DD/YYYY" disabled [(ngModel)]="challenge.date" ></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <ion-col class="courtInfo">
+          <h3>@ {{challenge.court.courtName}}</h3>
+        </ion-col>
+      </ion-row>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <h3>{{challenge.teams[0].teamName}}</h3>
+          </ion-col>
+          <ion-col>
+            <h3>vs</h3>
+          </ion-col>
+          <ion-col>
+            <h3>{{challenge.teams[1].teamName}}</h3>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+
+    <ion-item no-lines text-center *ngIf="challenge.status == 'Completed'">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+              <ion-datetime displayFormat="MM/DD/YYYY" disabled [(ngModel)]="challenge.date" ></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <ion-col class="courtInfo">
+          <h3>@ {{challenge.court.courtName}}</h3>
+        </ion-col>
+      </ion-row>
+      <ion-grid>
+        <ion-row>
+          <ion-col *ngIf="challenge.winner.id == challenge.teams[0].id">
+            <h3 style="font-weight: bold">{{challenge.teams[0].teamName}} &nbsp; <ion-icon name="trophy"></ion-icon></h3>
+          </ion-col>
+          <ion-col *ngIf="challenge.winner.id != challenge.teams[0].id">
+            <h3>{{challenge.teams[0].teamName}}</h3>
+          </ion-col>
+          <ion-col>
+            <h3>vs</h3>
+          </ion-col>
+          <ion-col *ngIf="challenge.winner.id == challenge.teams[1].id">
+            <h3 style="font-weight: bold">{{challenge.teams[1].teamName}} &nbsp; <ion-icon name="trophy"></ion-icon></h3>
+          </ion-col>
+          <ion-col *ngIf="challenge.winner.id != challenge.teams[1].id">
+            <h3>{{challenge.teams[1].teamName}}</h3>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+
+
+    </ion-item>
+
+  </div>
+</ion-content>

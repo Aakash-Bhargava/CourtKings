@@ -1,0 +1,31 @@
+page-all-challenges {
+  .section {
+    text-align: center;
+    border-bottom: solid 1px lightgray;
+    padding-bottom: 10px !important;
+  }
+
+  .courtInfo{
+    text-align: center;
+    vertical-align: middle;
+    color: orange;
+    font-size: 14px;
+     margin: auto;
+  }
+
+  .teamInfo{
+    .button-inner{
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+
+  div.datetime-text{
+    font-size: 14px;
+  }
+
+  ion-datetime{
+    margin: auto;
+  }
+
+}

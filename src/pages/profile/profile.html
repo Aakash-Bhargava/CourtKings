@@ -9,7 +9,7 @@
 
 <ion-content>
   <ion-grid text-center>
-    <ion-label id="name">{{this.user.name}}</ion-label>
+    <ion-label id="name">Hello, {{this.user.name}}!</ion-label>
 
     <div id="profile-info" padding *ngIf="!user.profilePic">
       <button id="add-photo-btn" ion-button large round icon-only color="dark">
@@ -17,7 +17,7 @@
       </button>
     </div>
     <div id="profile-info" padding *ngIf="user.profilePic">
-      <ion-avatar (click)="changePic()">
+      <ion-avatar>
         <img id="profile-image" [src]="_DomSanitizer.bypassSecurityTrustUrl(user.profilePic)">
       </ion-avatar>
     </div>
@@ -76,8 +76,8 @@
   <button ion-item (click)="goToTodaysChallenges()">
     <h3>Today's Games</h3>
   </button>
-  <ion-item>
+  <button ion-item (click)="goToAllChallenges()">
     <h3>Finished Games</h3>
-  </ion-item>
+  </button>
 
 </ion-content>

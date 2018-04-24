@@ -3,14 +3,19 @@ page-profile {
 
   .toolbar-background, .tabbar{
     border : none !important;
-    // background-color: black !important;
   }
 
   ion-grid{
-    background: linear-gradient(#232526, #414345);
-    // background-size: cover;
-    // background-image: url("../../assets/imgs/baskethigh.jpg");
+    // background: linear-gradient(#232526, #414345);
+    background-size: cover;
+    background-image: url("../../assets/imgs/basket1.jpg");
     color: white;
+  }
+  ion-col {
+    font-weight: bold;
+  }
+  .item > ion-icon:first-child, .item-inner > ion-icon:first-child {
+    min-width: 36px;
   }
 
   #name{
@@ -19,7 +24,8 @@ page-profile {
   }
 
   #streetName{
-    font-size: 1.35rem;
+    font-size: 1.5rem;
+    // font-weight: bold;
   }
 
   ion-avatar{
@@ -29,6 +35,8 @@ page-profile {
       margin: auto;
       display: block;
       border-radius: 50%;
+      border: 2px solid white;
+      // box-shadow:
     }
   }
 

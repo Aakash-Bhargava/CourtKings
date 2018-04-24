@@ -54,11 +54,28 @@ const QUERY_ALL_TEAMS = gql`
     allTeams{
       id
       teamName
-      captain {
-        id
+      teamImage
+      homeTown
+      _challengesWonMeta {
+        count
       }
       challengesWon {
         id
+      }
+      players{
+        id
+        name
+        profilePic
+        streetName
+        coins
+      }
+      challenges{
+        id
+        status
+      }
+      courtsRuled{
+        id
+        courtName
       }
     }
   }

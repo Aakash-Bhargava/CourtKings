@@ -10,16 +10,32 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-finished-challenges',
-  templateUrl: 'finished-challenges.html',
+  selector: 'page-all-challenges',
+  templateUrl: 'all-challenges.html',
 })
-export class FinishedChallengesPage {
+export class AllChallengesPage {
+
+  allChallenges = <any>[];
+  user: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FinishedChallengesPage');
+    this.user = this.navParams.get("user");
+    this.getAllChallenges();
+  }
+
+  getAllChallenges(){
+    for( let team of this.user.teams){
+      for(let challenge of team.challenges){
+        if(challenge.status !="Pending"){
+          this.allChallenges.push(challenge);
+        }
+      }
+    }
+    console.log(this.allChallenges);
   }
 
   goback() {

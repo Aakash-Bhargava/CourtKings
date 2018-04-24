@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar hideBackButton>
-    <button ion-button clear icon-only (tap)="goToTabsPage()">
+    <button ion-button clear icon-only (tap)="goBack()">
       <ion-icon name="arrow-back"></ion-icon>
     </button>
     <ion-title> Create a team</ion-title>
@@ -51,14 +51,19 @@
   <ion-list>
     <h5 padding>Current Roster</h5>
     <ion-list>
-      <ion-item *ngFor="let user of team" text-capitalize>
-        <ion-avatar *ngIf="user.profilePic" item-start class="profile-pic">
-          <img [src]="_DomSanitizer.bypassSecurityTrustUrl(user.profilePic)">
+      <ion-item *ngFor="let member of team" text-capitalize>
+        <ion-avatar *ngIf="member.profilePic" item-start class="profile-pic">
+          <img [src]="_DomSanitizer.bypassSecurityTrustUrl(member.profilePic)">
         </ion-avatar>
-        <ion-avatar *ngIf="!user.profilePic" item-start class="profile-pic">
+        <ion-avatar *ngIf="!member.profilePic" item-start class="profile-pic">
           <img src="../../assets/imgs/mockProfile.jpg">
         </ion-avatar>
-        <h3 class="player-name">@{{ user.streetName }}</h3>
+        <h3 style="font-weight:bold">{{member.name}}</h3> <h3>@{{member.streetName}}</h3>
+
+          <button ion-button item-end icon-only clear *ngIf="member.id != user.id" (tap)="removeUser(member)">
+            <ion-icon name="close"></ion-icon>
+          </button>
+
       </ion-item>
     </ion-list>
 
@@ -66,7 +71,13 @@
     <div *ngIf="queryList">
       <ion-list>
         <button ion-item *ngFor="let user of queryList" (click)="addUser(user)" text-capitalize>
-          @{{user.streetName}}
+          <ion-avatar *ngIf="user.profilePic" item-start class="profile-pic">
+            <img [src]="_DomSanitizer.bypassSecurityTrustUrl(user.profilePic)">
+          </ion-avatar>
+          <ion-avatar *ngIf="!user.profilePic" item-start class="profile-pic">
+            <img src="../../assets/imgs/mockProfile.jpg">
+          </ion-avatar>
+          <h3 style="font-weight:bold">{{user.name}}</h3> <h3>@{{user.streetName}}</h3>
         </button>
       </ion-list>
     </div>

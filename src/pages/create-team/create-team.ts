@@ -135,6 +135,25 @@ export class CreateTeamPage {
     console.log(this.q, this.queryList.length);
   }
 
+  removeUser(user){
+    console.log(user);
+    if(user.id == this.user.id){
+      const alert = this.alertCtrl.create({
+        title: 'Warning!',
+        subTitle: 'You cannot remove yourself!',
+        buttons: ['Ok']
+      });
+      alert.present();
+      return;
+    }
+    else{
+      var index: number = this.team.indexOf(user);
+      if (index !== -1) {
+       this.team.splice(index, 1);
+     }
+    }
+  }
+
   addUser(user) {
     if(user.id == this.user.id){
       const alert = this.alertCtrl.create({
@@ -276,8 +295,14 @@ export class CreateTeamPage {
     }).toPromise();
   }
 
-  goToTabsPage(){
-    this.navCtrl.push('TabsPage');
+  goBack(){
+    if(this.previousPage){
+      this.navCtrl.setRoot('TabsPage');
+    }
+    else{
+      this.navCtrl.pop();
+    }
+
   }
 
   presentActionSheet() {

@@ -59,16 +59,22 @@ export class ProfilePage {
               teamName
               teamImage
               homeTown
+              _challengesWonMeta {
+                count
+              }
               players{
                 id
                 name
                 profilePic
+                streetName
+                coins
               }
               challenges{
                 id
-                date
-                gameTime
                 status
+                winner{
+                  id
+                }
                 teams{
                   id
                   teamName
@@ -84,6 +90,7 @@ export class ProfilePage {
               }
               courtsRuled{
                 id
+                courtName
               }
             }
            }
@@ -114,6 +121,12 @@ export class ProfilePage {
     });
   }
 
+  goToAllChallenges(){
+    this.navCtrl.push('AllChallengesPage', {
+      user: this.user
+    });
+  }
+
   goToTeamProfile(team){
     console.log("GO TO TEAM");
     console.log(team);
@@ -126,26 +139,23 @@ export class ProfilePage {
     console.log(this.user.teams);
     var winCnt = 0;
     var totalGames = 0;
+
     for(let team of this.user.teams){
-      winCnt += team.challengesWon.length;
-      for(let challenge of team.challenges){
-        if(challenge.status == "Completed"){
-          totalGames = totalGames + 1;
-        }
-      }
+      winCnt += team._challengesWonMeta.count;
+      totalGames += team.challenges.filter(challenge => challenge.status == "Completed").length;
     }
-    console.log(winCnt);
-    console.log(totalGames);
-    console.log(totalGames - winCnt);
+
     this.wins = winCnt;
     this.losses = totalGames - winCnt;
   }
 
   getCourtsRuled(){
     var courtsRuled = 0;
+
     for(let team of this.user.teams){
       courtsRuled += team.courtsRuled.length;
     }
+
     this.courtsRuled = courtsRuled;
   }
 
