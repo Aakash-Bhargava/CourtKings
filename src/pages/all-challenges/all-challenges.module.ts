@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { AllChallengesPage } from './all-challenges';
+import { MomentModule } from 'angular2-moment';
 
 @NgModule({
   declarations: [
@@ -8,6 +9,7 @@ import { AllChallengesPage } from './all-challenges';
   ],
   imports: [
     IonicPageModule.forChild(AllChallengesPage),
+    MomentModule
   ],
   exports: [
     AllChallengesPage,

@@ -16,8 +16,9 @@
     <ion-item no-lines text-center *ngIf="challenge.status == 'Scheduled'">
       <ion-row>
         <ion-col>
-          <ion-item>
-              <ion-datetime displayFormat="MM/DD/YYYY" disabled [(ngModel)]="challenge.date" ></ion-datetime>
+          <ion-item class="date">
+              <!-- <ion-datetime displayFormat="MM/DD/YYYY" disabled [(ngModel)]="challenge.date" ></ion-datetime> -->
+              {{challenge.date | amDateFormat:'LL'}}
           </ion-item>
         </ion-col>
         <ion-col class="courtInfo">
@@ -42,8 +43,8 @@
     <ion-item no-lines text-center *ngIf="challenge.status == 'Completed'">
       <ion-row>
         <ion-col>
-          <ion-item>
-              <ion-datetime displayFormat="MM/DD/YYYY" disabled [(ngModel)]="challenge.date" ></ion-datetime>
+          <ion-item class="date">
+            {{challenge.date | amDateFormat:'LL'}}
           </ion-item>
         </ion-col>
         <ion-col class="courtInfo">
