@@ -134,6 +134,10 @@ export class SignUpPage {
   }
 
   createUser() {
+    if(!this.imageUri)
+    {
+      this.imageUri = "assets/imgs/mockProfile.jpg";
+    }
       return this.apollo.mutate({
         mutation: gql`
         mutation createUser($email: String!,$password: String!,
